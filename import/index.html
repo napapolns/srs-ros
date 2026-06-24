@@ -60,28 +60,6 @@
       </footer>
     </div>
   </div>
-  <script>
-    (function() {
-      const html = document.documentElement;
-      const saved = localStorage.getItem('srs-theme') || 'auto';
-      html.setAttribute('data-theme', saved);
-      function updateSystemDark() {
-        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        html.setAttribute('data-system-dark', isDark);
-      }
-      updateSystemDark();
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateSystemDark);
-      document.querySelectorAll('.theme-btn').forEach(btn => {
-        if (btn.dataset.themeValue === saved) { btn.classList.add('active'); } else { btn.classList.remove('active'); }
-        btn.addEventListener('click', function() {
-          const val = this.dataset.themeValue;
-          html.setAttribute('data-theme', val);
-          localStorage.setItem('srs-theme', val);
-          document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
-        });
-      });
-    })();
-  </script>
+  <script src="../assets/theme.js"></script>
 </body>
 </html>
