@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRS - Import ราคาเมนูตามช่องทางการขาย</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style>
+        :root {
+            /* M3-SCCN Color Tokens - Light */
+            --md-sys-color-primary: #0B0A0A;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-secondary: #785A00;
+            --md-sys-color-on-secondary: #FFFFFF;
+            --md-sys-color-secondary-container: #FBBF14;
+            --md-sys-color-on-secondary-container: #483400;
+            --md-sys-color-tertiary: #014AC5;
+            --md-sys-color-on-tertiary: #FFFFFF;
+            --md-sys-color-error: #BA1A1A;
+            --md-sys-color-on-error: #FFFFFF;
+            --md-sys-color-error-container: #FFDAD6;
+            --md-sys-color-on-error-container: #B6363A;
+            --md-sys-color-background: #FFFFFF;
+            --md-sys-color-on-background: #1C1B1B;
+            --md-sys-color-surface: #FCFCFC;
+            --md-sys-color-on-surface: #1C1B1B;
+            --md-sys-color-surface-variant: #F5F5F5;
+            --md-sys-color-on-surface-variant: #6B7274;
+            --md-sys-color-outline: #747878;
+            --md-sys-color-outline-variant: #C0C8CB;
+            --md-sys-color-surface-container: #EBEBEB;
+            --md-sys-color-surface-container-low: #F2F2F2;
+            --md-sys-color-surface-container-high: #E5E5E5;
+            --md-sys-color-on-success-variant: #00733F;
+            --md-sys-color-on-error-variant: #BA1A1A;
+
+            /* Shape Tokens */
+            --md-sys-shape-corner-none: 0px;
+            --md-sys-shape-corner-xs: 4px;
+            --md-sys-shape-corner-sm: 8px;
+            --md-sys-shape-corner-md: 12px;
+            --md-sys-shape-corner-lg: 16px;
+            --md-sys-shape-corner-xl: 24px;
+            --md-sys-shape-corner-full: 1000px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans Thai', sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+            color: var(--md-sys-color-on-background);
+            background-color: var(--md-sys-color-background);
+        }
+
+        /* Layout */
+        .page-wrapper {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+
+        /* App Bar */
+        .app-bar {
+            background-color: var(--md-sys-color-surface);
+            border-bottom: 1px solid var(--md-sys-color-outline-variant);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .app-bar-content {
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .app-bar h1 {
+            font-size: 22px;
+            font-weight: 500;
+            line-height: 28px;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .app-bar .badge {
+            background-color: var(--md-sys-color-secondary-container);
+            color: var(--md-sys-color-on-secondary-container);
+            font-size: 11px;
+            font-weight: 500;
+            padding: 2px 8px;
+            border-radius: var(--md-sys-shape-corner-full);
+        }
+
+        /* Document Meta */
+        .doc-meta {
+            margin-top: 32px;
+            margin-bottom: 40px;
+        }
+
+        .doc-meta .doc-title {
+            font-size: 32px;
+            font-weight: 500;
+            line-height: 40px;
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: 8px;
+        }
+
+        .doc-meta .doc-subtitle {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 24px;
+            color: var(--md-sys-color-on-surface-variant);
+            margin-bottom: 16px;
+        }
+
+        .doc-meta-info {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            padding: 16px;
+            background-color: var(--md-sys-color-surface-variant);
+            border-radius: var(--md-sys-shape-corner-md);
+        }
+
+        .doc-meta-info .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .meta-item .meta-label {
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        .meta-item .meta-value {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        /* Table of Contents */
+        .toc {
+            background-color: var(--md-sys-color-surface-container-low);
+            border-radius: var(--md-sys-shape-corner-lg);
+            padding: 24px;
+            margin-bottom: 48px;
+        }
+
+        .toc h2 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .toc ol {
+            list-style: none;
+            counter-reset: toc-counter;
+        }
+
+        .toc ol li {
+            counter-increment: toc-counter;
+            margin-bottom: 8px;
+        }
+
+        .toc ol li a {
+            font-size: 14px;
+            color: var(--md-sys-color-tertiary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 8px;
+            border-radius: var(--md-sys-shape-corner-sm);
+            transition: background-color 0.2s;
+        }
+
+        .toc ol li a:hover {
+            background-color: var(--md-sys-color-surface-container);
+        }
+
+        .toc ol li a::before {
+            content: counter(toc-counter) ".";
+            font-weight: 600;
+            color: var(--md-sys-color-on-surface-variant);
+            min-width: 20px;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 500;
+            line-height: 32px;
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--md-sys-color-secondary-container);
+        }
+
+        .section-description {
+            font-size: 14px;
+            line-height: 22px;
+            color: var(--md-sys-color-on-surface-variant);
+            margin-bottom: 20px;
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--md-sys-color-surface);
+            border: 1px solid var(--md-sys-color-outline-variant);
+            border-radius: var(--md-sys-shape-corner-md);
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 24px;
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title .material-symbols-outlined {
+            font-size: 20px;
+            color: var(--md-sys-color-tertiary);
+        }
+
+        /* Tables */
+        .data-table-wrapper {
+            overflow-x: auto;
+            margin-bottom: 16px;
+            border-radius: var(--md-sys-shape-corner-md);
+            border: 1px solid var(--md-sys-color-outline-variant);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .data-table thead {
+            background-color: var(--md-sys-color-surface-container);
+        }
+
+        .data-table th {
+            font-weight: 500;
+            font-size: 12px;
+            text-align: left;
+            padding: 12px 16px;
+            color: var(--md-sys-color-on-surface);
+            white-space: nowrap;
+        }
+
+        .data-table td {
+            padding: 10px 16px;
+            border-top: 1px solid var(--md-sys-color-outline-variant);
+            color: var(--md-sys-color-on-surface);
+            vertical-align: top;
+        }
+
+        .data-table tbody tr:hover {
+            background-color: var(--md-sys-color-surface-variant);
+        }
+
+        .data-table .required-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background-color: var(--md-sys-color-error-container);
+            color: var(--md-sys-color-on-error-container);
+            font-size: 11px;
+            font-weight: 500;
+            padding: 2px 8px;
+            border-radius: var(--md-sys-shape-corner-full);
+        }
+
+        .data-table .optional-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background-color: var(--md-sys-color-surface-container);
+            color: var(--md-sys-color-on-surface-variant);
+            font-size: 11px;
+            font-weight: 500;
+            padding: 2px 8px;
+            border-radius: var(--md-sys-shape-corner-full);
+        }
+
+        /* Alert / Callout boxes */
+        .callout {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            border-radius: var(--md-sys-shape-corner-md);
+            margin-bottom: 16px;
+        }
+
+        .callout-info {
+            background-color: #E8F0FE;
+            border-left: 4px solid var(--md-sys-color-tertiary);
+        }
+
+        .callout-warning {
+            background-color: #FFF8E1;
+            border-left: 4px solid var(--md-sys-color-secondary);
+        }
+
+        .callout-error {
+            background-color: var(--md-sys-color-error-container);
+            border-left: 4px solid var(--md-sys-color-error);
+        }
+
+        .callout-success {
+            background-color: #E6F4EA;
+            border-left: 4px solid var(--md-sys-color-on-success-variant);
+        }
+
+        .callout .callout-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .callout-info .callout-icon { color: var(--md-sys-color-tertiary); }
+        .callout-warning .callout-icon { color: var(--md-sys-color-secondary); }
+        .callout-error .callout-icon { color: var(--md-sys-color-error); }
+        .callout-success .callout-icon { color: var(--md-sys-color-on-success-variant); }
+
+        .callout-content {
+            font-size: 13px;
+            line-height: 20px;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .callout-content strong {
+            font-weight: 600;
+        }
+
+        /* Rules list */
+        .rules-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .rules-list li {
+            padding: 10px 16px;
+            border-left: 3px solid var(--md-sys-color-outline-variant);
+            margin-bottom: 8px;
+            font-size: 14px;
+            line-height: 22px;
+            background-color: var(--md-sys-color-surface);
+            border-radius: 0 var(--md-sys-shape-corner-sm) var(--md-sys-shape-corner-sm) 0;
+        }
+
+        .rules-list li strong {
+            font-weight: 600;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        /* Error table specific */
+        .error-code {
+            font-family: monospace;
+            font-size: 12px;
+            font-weight: 600;
+            background-color: var(--md-sys-color-error-container);
+            color: var(--md-sys-color-on-error-container);
+            padding: 2px 6px;
+            border-radius: var(--md-sys-shape-corner-xs);
+        }
+
+        .error-message {
+            font-family: monospace;
+            font-size: 12px;
+            background-color: var(--md-sys-color-surface-variant);
+            padding: 4px 8px;
+            border-radius: var(--md-sys-shape-corner-xs);
+            display: inline-block;
+            margin-top: 4px;
+            word-break: break-all;
+        }
+
+        /* Flow diagram */
+        .flow-diagram {
+            background-color: var(--md-sys-color-surface-variant);
+            border-radius: var(--md-sys-shape-corner-lg);
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .flow-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .flow-step-number {
+            width: 32px;
+            height: 32px;
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .flow-step-content {
+            flex: 1;
+            padding-top: 4px;
+        }
+
+        .flow-step-content h4 {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .flow-step-content p {
+            font-size: 13px;
+            color: var(--md-sys-color-on-surface-variant);
+            line-height: 20px;
+        }
+
+        .flow-connector {
+            position: absolute;
+            left: 15px;
+            top: 36px;
+            bottom: -16px;
+            width: 2px;
+            background-color: var(--md-sys-color-outline-variant);
+        }
+
+        /* Example table highlight */
+        .example-table {
+            margin-top: 12px;
+        }
+
+        .example-table .data-table td.empty-cell {
+            color: var(--md-sys-color-outline);
+            font-style: italic;
+        }
+
+        /* Footer */
+        .doc-footer {
+            margin-top: 64px;
+            padding-top: 24px;
+            border-top: 1px solid var(--md-sys-color-outline-variant);
+            text-align: center;
+            color: var(--md-sys-color-on-surface-variant);
+            font-size: 12px;
+        }
+
+        /* Chip style */
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 12px;
+            border-radius: var(--md-sys-shape-corner-sm);
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid var(--md-sys-color-outline-variant);
+            background: var(--md-sys-color-surface);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- App Bar -->
+    <header class="app-bar">
+        <div class="app-bar-content">
+            <a href="./" style="display: inline-flex; align-items: center; text-decoration: none; color: var(--md-sys-color-on-surface); margin-right: 4px;">
+                <span class="material-symbols-outlined" style="font-size: 24px;">arrow_back</span>
+            </a>
+            <h1>เอกสาร SRS</h1>
+            <span class="badge">Import Module</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="page-wrapper">
+
+        <!-- Document Meta -->
+        <section class="doc-meta">
+            <h2 class="doc-title">Import ราคาเมนู — ช่องทางการขาย</h2>
+            <p class="doc-subtitle">ข้อกำหนดความต้องการซอฟต์แวร์ (Software Requirements Specification) สำหรับฟีเจอร์ Import ข้อมูลราคาเมนูผ่านไฟล์ Template</p>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;">
+                <a href="https://docs.google.com/spreadsheets/d/1H6xCwXTl8Tjgo4tM3azAyF5MyzCMO5LgfNk0V9LEONM/edit?gid=956148942#gid=956148942" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: var(--md-sys-color-tertiary); color: var(--md-sys-color-on-tertiary); border-radius: var(--md-sys-shape-corner-full); text-decoration: none; font-size: 14px; font-weight: 500; transition: opacity 0.2s;">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">open_in_new</span>
+                    ดู Template ใน Google Sheets
+                </a>
+                <a href="import-menu-price-template.md" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: var(--md-sys-color-surface); color: var(--md-sys-color-tertiary); border: 1px solid var(--md-sys-color-tertiary); border-radius: var(--md-sys-shape-corner-full); text-decoration: none; font-size: 14px; font-weight: 500; transition: opacity 0.2s;">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">description</span>
+                    import-menu-price-template.md
+                </a>
+            </div>
+            <div class="doc-meta-info">
+                <div class="meta-item">
+                    <span class="meta-label">เวอร์ชัน</span>
+                    <span class="meta-value">1.0</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">วันที่</span>
+                    <span class="meta-value">21 มิถุนายน 2569</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">โมดูล</span>
+                    <span class="meta-value">ราคาเมนู / ช่องทางการขาย</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">รูปแบบไฟล์</span>
+                    <span class="meta-value">.xlsx (Excel)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Table of Contents -->
+        <nav class="toc">
+            <h2>สารบัญ</h2>
+            <ol>
+                <li><a href="#overview">ภาพรวม</a></li>
+                <li><a href="#columns">โครงสร้างคอลัมน์ใน Template</a></li>
+                <li><a href="#example">ตัวอย่างข้อมูลในไฟล์</a></li>
+                <li><a href="#rules">กฎการ Import ข้อมูล</a></li>
+                <li><a href="#custom-channels">การเพิ่มช่องทางการขายเพิ่มเติม</a></li>
+                <li><a href="#errors">รายการ Error Messages</a></li>
+                <li><a href="#flow">ขั้นตอนการทำงานของระบบ</a></li>
+                <li><a href="#notes">หมายเหตุสำคัญ</a></li>
+            </ol>
+        </nav>
+
+        <!-- Section 1: Overview -->
+        <section id="overview" class="section">
+            <h2 class="section-title">1. ภาพรวม</h2>
+            <p class="section-description">
+                ระบบรองรับการ Import ข้อมูลราคาเมนูในแต่ละช่องทางการขายแบบ Bulk ผ่านไฟล์ Excel (.xlsx)
+                เพื่อให้ผู้ใช้สามารถอัพเดทราคาเมนูจำนวนมากได้ในคราวเดียว โดยไม่ต้องแก้ไขทีละรายการในระบบ
+            </p>
+            <div class="callout callout-info">
+                <span class="material-symbols-outlined callout-icon">info</span>
+                <div class="callout-content">
+                    <strong>วัตถุประสงค์:</strong> ลดเวลาในการอัพเดทราคาเมนูหลายรายการพร้อมกัน และรองรับหลายช่องทางการขายในครั้งเดียว
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Column Structure -->
+        <section id="columns" class="section">
+            <h2 class="section-title">2. โครงสร้างคอลัมน์ใน Template</h2>
+            <p class="section-description">
+                ตารางด้านล่างแสดงคอลัมน์ทั้งหมดที่อยู่ใน Template พร้อมระบุว่าคอลัมน์ใดบังคับกรอก
+            </p>
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ลำดับ</th>
+                            <th>ชื่อคอลัมน์</th>
+                            <th>บังคับกรอก</th>
+                            <th>ประเภทข้อมูล</th>
+                            <th>คำอธิบาย</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td><strong>ชื่อเมนู</strong></td>
+                            <td><span class="required-badge">✱ บังคับ</span></td>
+                            <td>Text</td>
+                            <td>ชื่อเมนูที่ต้องการกำหนดราคา</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><strong>ทานที่ร้าน</strong></td>
+                            <td><span class="required-badge">✱ บังคับ</span></td>
+                            <td>Number (ทศนิยม 2 ตำแหน่ง)</td>
+                            <td>ราคาสำหรับช่องทางทานที่ร้าน</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>กลับบ้าน</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Number (ทศนิยม 2 ตำแหน่ง)</td>
+                            <td>ราคาสำหรับช่องทางกลับบ้าน</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Grab Food</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Number (ทศนิยม 2 ตำแหน่ง)</td>
+                            <td>ราคาสำหรับช่องทาง Grab Food</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Lineman</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Number (ทศนิยม 2 ตำแหน่ง)</td>
+                            <td>ราคาสำหรับช่องทาง Lineman</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Robinhood</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Number (ทศนิยม 2 ตำแหน่ง)</td>
+                            <td>ราคาสำหรับช่องทาง Robinhood</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>Shopee Food</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Number (ทศนิยม 2 ตำแหน่ง)</td>
+                            <td>ราคาสำหรับช่องทาง Shopee Food</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="callout callout-warning">
+                <span class="material-symbols-outlined callout-icon">lightbulb</span>
+                <div class="callout-content">
+                    <strong>หมายเหตุ:</strong> สามารถเพิ่มคอลัมน์ช่องทางการขายใหม่ต่อจากคอลัมน์สุดท้ายได้ (ดูรายละเอียดในหัวข้อ 5)
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Example -->
+        <section id="example" class="section">
+            <h2 class="section-title">3. ตัวอย่างข้อมูลในไฟล์</h2>
+            <p class="section-description">ตัวอย่างข้อมูลที่กรอกใน Template สำหรับ Import:</p>
+            <div class="data-table-wrapper example-table">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ชื่อเมนู</th>
+                            <th>ทานที่ร้าน</th>
+                            <th>กลับบ้าน</th>
+                            <th>Grab Food</th>
+                            <th>Lineman</th>
+                            <th>Robinhood</th>
+                            <th>Shopee Food</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>เมนู 1</td>
+                            <td>100.00</td>
+                            <td class="empty-cell">—</td>
+                            <td class="empty-cell">—</td>
+                            <td class="empty-cell">—</td>
+                            <td class="empty-cell">—</td>
+                            <td class="empty-cell">—</td>
+                        </tr>
+                        <tr>
+                            <td>เมนู 2</td>
+                            <td>100.00</td>
+                            <td class="empty-cell">—</td>
+                            <td class="empty-cell">—</td>
+                            <td class="empty-cell">—</td>
+                            <td class="empty-cell">—</td>
+                            <td class="empty-cell">—</td>
+                        </tr>
+                        <tr>
+                            <td>เมนู 3</td>
+                            <td>100.00</td>
+                            <td class="empty-cell">—</td>
+                            <td class="empty-cell">—</td>
+                            <td class="empty-cell">—</td>
+                            <td class="empty-cell">—</td>
+                            <td class="empty-cell">—</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="callout callout-info">
+                <span class="material-symbols-outlined callout-icon">info</span>
+                <div class="callout-content">
+                    ช่องที่แสดง "—" หมายถึงไม่มีข้อมูล (เว้นว่าง) ซึ่งระบบจะ<strong>ไม่อัพเดทราคาในช่องทางนั้น</strong>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Rules -->
+        <section id="rules" class="section">
+            <h2 class="section-title">4. กฎการ Import ข้อมูล</h2>
+
+            <!-- 4.1 Required Fields -->
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="material-symbols-outlined">verified</span>
+                    4.1 คอลัมน์บังคับกรอก (Required Fields)
+                </h3>
+                <ul class="rules-list">
+                    <li><strong>ชื่อเมนู</strong> — ต้องมีค่าทุกแถว ห้ามเว้นว่าง</li>
+                    <li><strong>ทานที่ร้าน</strong> — ต้องมีค่าทุกแถว (เป็นราคาหลักของเมนู)</li>
+                </ul>
+            </div>
+
+            <!-- 4.2 Empty Value -->
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="material-symbols-outlined">remove_circle_outline</span>
+                    4.2 การไม่ใส่ข้อมูล (Empty Value)
+                </h3>
+                <ul class="rules-list">
+                    <li>คอลัมน์ช่องทางการขายที่ไม่บังคับ หากไม่ใส่ค่า → <strong>ไม่อัพเดทข้อมูลในระบบเดิม</strong> (ระบบจะคงค่าเดิมไว้)</li>
+                    <li>กรณีต้องการ<strong>ลบราคา</strong>ของช่องทางนั้นออก → ให้ใส่ค่าเป็น <code>0</code></li>
+                </ul>
+                <div class="callout callout-warning" style="margin-top:12px">
+                    <span class="material-symbols-outlined callout-icon">warning</span>
+                    <div class="callout-content">
+                        <strong>สำคัญ:</strong> "ไม่ใส่ค่า" ≠ "ใส่ค่า 0" — ไม่ใส่ค่าคือไม่อัพเดท, ใส่ 0 คือลบราคาออก
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4.3 Price Rules -->
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="material-symbols-outlined">payments</span>
+                    4.3 เงื่อนไขราคา
+                </h3>
+                <ul class="rules-list">
+                    <li>ราคาต้องเป็น<strong>ตัวเลขเท่านั้น</strong> (รองรับทศนิยม 2 ตำแหน่ง เช่น 100.00, 59.50)</li>
+                    <li>ราคาต้องมีค่า <strong>≥ 0</strong> (มากกว่าหรือเท่ากับศูนย์)</li>
+                    <li>ห้ามใส่สัญลักษณ์หรือตัวอักษร เช่น ฿, บาท, THB</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 5: Custom Channels -->
+        <section id="custom-channels" class="section">
+            <h2 class="section-title">5. การเพิ่มช่องทางการขายเพิ่มเติม</h2>
+            <p class="section-description">
+                หากมีช่องทางการขายนอกเหนือจากที่กำหนดใน Template เดิม สามารถเพิ่มคอลัมน์ใหม่ต่อท้ายได้
+            </p>
+
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="material-symbols-outlined">add_circle</span>
+                    เงื่อนไขการเพิ่มช่องทาง
+                </h3>
+                <ul class="rules-list">
+                    <li><strong>ชื่อคอลัมน์ต้องตรงกับชื่อช่องทางการขายที่มีอยู่ในระบบ</strong> (ตัวพิมพ์เล็ก-ใหญ่ต้องตรงกัน)</li>
+                    <li>ประเภทข้อมูลเป็น Number (ทศนิยม 2 ตำแหน่ง) เหมือนช่องทางอื่น</li>
+                    <li>หากไม่ใส่ค่า ระบบจะไม่อัพเดทข้อมูลเดิม (เหมือนช่องทางอื่น)</li>
+                    <li>หากชื่อคอลัมน์ไม่ตรงกับช่องทางในระบบ → แสดง Error</li>
+                </ul>
+            </div>
+
+            <p class="section-description" style="margin-top:20px"><strong>ตัวอย่าง:</strong> เพิ่มช่องทาง "Food Panda" ต่อท้าย</p>
+            <div class="data-table-wrapper example-table">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ชื่อเมนู</th>
+                            <th>ทานที่ร้าน</th>
+                            <th>กลับบ้าน</th>
+                            <th>Grab Food</th>
+                            <th>...</th>
+                            <th style="background-color:#E8F0FE">Food Panda ✨</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>เมนู 1</td>
+                            <td>100.00</td>
+                            <td class="empty-cell">—</td>
+                            <td class="empty-cell">—</td>
+                            <td>...</td>
+                            <td><strong>120.00</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 6: Error Messages -->
+        <section id="errors" class="section">
+            <h2 class="section-title">6. รายการ Error Messages</h2>
+            <p class="section-description">
+                เมื่อข้อมูลไม่ผ่านการตรวจสอบ ระบบจะแจ้งเตือน Error ตามรายการด้านล่าง โดยระบุแถวที่พบปัญหาให้ชัดเจน
+            </p>
+            <div class="callout callout-error">
+                <span class="material-symbols-outlined callout-icon">error</span>
+                <div class="callout-content">
+                    <strong>หลักการ All or Nothing:</strong> หากพบ Error แม้แต่ 1 รายการ ระบบจะไม่ทำการ Import ข้อมูลทั้งไฟล์ และแสดง Error ทั้งหมดให้แก้ไข
+                </div>
+            </div>
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>รหัส</th>
+                            <th>เงื่อนไขที่ทำให้เกิด Error</th>
+                            <th>ข้อความแจ้งเตือน</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="error-code">ERR-001</span></td>
+                            <td>ชื่อเมนูเป็นค่าว่าง</td>
+                            <td><span class="error-message">แถวที่ {row}: กรุณาระบุชื่อเมนู (ชื่อเมนูเป็นข้อมูลบังคับ)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-002</span></td>
+                            <td>ทานที่ร้านเป็นค่าว่าง</td>
+                            <td><span class="error-message">แถวที่ {row}: กรุณาระบุราคาทานที่ร้าน (ราคาทานที่ร้านเป็นข้อมูลบังคับ)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-003</span></td>
+                            <td>ราคาไม่เป็นตัวเลข</td>
+                            <td><span class="error-message">แถวที่ {row}: ราคาในคอลัมน์ "{column_name}" ต้องเป็นตัวเลขเท่านั้น</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-004</span></td>
+                            <td>ราคามีค่าน้อยกว่า 0</td>
+                            <td><span class="error-message">แถวที่ {row}: ราคาในคอลัมน์ "{column_name}" ต้องมีค่ามากกว่าหรือเท่ากับ 0</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-005</span></td>
+                            <td>ชื่อเมนูไม่มีอยู่ในระบบ</td>
+                            <td><span class="error-message">แถวที่ {row}: ไม่พบเมนู "{menu_name}" ในระบบ กรุณาตรวจสอบ</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-006</span></td>
+                            <td>ชื่อเมนูซ้ำในไฟล์</td>
+                            <td><span class="error-message">แถวที่ {row}: ชื่อเมนู "{menu_name}" ซ้ำกับแถวที่ {duplicate_row}</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-007</span></td>
+                            <td>ไฟล์ไม่มีข้อมูล (เฉพาะ Header)</td>
+                            <td><span class="error-message">ไฟล์ไม่มีข้อมูลสำหรับ Import กรุณาเพิ่มข้อมูลอย่างน้อย 1 แถว</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-008</span></td>
+                            <td>รูปแบบไฟล์ไม่ถูกต้อง</td>
+                            <td><span class="error-message">รูปแบบไฟล์ไม่ถูกต้อง กรุณาใช้ Template ที่กำหนด</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-009</span></td>
+                            <td>ชื่อคอลัมน์ช่องทางการขายไม่มีในระบบ</td>
+                            <td><span class="error-message">ไม่พบช่องทางการขาย "{column_name}" ในระบบ กรุณาตรวจสอบชื่อให้ตรงกับที่ตั้งค่าไว้</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 7: Flow -->
+        <section id="flow" class="section">
+            <h2 class="section-title">7. ขั้นตอนการทำงานของระบบ</h2>
+            <p class="section-description">
+                ลำดับการทำงานเมื่อผู้ใช้กด Import ไฟล์เข้าสู่ระบบ:
+            </p>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="flow-step-number">1</div>
+                    <div class="flow-step-content">
+                        <h4>ตรวจสอบรูปแบบไฟล์</h4>
+                        <p>ไฟล์ต้องเป็น .xlsx เท่านั้น</p>
+                    </div>
+                    <div class="flow-connector"></div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step-number">2</div>
+                    <div class="flow-step-content">
+                        <h4>ตรวจสอบ Header</h4>
+                        <p>Header ต้องตรงกับ Template + ช่องทางเพิ่มเติมต้องมีอยู่ในระบบ</p>
+                    </div>
+                    <div class="flow-connector"></div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step-number">3</div>
+                    <div class="flow-step-content">
+                        <h4>ตรวจสอบข้อมูลทีละแถว</h4>
+                        <p>
+                            • คอลัมน์บังคับ (ชื่อเมนู, ทานที่ร้าน) ต้องมีค่า<br>
+                            • ราคาต้องเป็นตัวเลข ≥ 0<br>
+                            • ชื่อเมนูต้องไม่ซ้ำในไฟล์<br>
+                            • ชื่อเมนูต้องมีอยู่ในระบบ
+                        </p>
+                    </div>
+                    <div class="flow-connector"></div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step-number">4</div>
+                    <div class="flow-step-content">
+                        <h4>แสดงผลลัพธ์</h4>
+                        <p>
+                            ✗ พบ Error → แสดงรายการ Error ทั้งหมด (ไม่ Import ข้อมูลใดๆ)<br>
+                            ✓ ไม่มี Error → ดำเนินการ Import และอัพเดทราคาทั้งหมด
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 8: Notes -->
+        <section id="notes" class="section">
+            <h2 class="section-title">8. หมายเหตุสำคัญ</h2>
+            <div class="callout callout-error">
+                <span class="material-symbols-outlined callout-icon">gavel</span>
+                <div class="callout-content">
+                    <strong>All or Nothing:</strong> ระบบจะทำการ Validate ข้อมูลทั้งหมดก่อน หากมี Error แม้แต่ 1 แถว จะไม่ดำเนินการ Import ทั้งไฟล์
+                </div>
+            </div>
+            <div class="callout callout-warning">
+                <span class="material-symbols-outlined callout-icon">shield</span>
+                <div class="callout-content">
+                    <strong>ป้องกันการเขียนทับ:</strong> คอลัมน์ช่องทางที่ไม่ได้ใส่ราคา จะไม่ถูกอัพเดท เพื่อป้องกันการเขียนทับข้อมูลเดิมโดยไม่ตั้งใจ
+                </div>
+            </div>
+            <div class="callout callout-info">
+                <span class="material-symbols-outlined callout-icon">calculate</span>
+                <div class="callout-content">
+                    <strong>รูปแบบตัวเลข:</strong> รองรับทศนิยม 2 ตำแหน่ง (เช่น 100.00, 59.50)
+                </div>
+            </div>
+            <div class="callout callout-success">
+                <span class="material-symbols-outlined callout-icon">add_circle</span>
+                <div class="callout-content">
+                    <strong>ช่องทางเพิ่มเติม:</strong> สามารถเพิ่มช่องทางการขายใหม่ได้ โดยเพิ่มคอลัมน์ต่อท้าย และชื่อต้องตรงกับในระบบ
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="doc-footer">
+            <p>เอกสาร SRS — Import ราคาเมนูตามช่องทางการขาย v1.0</p>
+            <p style="margin-top:4px">Design System: M3-SCCN | Font: IBM Plex Sans Thai</p>
+        </footer>
+
+    </main>
+
+</body>
+</html>
