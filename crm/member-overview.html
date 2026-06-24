@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SRS — รายงานภาพรวมสมาชิก | Super Coconut CRM</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0B0A0A;
+      --on-primary: #FFFFFF;
+      --secondary-container: #FBBF14;
+      --on-secondary-container: #483400;
+      --tertiary: #014AC5;
+      --on-tertiary: #FFFFFF;
+      --error: #BA1A1A;
+      --error-container: #FFDAD6;
+      --success: #00733F;
+      --background: #FFFFFF;
+      --surface: #FCFCFC;
+      --on-surface: #1C1B1B;
+      --on-surface-variant: #6B7274;
+      --surface-container-lowest: #F8F8F8;
+      --surface-container-low: #F2F2F2;
+      --surface-container: #EBEBEB;
+      --surface-container-high: #E5E5E5;
+      --outline: #747878;
+      --outline-variant: #C0C8CB;
+      --inverse-surface: #313030;
+      --inverse-on-surface: #F4F0EF;
+      --font-family: 'IBM Plex Sans Thai', sans-serif;
+      --corner-xs: 4px;
+      --corner-sm: 8px;
+      --corner-md: 12px;
+      --corner-lg: 16px;
+      --corner-xl: 24px;
+      --corner-full: 1000px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-family);
+      background: var(--background);
+      color: var(--on-surface);
+      font-size: 16px;
+      line-height: 24px;
+      letter-spacing: 0.5px;
+    }
+
+    /* Navigation Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 280px;
+      height: 100vh;
+      background: var(--surface-container-lowest);
+      border-right: 1px solid var(--outline-variant);
+      overflow-y: auto;
+      padding: 24px 16px;
+      z-index: 100;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      margin-bottom: 24px;
+    }
+
+    .sidebar-logo .brand {
+      width: 32px;
+      height: 32px;
+      background: var(--secondary-container);
+      border-radius: var(--corner-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--on-secondary-container);
+    }
+
+    .sidebar-logo span {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--on-surface);
+    }
+
+    .nav-section {
+      margin-bottom: 8px;
+    }
+
+    .nav-section-title {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--on-surface-variant);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 8px 12px 4px;
+    }
+
+    .nav-link {
+      display: block;
+      padding: 10px 12px;
+      color: var(--on-surface);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 400;
+      border-radius: var(--corner-sm);
+      transition: background 0.15s;
+    }
+
+    .nav-link:hover {
+      background: var(--surface-container-low);
+    }
+
+    .nav-link.active {
+      background: var(--secondary-container);
+      color: var(--on-secondary-container);
+      font-weight: 500;
+    }
+
+    /* Main Content */
+    .main {
+      margin-left: 280px;
+      padding: 48px 64px 96px;
+      max-width: 960px;
+    }
+
+    /* Hero Section */
+    .hero {
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--outline-variant);
+    }
+
+    .hero h1 {
+      font-size: 32px;
+      line-height: 40px;
+      font-weight: 500;
+      color: var(--on-surface);
+      margin-bottom: 12px;
+    }
+
+    .hero .subtitle {
+      font-size: 16px;
+      color: var(--on-surface-variant);
+      line-height: 24px;
+    }
+
+    .meta-badges {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      border-radius: var(--corner-full);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-version {
+      background: var(--secondary-container);
+      color: var(--on-secondary-container);
+    }
+
+    .badge-status {
+      background: #D4EDDA;
+      color: var(--success);
+    }
+
+    .badge-fields {
+      background: var(--surface-container);
+      color: var(--on-surface);
+    }
+
+    /* Section Styles */
+    .section {
+      margin-bottom: 48px;
+    }
+
+    .section h2 {
+      font-size: 24px;
+      line-height: 32px;
+      font-weight: 500;
+      color: var(--on-surface);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--secondary-container);
+    }
+
+    .section h3 {
+      font-size: 16px;
+      line-height: 24px;
+      font-weight: 500;
+      color: var(--on-surface);
+      margin-bottom: 12px;
+      margin-top: 24px;
+    }
+
+    p {
+      margin-bottom: 12px;
+      color: var(--on-surface);
+    }
+
+    /* Card Styles */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--corner-md);
+      padding: 24px;
+      margin-bottom: 16px;
+      box-shadow: 0px 1px 2px rgba(0,0,0,0.08);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--corner-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .card-icon.blue { background: #E8F0FE; color: var(--tertiary); }
+    .card-icon.gold { background: #FFF3CD; color: #785A00; }
+    .card-icon.green { background: #D4EDDA; color: var(--success); }
+    .card-icon.red { background: var(--error-container); color: var(--error); }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--on-surface);
+    }
+
+    .card-subtitle {
+      font-size: 12px;
+      color: var(--on-surface-variant);
+    }
+
+    /* Table Styles */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 16px 0;
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--corner-sm);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    thead {
+      background: var(--surface-container-low);
+    }
+
+    th {
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 500;
+      font-size: 12px;
+      color: var(--on-surface-variant);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--outline-variant);
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--outline-variant);
+      color: var(--on-surface);
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover {
+      background: var(--surface-container-lowest);
+    }
+
+    /* Code/Formula Styles */
+    .formula {
+      background: var(--inverse-surface);
+      color: var(--inverse-on-surface);
+      padding: 16px 20px;
+      border-radius: var(--corner-sm);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      line-height: 22px;
+      margin: 12px 0;
+      overflow-x: auto;
+    }
+
+    .formula-list {
+      background: var(--inverse-surface);
+      color: var(--inverse-on-surface);
+      padding: 16px 20px 16px 40px;
+      border-radius: var(--corner-sm);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      line-height: 28px;
+      margin: 12px 0;
+      overflow-x: auto;
+      list-style: decimal;
+    }
+
+    .formula-list li {
+      margin-bottom: 4px;
+      padding-left: 8px;
+    }
+
+    .inline-code {
+      background: var(--surface-container);
+      padding: 2px 8px;
+      border-radius: var(--corner-xs);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      color: var(--tertiary);
+    }
+
+    /* Info Box */
+    .info-box {
+      padding: 16px 20px;
+      border-radius: var(--corner-sm);
+      margin: 16px 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .info-box.warning {
+      background: #FFF3CD;
+      border-left: 4px solid var(--secondary-container);
+    }
+
+    .info-box.info {
+      background: #E8F0FE;
+      border-left: 4px solid var(--tertiary);
+    }
+
+    .info-box.error {
+      background: var(--error-container);
+      border-left: 4px solid var(--error);
+    }
+
+    .info-box.success {
+      background: #D4EDDA;
+      border-left: 4px solid var(--success);
+    }
+
+    .info-box-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .info-box-content {
+      font-size: 14px;
+      line-height: 22px;
+    }
+
+    .info-box-content strong {
+      font-weight: 500;
+    }
+
+    /* Condition Tag */
+    .condition-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: var(--corner-xs);
+      font-size: 11px;
+      font-weight: 500;
+      background: #FEF3C7;
+      color: #92400E;
+    }
+
+    /* Source Tag */
+    .source-tag {
+      display: inline-flex;
+      padding: 2px 8px;
+      border-radius: var(--corner-xs);
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .source-tag.input { background: #E8F0FE; color: var(--tertiary); }
+    .source-tag.bill { background: #D4EDDA; color: var(--success); }
+    .source-tag.calc { background: #FEF3C7; color: #92400E; }
+    .source-tag.bill-item { background: #F3E8FF; color: #6B21A8; }
+
+    /* Flowchart / Diagram */
+    .diagram-box {
+      background: var(--surface-container-lowest);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--corner-md);
+      padding: 24px;
+      margin: 16px 0;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 12px;
+      line-height: 20px;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    /* TOC */
+    .toc {
+      background: var(--surface-container-lowest);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--corner-md);
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+
+    .toc h3 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--on-surface-variant);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .toc-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .toc-list li {
+      margin-bottom: 8px;
+    }
+
+    .toc-list a {
+      color: var(--tertiary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .toc-list a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 24px; }
+    }
+
+    /* Field Number */
+    .field-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: var(--corner-full);
+      background: var(--surface-container);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--on-surface-variant);
+    }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--outline-variant);
+      margin: 32px 0;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--outline-variant);
+      font-size: 12px;
+      color: var(--on-surface-variant);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar Navigation -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">SC</div>
+    <span>Super Coconut CRM</span>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">เอกสาร</div>
+    <a href="#overview" class="nav-link active">ภาพรวม</a>
+    <a href="#datasources" class="nav-link">แหล่งข้อมูล</a>
+    <a href="#conditions" class="nav-link">เงื่อนไขสำคัญ</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">กลุ่มฟิลด์</div>
+    <a href="#group1" class="nav-link">1. ข้อมูลส่วนตัว</a>
+    <a href="#group2" class="nav-link">2. LINE & สถานะ</a>
+    <a href="#group3" class="nav-link">3. อายุสมาชิก</a>
+    <a href="#group4" class="nav-link">4. พฤติกรรมการใช้บริการ</a>
+    <a href="#group5" class="nav-link">5. ยอดซื้อ & ความถี่</a>
+    <a href="#group6" class="nav-link">6. คะแนน (Points)</a>
+    <a href="#group7" class="nav-link">7. เครดิต (Credits)</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">ภาคผนวก</div>
+    <a href="#points-events" class="nav-link">เหตุการณ์คะแนน</a>
+    <a href="#dependency" class="nav-link">แผนผังความสัมพันธ์</a>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main class="main">
+
+  <!-- Hero -->
+  <header class="hero" id="overview">
+    <h1>SRS — รายงานภาพรวมสมาชิก</h1>
+    <p class="subtitle">เอกสารอ้างอิงที่อธิบายว่าแต่ละฟิลด์ในแดชบอร์ดภาพรวมสมาชิกดึงข้อมูลจากไหน ใช้สูตรอะไร และมีเงื่อนไขอะไรบ้าง</p>
+    <div class="meta-badges">
+      <span class="badge badge-version">v1.0</span>
+      <span class="badge badge-status">Active</span>
+      <span class="badge badge-fields">66 Fields</span>
+    </div>
+  </header>
+
+  <!-- Table of Contents -->
+  <div class="toc">
+    <h3>สารบัญ</h3>
+    <ul class="toc-list">
+      <li><a href="#datasources">1. แหล่งข้อมูลที่ใช้</a></li>
+      <li><a href="#conditions">2. เงื่อนไขสำคัญในการดึงข้อมูล</a></li>
+      <li><a href="#group1">3. กลุ่ม 1 — ข้อมูลส่วนตัว (Field 1-16)</a></li>
+      <li><a href="#group2">4. กลุ่ม 2 — LINE & สถานะสมาชิก (Field 17-22)</a></li>
+      <li><a href="#group3">5. กลุ่ม 3 — อายุสมาชิก & วันหมดอายุ (Field 23-28)</a></li>
+      <li><a href="#group4">6. กลุ่ม 4 — พฤติกรรมการใช้บริการ (Field 29-41)</a></li>
+      <li><a href="#group5">7. กลุ่ม 5 — ยอดซื้อ & ความถี่ (Field 42-56)</a></li>
+      <li><a href="#group6">8. กลุ่ม 6 — คะแนน (Field 57-62)</a></li>
+      <li><a href="#group7">9. กลุ่ม 7 — เครดิต (Field 63-66)</a></li>
+      <li><a href="#points-events">10. ตารางเหตุการณ์คะแนน</a></li>
+      <li><a href="#dependency">11. แผนผังความสัมพันธ์ข้อมูล</a></li>
+    </ul>
+  </div>
+
+  <!-- Section: Data Sources -->
+  <section class="section" id="datasources">
+    <h2>1. แหล่งข้อมูลที่ใช้</h2>
+    <p>ข้อมูลในแดชบอร์ดภาพรวมสมาชิกดึงมาจาก 4 แหล่งหลัก ดังนี้:</p>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon blue">📋</div>
+        <div>
+          <div class="card-title">ข้อมูลสมัครสมาชิก (Input)</div>
+          <div class="card-subtitle">ข้อมูลที่กรอกตอนสมัคร — ไม่ต้องคำนวณ</div>
+        </div>
+      </div>
+      <p>ใช้สำหรับ: <strong>Field 1-18, 20, 22, 26-28</strong></p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon green">🧾</div>
+        <div>
+          <div class="card-title">รายงานบิล (bills)</div>
+          <div class="card-subtitle">ข้อมูลระดับบิล — 1 แถว = 1 บิล</div>
+        </div>
+      </div>
+      <p>ใช้สำหรับ: <strong>Field 29, 32-35, 40-55, 58-66</strong></p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon gold">🍽️</div>
+        <div>
+          <div class="card-title">รายงานรายละเอียดบิล (bill_items)</div>
+          <div class="card-subtitle">ข้อมูลระดับเมนู — 1 แถว = 1 รายการสินค้าในบิล</div>
+        </div>
+      </div>
+      <p>ใช้สำหรับ: <strong>Field 36-39, 51, 56</strong></p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon red">🧮</div>
+        <div>
+          <div class="card-title">คำนวณแยก (สูตรเฉพาะ)</div>
+          <div class="card-subtitle">RFM, Lifecycle, Rank — มีสูตรคำนวณเฉพาะ</div>
+        </div>
+      </div>
+      <p>ใช้สำหรับ: <strong>Field 19, 21, 23-25, 30-31</strong></p>
+    </div>
+  </section>
+
+  <!-- Section: Conditions -->
+  <section class="section" id="conditions">
+    <h2>2. เงื่อนไขสำคัญในการดึงข้อมูล</h2>
+
+    <div class="info-box error">
+      <div class="info-box-icon">⚠️</div>
+      <div class="info-box-content">
+        <strong>เงื่อนไขบังคับ:</strong> ทุก Field ที่คำนวณจากรายงานบิล ต้องใช้เฉพาะบิลที่มีสถานะ <span class="inline-code">bill_status = "สำเร็จ"</span> เท่านั้น (ไม่นับ "คืนเงิน" หรือ "ยกเลิก")
+      </div>
+    </div>
+
+    <div class="info-box warning">
+      <div class="info-box-icon">🚫</div>
+      <div class="info-box-content">
+        <strong>บิล "ไม่คิดรายได้":</strong> บิลที่ถูก flag เป็น "ไม่คิดรายได้" จะไม่ถูกนำมาคำนวณใดๆ ทั้งสิ้น ไม่ว่าจะเป็นยอดขาย ความถี่ หรือคะแนน
+      </div>
+    </div>
+
+    <div class="info-box info">
+      <div class="info-box-icon">🌐</div>
+      <div class="info-box-content">
+        <strong>ทุกสาขา:</strong> Fields ที่ระบุ "ทุกสาขา" จะคำนวณรวมข้อมูลจากทุกสาขา ไม่จำกัดเฉพาะสาขาใดสาขาหนึ่ง
+      </div>
+    </div>
+
+    <div class="info-box success">
+      <div class="info-box-icon">🔗</div>
+      <div class="info-box-content">
+        <strong>ความสัมพันธ์ข้อมูล:</strong> รายงานบิล (1) → รายงานรายละเอียดบิล (N) เชื่อมด้วย <span class="inline-code">bill_id</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: Group 1 -->
+  <section class="section" id="group1">
+    <h2>3. กลุ่ม 1 — ข้อมูลส่วนตัว</h2>
+    <p>ข้อมูลที่ได้มาจากการกรอกตอนสมัครสมาชิก ไม่ต้องคำนวณ แสดงตามที่ได้รับมา</p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ชื่อฟิลด์</th>
+            <th>Field Name</th>
+            <th>แหล่งข้อมูล</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="field-num">1</span></td><td>รหัสสมาชิก</td><td><span class="inline-code">member_id</span></td><td><span class="source-tag input">ระบบสร้างอัตโนมัติ</span></td></tr>
+          <tr><td><span class="field-num">2</span></td><td>ชื่อ-นามสกุล</td><td><span class="inline-code">full_name</span></td><td><span class="source-tag input">Input</span></td></tr>
+          <tr><td><span class="field-num">3</span></td><td>ชื่อเล่น</td><td><span class="inline-code">nickname</span></td><td><span class="source-tag input">Input</span></td></tr>
+          <tr><td><span class="field-num">4</span></td><td>เบอร์โทร</td><td><span class="inline-code">phone_number</span></td><td><span class="source-tag input">Input</span></td></tr>
+          <tr><td><span class="field-num">5</span></td><td>วันเกิด</td><td><span class="inline-code">birth_date</span></td><td><span class="source-tag input">Input</span></td></tr>
+          <tr><td><span class="field-num">6</span></td><td>อายุ</td><td><span class="inline-code">age</span></td><td><span class="source-tag input">Input</span></td></tr>
+          <tr><td><span class="field-num">7</span></td><td>เพศ</td><td><span class="inline-code">gender</span></td><td><span class="source-tag input">Input</span></td></tr>
+          <tr><td><span class="field-num">8</span></td><td>ที่อยู่</td><td><span class="inline-code">address</span></td><td><span class="source-tag input">Input</span></td></tr>
+          <tr><td><span class="field-num">9</span></td><td>Email</td><td><span class="inline-code">email</span></td><td><span class="source-tag input">Input</span></td></tr>
+          <tr><td><span class="field-num">10</span></td><td>อาชีพ</td><td><span class="inline-code">occupation</span></td><td><span class="source-tag input">Input</span></td></tr>
+          <tr><td><span class="field-num">11</span></td><td>รายได้</td><td><span class="inline-code">income</span></td><td><span class="source-tag input">Input</span></td></tr>
+          <tr><td><span class="field-num">12</span></td><td>สถานภาพ</td><td><span class="inline-code">marital_status</span></td><td><span class="source-tag input">Input</span></td></tr>
+          <tr><td><span class="field-num">13</span></td><td>ระดับการศึกษา</td><td><span class="inline-code">education_level</span></td><td><span class="source-tag input">Input</span></td></tr>
+          <tr><td><span class="field-num">14</span></td><td>การรับข่าวสาร</td><td><span class="inline-code">social_media_channel</span></td><td><span class="source-tag input">Input</span></td></tr>
+          <tr><td><span class="field-num">15</span></td><td>ไลฟ์สไตล์</td><td><span class="inline-code">lifestyle</span></td><td><span class="source-tag input">Input</span></td></tr>
+          <tr><td><span class="field-num">16</span></td><td>แพ้อาหาร</td><td><span class="inline-code">food_allergy</span></td><td><span class="source-tag input">Input</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Section: Group 2 -->
+  <section class="section" id="group2">
+    <h2>4. กลุ่ม 2 — LINE & สถานะสมาชิก</h2>
+    <p>ข้อมูลเกี่ยวกับการเชื่อมต่อ LINE และสถานะการเป็นสมาชิก</p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ชื่อฟิลด์</th>
+            <th>Field Name</th>
+            <th>สูตร / ที่มา</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="field-num">17</span></td>
+            <td>Start on LINE</td>
+            <td><span class="inline-code">line_start_date</span></td>
+            <td>วันที่เชื่อมต่อ LINE ครั้งแรก</td>
+          </tr>
+          <tr>
+            <td><span class="field-num">18</span></td>
+            <td>LINE User ID</td>
+            <td><span class="inline-code">line_user_id</span></td>
+            <td>UID จากระบบ LINE</td>
+          </tr>
+          <tr>
+            <td><span class="field-num">19</span></td>
+            <td><strong>สถานะสมาชิก</strong></td>
+            <td><span class="inline-code">member_status</span></td>
+            <td><span class="source-tag calc">คำนวณ</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">20</span></td>
+            <td>วันสมัครสมาชิก</td>
+            <td><span class="inline-code">register_date</span></td>
+            <td><span class="source-tag input">Input</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">21</span></td>
+            <td><strong>ระดับสมาชิก</strong></td>
+            <td><span class="inline-code">member_tier</span></td>
+            <td><span class="source-tag calc">คำนวณจาก Rerank</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">22</span></td>
+            <td>แท็ก</td>
+            <td><span class="inline-code">tags</span></td>
+            <td><span class="source-tag input">Input (VIP, etc.)</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>สูตร: สถานะสมาชิก (Field 19)</h3>
+    <ul class="formula-list">
+      <li>IF วันปัจจุบัน > วันหมดอายุ → "Expired"</li>
+      <li>IF วันปัจจุบัน ≤ วันหมดอายุ → "Active"</li>
+    </ul>
+
+    <h3>สูตร: ระดับสมาชิก (Field 21)</h3>
+    <p>คำนวณจากยอดสะสมหลัง Rerank — เมื่อยอดสะสมถึงเกณฑ์ที่กำหนด สมาชิกจะถูกเลื่อนระดับ (เช่น Classic → Platinum)</p>
+  </section>
+
+  <!-- Section: Group 3 -->
+  <section class="section" id="group3">
+    <h2>5. กลุ่ม 3 — อายุสมาชิก & วันหมดอายุ</h2>
+    <p>ข้อมูลที่เกี่ยวกับระยะเวลาการเป็นสมาชิกและวันหมดอายุ</p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ชื่อฟิลด์</th>
+            <th>Field Name</th>
+            <th>สูตร / ที่มา</th>
+            <th>หน่วย</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="field-num">23</span></td>
+            <td><strong>อายุสมาชิก (วัน)</strong></td>
+            <td><span class="inline-code">membership_age_day</span></td>
+            <td><span class="source-tag calc">คำนวณ</span></td>
+            <td>วัน</td>
+          </tr>
+          <tr>
+            <td><span class="field-num">24</span></td>
+            <td><strong>อายุสมาชิก (เดือน)</strong></td>
+            <td><span class="inline-code">membership_age_month</span></td>
+            <td><span class="source-tag calc">คำนวณ</span></td>
+            <td>เดือน</td>
+          </tr>
+          <tr>
+            <td><span class="field-num">25</span></td>
+            <td><strong>วันหมดอายุ</strong></td>
+            <td><span class="inline-code">membership_expiry_date</span></td>
+            <td><span class="source-tag calc">คำนวณ</span></td>
+            <td>วันที่</td>
+          </tr>
+          <tr>
+            <td><span class="field-num">26</span></td>
+            <td>ช่องทางสมัคร</td>
+            <td><span class="inline-code">register_channel</span></td>
+            <td><span class="source-tag input">Input (POS / Web CRM)</span></td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><span class="field-num">27</span></td>
+            <td>พนักงาน</td>
+            <td><span class="inline-code">staff_name</span></td>
+            <td><span class="source-tag input">Input</span></td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><span class="field-num">28</span></td>
+            <td>สาขาที่สมัคร</td>
+            <td><span class="inline-code">register_branch</span></td>
+            <td><span class="source-tag input">Input</span></td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>สูตรที่ใช้</h3>
+    <ul class="formula-list">
+      <li>อายุสมาชิก (วัน) = TODAY() - register_date</li>
+      <li>อายุสมาชิก (เดือน) = DATEDIF(register_date, TODAY(), "M")</li>
+      <li>วันหมดอายุ = register_date + จำนวนเดือนจากแพ็กเกจ</li>
+    </ul>
+  </section>
+
+  <!-- Section: Group 4 -->
+  <section class="section" id="group4">
+    <h2>6. กลุ่ม 4 — พฤติกรรมการใช้บริการ</h2>
+    <p>ข้อมูลที่คำนวณจากรายงานบิล แสดงพฤติกรรมการใช้บริการของสมาชิก</p>
+
+    <div class="info-box warning">
+      <div class="info-box-icon">⚡</div>
+      <div class="info-box-content">
+        <strong>เงื่อนไข:</strong> ทุก Field ในกลุ่มนี้ใช้เฉพาะบิลที่ <span class="inline-code">bill_status = "สำเร็จ"</span> และรวมทุกสาขา
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ชื่อฟิลด์</th>
+            <th>Field Name</th>
+            <th>สูตร</th>
+            <th>แหล่งข้อมูล</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="field-num">29</span></td>
+            <td><strong>ใช้บริการล่าสุด</strong></td>
+            <td><span class="inline-code">last_visit_date</span></td>
+            <td>MAX(Close_Date) ของสมาชิก</td>
+            <td><span class="source-tag bill">รายงานบิล</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">30</span></td>
+            <td><strong>กลุ่ม RFM</strong></td>
+            <td><span class="inline-code">rfm_segment</span></td>
+            <td>คำนวณแยก (สูตร RFM)</td>
+            <td><span class="source-tag calc">คำนวณแยก</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">31</span></td>
+            <td><strong>กลุ่ม Lifecycle</strong></td>
+            <td><span class="inline-code">lifecycle_segment</span></td>
+            <td>คำนวณแยก (สูตร Lifecycle)</td>
+            <td><span class="source-tag calc">คำนวณแยก</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">32</span></td>
+            <td><strong>ลักษณะลูกค้า</strong></td>
+            <td><span class="inline-code">customer_type</span></td>
+            <td>MODE(customer_type) จากบิลทั้งหมด</td>
+            <td><span class="source-tag bill">รายงานบิล</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">33</span></td>
+            <td><strong>โปรโมชันที่ใช้ล่าสุด</strong></td>
+            <td><span class="inline-code">last_promotion_used</span></td>
+            <td>ค่าล่าสุดจาก discount_name (ที่ไม่ว่าง)</td>
+            <td><span class="source-tag bill">รายงานบิล</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">34</span></td>
+            <td><strong>วัน เวลาที่ใช้บริการบ่อย</strong></td>
+            <td><span class="inline-code">frequent_visit_datetime</span></td>
+            <td>MODE(วัน + ช่วงเวลา)</td>
+            <td><span class="source-tag bill">รายงานบิล</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">35</span></td>
+            <td><strong>ช่องทางใช้บริการบ่อย</strong></td>
+            <td><span class="inline-code">frequent_service_channel</span></td>
+            <td>MODE(sales_channel)</td>
+            <td><span class="source-tag bill">รายงานบิล</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ชื่อฟิลด์</th>
+            <th>Field Name</th>
+            <th>สูตร</th>
+            <th>แหล่งข้อมูล</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="field-num">36</span></td>
+            <td><strong>หมวดหมู่ทานบ่อย</strong></td>
+            <td><span class="inline-code">frequent_food_category</span></td>
+            <td>MODE(item_category)</td>
+            <td><span class="source-tag bill-item">รายละเอียดบิล</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">37</span></td>
+            <td>เมนูทานบ่อย 1</td>
+            <td><span class="inline-code">top_menu_1</span></td>
+            <td>item_name ที่มี SUM(item_qty) มากสุด อันดับ 1</td>
+            <td><span class="source-tag bill-item">รายละเอียดบิล</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">38</span></td>
+            <td>เมนูทานบ่อย 2</td>
+            <td><span class="inline-code">top_menu_2</span></td>
+            <td>item_name ที่มี SUM(item_qty) มากสุด อันดับ 2</td>
+            <td><span class="source-tag bill-item">รายละเอียดบิล</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">39</span></td>
+            <td>เมนูทานบ่อย 3</td>
+            <td><span class="inline-code">top_menu_3</span></td>
+            <td>item_name ที่มี SUM(item_qty) มากสุด อันดับ 3</td>
+            <td><span class="source-tag bill-item">รายละเอียดบิล</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">40</span></td>
+            <td><strong>ระยะห่างการใช้บริการล่าสุด</strong></td>
+            <td><span class="inline-code">recency_day</span></td>
+            <td>TODAY() - last_visit_date</td>
+            <td><span class="source-tag bill">รายงานบิล</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">41</span></td>
+            <td><strong>สาขาที่ใช้บริการบ่อย</strong></td>
+            <td><span class="inline-code">frequent_branch</span></td>
+            <td>MODE(branch_name)</td>
+            <td><span class="source-tag bill">รายงานบิล</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>สูตร: ลักษณะลูกค้า (Field 32)</h3>
+    <ul class="formula-list">
+      <li>customer_type = MODE(customer_type จากบิลทั้งหมดที่สำเร็จ)</li>
+      <li>ตัวอย่าง: ถ้าบิล 5 ใบ มี customer_type เป็น "ทานที่ร้าน" 3 ใบ, "Delivery" 2 ใบ → ผลลัพธ์ = "ทานที่ร้าน"</li>
+    </ul>
+
+    <h3>สูตร: วัน เวลาที่ใช้บริการบ่อย (Field 34)</h3>
+    <ul class="formula-list">
+      <li>แปลง Open_Date → ชื่อวัน (จันทร์-อาทิตย์)</li>
+      <li>แปลง Open_Time → ช่วงเวลา: กลางวัน (10:00-14:59), บ่าย (15:00-16:59), เย็น (17:00-18:59), ค่ำ (19:00-22:00)</li>
+      <li>รวมเป็น "วัน + ช่วงเวลา" เช่น "วันอาทิตย์ กลางวัน"</li>
+      <li>หา MODE (ค่าที่ปรากฏมากที่สุด)</li>
+    </ul>
+
+    <h3>สูตร: เมนูทานบ่อย (Field 37-39)</h3>
+    <ul class="formula-list">
+      <li>GROUP BY item_name จากรายงานรายละเอียดบิลของสมาชิก</li>
+      <li>SUM(item_qty) ของแต่ละ item_name</li>
+      <li>ORDER BY SUM(item_qty) DESC</li>
+      <li>เลือก 3 อันดับแรก → top_menu_1, top_menu_2, top_menu_3</li>
+    </ul>
+  </section>
+
+  <!-- Section: Group 5 -->
+  <section class="section" id="group5">
+    <h2>7. กลุ่ม 5 — ยอดซื้อ & ความถี่</h2>
+    <p>ข้อมูลเชิงปริมาณ: จำนวนครั้ง, ยอดเงิน, ค่าเฉลี่ย ที่คำนวณจากรายงานบิล</p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ชื่อฟิลด์</th>
+            <th>Field Name</th>
+            <th>สูตร</th>
+            <th>เงื่อนไข</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="field-num">42</span></td>
+            <td><strong>จำนวนการซื้อทั้งหมด</strong></td>
+            <td><span class="inline-code">total_orders_lifetime</span></td>
+            <td>COUNT(bills) ของสมาชิก</td>
+            <td><span class="condition-tag">สำเร็จ</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">43</span></td>
+            <td><strong>ยอดใช้จ่ายตลอดอายุ</strong></td>
+            <td><span class="inline-code">total_spend_lifetime</span></td>
+            <td>SUM(Total_Net_Sales)</td>
+            <td><span class="condition-tag">สำเร็จ</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">44</span></td>
+            <td><strong>ยอดสะสมหลัง Rerank</strong></td>
+            <td><span class="inline-code">spend_since_last_rerank</span></td>
+            <td>SUM(Total_Net_Sales) หลังวัน Rerank ล่าสุด</td>
+            <td><span class="condition-tag">สำเร็จ</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">45</span></td>
+            <td><strong>จำนวนคน TC</strong></td>
+            <td><span class="inline-code">avg_party_size_tc</span></td>
+            <td>SUM(customer_count) จากบิลทั้งหมด</td>
+            <td><span class="condition-tag">สำเร็จ</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">46</span></td>
+            <td><strong>เฉลี่ยต่อคน TA</strong></td>
+            <td><span class="inline-code">avg_spend_per_person_ta</span></td>
+            <td>total_spend_lifetime / SUM(customer_count)</td>
+            <td><span class="condition-tag">สำเร็จ</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">47</span></td>
+            <td><strong>ยอดเฉลี่ยต่อครั้ง</strong></td>
+            <td><span class="inline-code">avg_spend_per_visit</span></td>
+            <td>total_spend_lifetime / total_orders_lifetime</td>
+            <td><span class="condition-tag">สำเร็จ</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ชื่อฟิลด์</th>
+            <th>Field Name</th>
+            <th>สูตร</th>
+            <th>เงื่อนไข</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="field-num">48</span></td>
+            <td><strong>ความถี่ 0-1 เดือน</strong></td>
+            <td><span class="inline-code">orders_first_1m</span></td>
+            <td>COUNT(bills WHERE Close_Date ≤ register_date + 30 วัน)</td>
+            <td><span class="condition-tag">สำเร็จ</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">49</span></td>
+            <td><strong>ความถี่ 0-6 เดือน</strong></td>
+            <td><span class="inline-code">orders_first_6m</span></td>
+            <td>COUNT(bills WHERE Close_Date ≤ register_date + 180 วัน)</td>
+            <td><span class="condition-tag">สำเร็จ</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">50</span></td>
+            <td><strong>ความถี่ 0-12 เดือน</strong></td>
+            <td><span class="inline-code">orders_first_1y</span></td>
+            <td>COUNT(bills WHERE Close_Date ≤ register_date + 365 วัน)</td>
+            <td><span class="condition-tag">สำเร็จ</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">51</span></td>
+            <td><strong>เฉลี่ยจาน/ครั้ง</strong></td>
+            <td><span class="inline-code">avg_dish_per_visit</span></td>
+            <td>SUM(item_qty) / total_orders_lifetime</td>
+            <td><span class="condition-tag">สำเร็จ</span></td>
+          </tr>
+          <tr>
+            <td><span class="field-num">52</span></td>
+            <td><strong>ระยะห่างเฉลี่ยระหว่างการซื้อ</strong></td>
+            <td><span class="inline-code">avg_visit_interval_day</span></td>
+            <td>membership_age_day / total_orders_lifetime</td>
+            <td>total_orders ≥ 2</td>
+          </tr>
+          <tr>
+            <td><span class="field-num">53</span></td>
+            <td><strong>เฉลี่ยเวลาทาน/บิล</strong></td>
+            <td><span class="inline-code">avg_dine_time_min</span></td>
+            <td>AVG(bill_duration)</td>
+            <td>สำเร็จ + ทานที่ร้าน</td>
+          </tr>
+          <tr>
+            <td><span class="field-num">54</span></td>
+            <td><strong>ใช้บริการเฉลี่ย/เดือน</strong></td>
+            <td><span class="inline-code">avg_visit_per_month</span></td>
+            <td>total_orders_lifetime / membership_age_month</td>
+            <td>membership_age_month > 0</td>
+          </tr>
+          <tr>
+            <td><span class="field-num">55</span></td>
+            <td><strong>LTV ต่อปี</strong></td>
+            <td><span class="inline-code">ltv_annual</span></td>
+            <td>avg_spend_per_visit × avg_visit_per_month × 12</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><span class="field-num">56</span></td>
+            <td><strong>ความหลากหลายเมนู</strong></td>
+            <td><span class="inline-code">menu_diversity_score</span></td>
+            <td>COUNT(DISTINCT item_name)</td>
+            <td><span class="condition-tag">สำเร็จ</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>สูตรสำคัญในกลุ่มนี้</h3>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon blue">📊</div>
+        <div>
+          <div class="card-title">ยอดเฉลี่ยต่อครั้ง (Field 47)</div>
+          <div class="card-subtitle">Average Spend per Visit</div>
+        </div>
+      </div>
+      <ul class="formula-list">
+        <li>avg_spend_per_visit = total_spend_lifetime / total_orders_lifetime</li>
+        <li>ตัวอย่าง: ยอดรวม 50,000 บาท / มา 20 ครั้ง = เฉลี่ย 2,500 บาท/ครั้ง</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon green">📅</div>
+        <div>
+          <div class="card-title">ระยะห่างเฉลี่ยระหว่างการซื้อ (Field 52)</div>
+          <div class="card-subtitle">Average Visit Interval</div>
+        </div>
+      </div>
+      <ul class="formula-list">
+        <li>avg_visit_interval_day = (TODAY() - register_date) / total_orders_lifetime</li>
+        <li>ตัวอย่าง: เป็นสมาชิก 180 วัน / มา 6 ครั้ง = เฉลี่ย 30 วัน/ครั้ง</li>
+        <li>หมายเหตุ: ใช้ได้เมื่อ total_orders ≥ 2</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon gold">💰</div>
+        <div>
+          <div class="card-title">LTV ต่อปี (Field 55)</div>
+          <div class="card-subtitle">Lifetime Value Annual</div>
+        </div>
+      </div>
+      <ul class="formula-list">
+        <li>ltv_annual = avg_spend_per_visit × avg_visit_per_month × 12</li>
+        <li>ตัวอย่าง: 2,500 บาท/ครั้ง × 2 ครั้ง/เดือน × 12 = 60,000 บาท/ปี</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Section: Group 6 -->
+  <section class="section" id="group6">
+    <h2>8. กลุ่ม 6 — คะแนน (Points)</h2>
+    <p>ระบบคะแนนสะสมของสมาชิก คำนวณจากเหตุการณ์คะแนนต่างๆ</p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ชื่อฟิลด์</th>
+            <th>Field Name</th>
+            <th>สูตร</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="field-num">57</span></td>
+            <td>โปรโมชันล่าสุด</td>
+            <td><span class="inline-code">last_promotion</span></td>
+            <td>ชื่อโปรโมชันที่ใช้ล่าสุด</td>
+          </tr>
+          <tr>
+            <td><span class="field-num">58</span></td>
+            <td><strong>คะแนนที่ได้รับทั้งหมด</strong></td>
+            <td><span class="inline-code">total_points_earned</span></td>
+            <td>SUM(Earned) + SUM(Migrate) + SUM(Adjusted Increase) + SUM(Refund)</td>
+          </tr>
+          <tr>
+            <td><span class="field-num">59</span></td>
+            <td><strong>คะแนนหลัง Rerank</strong></td>
+            <td><span class="inline-code">points_earned_since_rerank</span></td>
+            <td>SUM(points +) หลังวัน Rerank ล่าสุด</td>
+          </tr>
+          <tr>
+            <td><span class="field-num">60</span></td>
+            <td><strong>คะแนนที่ใช้ทั้งหมด</strong></td>
+            <td><span class="inline-code">total_points_redeemed</span></td>
+            <td>SUM(Used)</td>
+          </tr>
+          <tr>
+            <td><span class="field-num">61</span></td>
+            <td><strong>คะแนนที่หมดอายุ</strong></td>
+            <td><span class="inline-code">total_points_expired</span></td>
+            <td>SUM(Expired)</td>
+          </tr>
+          <tr>
+            <td><span class="field-num">62</span></td>
+            <td><strong>คะแนนคงเหลือ</strong></td>
+            <td><span class="inline-code">points_balance</span></td>
+            <td>earned - redeemed - expired - deducted</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>สูตรคะแนนคงเหลือ (Field 62)</h3>
+    <ul class="formula-list">
+      <li>total_points_earned = SUM(Earned) + SUM(Migrate) + SUM(Adjusted Increase) + SUM(Refund)</li>
+      <li>total_points_redeemed = SUM(Used)</li>
+      <li>total_points_expired = SUM(Expired)</li>
+      <li>total_points_deducted = SUM(Returned) + SUM(Adjusted Decrease)</li>
+      <li>points_balance = total_points_earned - total_points_redeemed - total_points_expired - total_points_deducted</li>
+    </ul>
+
+    <h3>อัตราคะแนนต่อบิล</h3>
+    <div class="info-box success">
+      <div class="info-box-icon">⭐</div>
+      <div class="info-box-content">
+        <strong>อัตราคะแนน:</strong> ทุก 5 บาท = 1 คะแนน (Net Sales ÷ 5) หรือ Net Sales × 20%
+      </div>
+    </div>
+
+    <ul class="formula-list">
+      <li>points_earned_per_bill = ROUND(Total_Net_Sales ÷ 5)</li>
+      <li>ตัวอย่าง: บิล ฿1,215 → 1,215 ÷ 5 = 243 คะแนน</li>
+      <li>ตัวอย่าง: บิล ฿3,674 → 3,674 ÷ 5 = 734.8 ≈ 735 คะแนน</li>
+      <li>ตัวอย่าง: บิล ฿424 → 424 ÷ 5 = 84.8 ≈ 85 คะแนน</li>
+      <li>ตัวอย่าง: บิล ฿3,500 → 3,500 ÷ 5 = 700 คะแนน</li>
+    </ul>
+  </section>
+
+  <!-- Section: Group 7 -->
+  <section class="section" id="group7">
+    <h2>9. กลุ่ม 7 — เครดิต (Credits)</h2>
+    <p>ระบบเครดิตสะสมของสมาชิก คล้ายระบบคะแนนแต่แยกต่างหาก</p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ชื่อฟิลด์</th>
+            <th>Field Name</th>
+            <th>สูตร</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="field-num">63</span></td>
+            <td>เครดิตที่ได้รับทั้งหมด</td>
+            <td><span class="inline-code">total_credits_earned</span></td>
+            <td>รวมเครดิตที่ได้รับจากทุกแหล่ง</td>
+          </tr>
+          <tr>
+            <td><span class="field-num">64</span></td>
+            <td>เครดิตที่ใช้ทั้งหมด</td>
+            <td><span class="inline-code">total_credits_redeemed</span></td>
+            <td>รวมเครดิตที่ใช้</td>
+          </tr>
+          <tr>
+            <td><span class="field-num">65</span></td>
+            <td>เครดิตที่หมดอายุ</td>
+            <td><span class="inline-code">total_credits_expired</span></td>
+            <td>เครดิตที่เกินอายุ</td>
+          </tr>
+          <tr>
+            <td><span class="field-num">66</span></td>
+            <td><strong>เครดิตคงเหลือ</strong></td>
+            <td><span class="inline-code">credits_balance</span></td>
+            <td>earned - redeemed - expired</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>สูตรเครดิตคงเหลือ (Field 66)</h3>
+    <ul class="formula-list">
+      <li>credits_balance = total_credits_earned - total_credits_redeemed - total_credits_expired</li>
+    </ul>
+  </section>
+
+  <!-- Section: Point Events -->
+  <section class="section" id="points-events">
+    <h2>10. ตารางเหตุการณ์คะแนน</h2>
+    <p>ระบบบันทึกประวัติคะแนนเป็น "เหตุการณ์" แต่ละรายการ แบ่งเป็น 2 กลุ่ม:</p>
+
+    <h3>เหตุการณ์ที่ทำให้คะแนนเพิ่ม (+)</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>ประเภท</th>
+            <th>ชื่อเหตุการณ์</th>
+            <th>คำอธิบาย</th>
+            <th>ที่มา</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="source-tag bill">Earned</span></td>
+            <td>สมัครสมาชิกแรกเข้า</td>
+            <td>คะแนนที่ได้ตอนสมัครสมาชิก</td>
+            <td>ตั้งค่าจากระบบ</td>
+          </tr>
+          <tr>
+            <td><span class="source-tag bill">Earned</span></td>
+            <td>ได้รับคะแนนบิล</td>
+            <td>คะแนนจากยอดซื้อ (Net Sales ÷ 5)</td>
+            <td>รายงานบิล (สำเร็จ)</td>
+          </tr>
+          <tr>
+            <td><span class="source-tag calc">Migrate</span></td>
+            <td>นำเข้าข้อมูล</td>
+            <td>คะแนนที่ Import ผ่านชีท (ย้ายระบบ)</td>
+            <td>Admin import</td>
+          </tr>
+          <tr>
+            <td><span class="source-tag calc">Adjusted +</span></td>
+            <td>แก้ไขคะแนนเพิ่ม</td>
+            <td>Admin ปรับคะแนนเพิ่มให้ลูกค้า</td>
+            <td>Admin manual</td>
+          </tr>
+          <tr>
+            <td><span class="source-tag input">Refund</span></td>
+            <td>ยกเลิกคะแนนที่ใช้</td>
+            <td>ยกเลิกบิล → คะแนนที่เคยใช้ได้คืน</td>
+            <td>ยกเลิกบิล</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>เหตุการณ์ที่ทำให้คะแนนลด (-)</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>ประเภท</th>
+            <th>ชื่อเหตุการณ์</th>
+            <th>คำอธิบาย</th>
+            <th>ที่มา</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="source-tag bill">Used</span></td>
+            <td>ตัดใช้คะแนน</td>
+            <td>ลูกค้าใช้คะแนนแลกส่วนลด/ของรางวัล</td>
+            <td>รายงานบิล (สำเร็จ)</td>
+          </tr>
+          <tr>
+            <td><span class="source-tag input">Returned</span></td>
+            <td>ยกเลิกคะแนนที่ได้รับ</td>
+            <td>ยกเลิกบิล → คืนคะแนนที่เคยได้รับ</td>
+            <td>ยกเลิกบิล</td>
+          </tr>
+          <tr>
+            <td><span class="source-tag calc">Adjusted -</span></td>
+            <td>แก้ไขคะแนนลด</td>
+            <td>Admin ปรับคะแนนลดให้ลูกค้า</td>
+            <td>Admin manual</td>
+          </tr>
+          <tr>
+            <td><span class="source-tag bill-item">Expired</span></td>
+            <td>คะแนนหมดอายุ</td>
+            <td>คะแนนเกินอายุตามนโยบาย</td>
+            <td>ระบบอัตโนมัติ</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>ตัวอย่างการคำนวณคะแนน</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>เหตุการณ์</th>
+            <th>ประเภท</th>
+            <th>คะแนน</th>
+            <th>ยอดสะสม</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>สมัครสมาชิกแรกเข้า</td><td>Earned</td><td>+3</td><td>3</td></tr>
+          <tr><td>ได้รับคะแนนบิล DN-1330</td><td>Earned</td><td>+3</td><td>6</td></tr>
+          <tr><td>นำเข้าข้อมูล</td><td>Migrate</td><td>+3</td><td>9</td></tr>
+          <tr><td>แก้ไขคะแนนเพิ่ม</td><td>Adjusted +</td><td>+3</td><td>12</td></tr>
+          <tr><td>ตัดใช้คะแนน DN-1330</td><td>Used</td><td>-3</td><td>9</td></tr>
+          <tr><td>ยกเลิกคะแนนที่ใช้ DN-1330</td><td>Refund</td><td>+3</td><td>12</td></tr>
+          <tr><td>ยกเลิกคะแนนที่ได้รับ DN-1330</td><td>Returned</td><td>-3</td><td>9</td></tr>
+          <tr><td>แก้ไขคะแนนลด</td><td>Adjusted -</td><td>-3</td><td>6</td></tr>
+          <tr><td>คะแนนหมดอายุ</td><td>Expired</td><td>-3</td><td>3</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-box success">
+      <div class="info-box-icon">✅</div>
+      <div class="info-box-content">
+        <strong>ผลลัพธ์จากตัวอย่าง:</strong><br>
+        • total_points_earned = 3 + 3 + 3 + 3 + 3 = <strong>15</strong><br>
+        • total_points_redeemed (Used) = <strong>3</strong><br>
+        • total_points_expired = <strong>3</strong><br>
+        • total_points_deducted (Returned + Adjusted -) = 3 + 3 = <strong>6</strong><br>
+        • points_balance = 15 - 3 - 3 - 6 = <strong>3</strong> ✓
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: Dependency Diagram -->
+  <section class="section" id="dependency">
+    <h2>11. แผนผังความสัมพันธ์ข้อมูล</h2>
+    <p>แผนผังแสดงว่าข้อมูลจากแต่ละแหล่งถูกนำไปคำนวณ Field ใดบ้าง</p>
+
+    <div class="diagram-box">รายงานบิล (bills) — 1 แถว = 1 บิล
+├── bill_status = "สำเร็จ" AND ไม่ใช่ "ไม่คิดรายได้" (filter)
+├── → last_visit_date (MAX Close_Date)
+├── → recency_day (TODAY - last_visit)
+├── → total_orders_lifetime (COUNT bills)
+├── → total_spend_lifetime (SUM Net_Sales)
+├── → avg_spend_per_visit (spend / orders)
+├── → avg_party_size_tc (SUM customer_count)
+├── → avg_spend_per_person_ta (spend / SUM customer_count)
+├── → orders_first_1m/6m/1y (COUNT by date range)
+├── → avg_dine_time_min (AVG bill_duration)
+├── → customer_type (MODE)
+├── → frequent_visit_datetime (MODE วัน+เวลา)
+├── → frequent_service_channel (MODE sales_channel)
+├── → frequent_branch (MODE branch_name)
+├── → total_points_earned (SUM points_earned)
+└── → total_points_redeemed (SUM points_used)</div>
+
+    <div class="diagram-box">รายงานรายละเอียดบิล (bill_items) — 1 แถว = 1 รายการเมนูในบิล
+├── bill_status = "สำเร็จ" AND ไม่ใช่ "ไม่คิดรายได้" (filter ผ่าน bill_id)
+├── → top_menu_1/2/3 (TOP 3 item_name by SUM item_qty)
+├── → frequent_food_category (MODE item_category)
+├── → avg_dish_per_visit (SUM item_qty / total_orders)
+└── → menu_diversity_score (COUNT DISTINCT item_name)</div>
+
+    <div class="diagram-box">ข้อมูลสมาชิก (member)
+├── register_date
+│   ├── → membership_age_day (TODAY - register_date)
+│   ├── → membership_age_month (DATEDIF)
+│   └── → membership_expiry_date (register_date + package_months)
+├── membership_expiry_date
+│   └── → member_status (Active/Expired)
+└── total_spend / recency / frequency
+    ├── → rfm_segment (RFM scoring)
+    └── → lifecycle_segment (Lifecycle rules)</div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p><strong>เอกสารอ้างอิง:</strong> สูตร-รายงานภาพรวมสมาชิก.md</p>
+    <p><strong>Design System:</strong> M3-SCCN (Super Coconut — Material 3 Custom Design System)</p>
+    <p><strong>วันที่สร้าง:</strong> 19 มิถุนายน 2569</p>
+    <p><strong>เวอร์ชัน:</strong> 1.0</p>
+    <p style="margin-top: 16px; color: var(--on-surface-variant);">© Super Coconut — rOS (Restaurant/Retail Operating System)</p>
+  </footer>
+
+</main>
+
+<script>
+  // Simple active nav highlight on scroll
+  const sections = document.querySelectorAll('.section, .hero');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 100;
+      if (pageYOffset >= sectionTop) {
+        current = section.getAttribute('id');
+      }
+    });
+
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

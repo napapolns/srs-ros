@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SRS — CRM | Super Coconut rOS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+  <div class="page-layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">SC</div>
+        <span class="brand-name">Super Coconut rOS</span>
+      </div>
+      <div class="sidebar-section-title">Modules</div>
+      <ul class="sidebar-nav">
+        <li><a href="../pos/">ขายหน้าร้าน (POS)</a></li>
+        <li><a href="#">คลังสินค้า</a></li>
+        <li><a href="./" class="active">CRM</a></li>
+        <li><a href="#">รายงาน</a></li>
+        <li><a href="#">ตั้งค่า</a></li>
+      </ul>
+      <div class="sidebar-section-title">CRM Features</div>
+      <ul class="sidebar-nav">
+        <li><a href="dashboard.html">Dashboard CRM</a></li>
+        <li><a href="member-overview.html">รายงานภาพรวมสมาชิก</a></li>
+      </ul>
+    </aside>
+
+    <div class="page-wrapper">
+      <div class="breadcrumb">
+        <a href="../">หน้าแรก</a>
+        <span class="sep">/</span>
+        <span>CRM</span>
+      </div>
+
+      <header class="page-header">
+        <h1>CRM — ระบบจัดการลูกค้าสัมพันธ์</h1>
+        <p class="subtitle">เอกสาร SRS สำหรับระบบ CRM ครอบคลุม Dashboard, รายงานภาพรวมสมาชิก, คะแนน, เครดิต</p>
+        <span class="badge">2 Features</span>
+      </header>
+
+      <div class="feature-list">
+        <a href="dashboard.html" class="feature-item">
+          <div class="feat-icon">📊</div>
+          <div>
+            <div class="feat-title">Dashboard CRM</div>
+            <div class="feat-desc">สูตรคำนวณและแหล่งข้อมูลทุก Card ใน Dashboard — ภาพรวมลูกค้า, CLV, ยอดซื้อสาขา, RFM, Lifecycle, คะแนน, เครดิต</div>
+          </div>
+          <div class="feat-arrow">→</div>
+        </a>
+        <a href="member-overview.html" class="feature-item">
+          <div class="feat-icon">👥</div>
+          <div>
+            <div class="feat-title">รายงานภาพรวมสมาชิก (66 Fields)</div>
+            <div class="feat-desc">สูตรคำนวณทั้ง 66 ฟิลด์ — ข้อมูลส่วนตัว, พฤติกรรม, ยอดซื้อ, คะแนน, เครดิต พร้อมแหล่งข้อมูลและเงื่อนไข</div>
+          </div>
+          <div class="feat-arrow">→</div>
+        </a>
+      </div>
+
+      <footer class="page-footer">
+        <p>SRS Documentation | Super Coconut rOS | Design System: M3-SCCN</p>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SRS — Dashboard CRM | Super Coconut</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0B0A0A;
+      --on-primary: #FFFFFF;
+      --secondary-container: #FBBF14;
+      --on-secondary-container: #483400;
+      --tertiary: #014AC5;
+      --on-tertiary: #FFFFFF;
+      --error: #BA1A1A;
+      --error-container: #FFDAD6;
+      --success: #00733F;
+      --background: #FFFFFF;
+      --surface: #FCFCFC;
+      --on-surface: #1C1B1B;
+      --on-surface-variant: #6B7274;
+      --surface-container-lowest: #F8F8F8;
+      --surface-container-low: #F2F2F2;
+      --surface-container: #EBEBEB;
+      --surface-container-high: #E5E5E5;
+      --outline: #747878;
+      --outline-variant: #C0C8CB;
+      --inverse-surface: #313030;
+      --inverse-on-surface: #F4F0EF;
+      --font-family: 'IBM Plex Sans Thai', sans-serif;
+      --corner-xs: 4px;
+      --corner-sm: 8px;
+      --corner-md: 12px;
+      --corner-lg: 16px;
+      --corner-xl: 24px;
+      --corner-full: 1000px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-family);
+      background: var(--background);
+      color: var(--on-surface);
+      font-size: 16px;
+      line-height: 24px;
+      letter-spacing: 0.5px;
+    }
+    .sidebar {
+      position: fixed; top: 0; left: 0; width: 280px; height: 100vh;
+      background: var(--surface-container-lowest);
+      border-right: 1px solid var(--outline-variant);
+      overflow-y: auto; padding: 24px 16px; z-index: 100;
+    }
+    .sidebar-logo {
+      display: flex; align-items: center; gap: 12px;
+      padding: 8px 12px; margin-bottom: 24px;
+    }
+    .sidebar-logo .brand {
+      width: 32px; height: 32px; background: var(--secondary-container);
+      border-radius: var(--corner-full); display: flex; align-items: center;
+      justify-content: center; font-weight: 600; font-size: 14px;
+      color: var(--on-secondary-container);
+    }
+    .sidebar-logo span { font-size: 16px; font-weight: 500; }
+    .nav-section { margin-bottom: 8px; }
+    .nav-section-title {
+      font-size: 11px; font-weight: 500; color: var(--on-surface-variant);
+      text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 12px 4px;
+    }
+    .nav-link {
+      display: block; padding: 10px 12px; color: var(--on-surface);
+      text-decoration: none; font-size: 14px; border-radius: var(--corner-sm);
+      transition: background 0.15s;
+    }
+    .nav-link:hover { background: var(--surface-container-low); }
+    .nav-link.active {
+      background: var(--secondary-container); color: var(--on-secondary-container);
+      font-weight: 500;
+    }
+
+    .main { margin-left: 280px; padding: 48px 64px 96px; max-width: 960px; }
+    .hero { margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--outline-variant); }
+    .hero h1 { font-size: 32px; line-height: 40px; font-weight: 500; margin-bottom: 12px; }
+    .hero .subtitle { font-size: 16px; color: var(--on-surface-variant); line-height: 24px; }
+    .meta-badges { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+    .badge {
+      display: inline-flex; align-items: center; padding: 4px 12px;
+      border-radius: var(--corner-full); font-size: 12px; font-weight: 500;
+    }
+    .badge-version { background: var(--secondary-container); color: var(--on-secondary-container); }
+    .badge-status { background: #D4EDDA; color: var(--success); }
+    .badge-level-owner { background: #E8F0FE; color: var(--tertiary); }
+    .badge-level-branch { background: #FEF3C7; color: #92400E; }
+    .section { margin-bottom: 48px; }
+    .section h2 {
+      font-size: 24px; line-height: 32px; font-weight: 500;
+      margin-bottom: 16px; padding-bottom: 8px;
+      border-bottom: 2px solid var(--secondary-container);
+    }
+    .section h3 { font-size: 16px; font-weight: 500; margin-bottom: 12px; margin-top: 24px; }
+    p { margin-bottom: 12px; }
+    .card {
+      background: var(--surface); border: 1px solid var(--outline-variant);
+      border-radius: var(--corner-md); padding: 24px; margin-bottom: 16px;
+      box-shadow: 0px 1px 2px rgba(0,0,0,0.08);
+    }
+    .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .card-icon {
+      width: 40px; height: 40px; border-radius: var(--corner-sm);
+      display: flex; align-items: center; justify-content: center; font-size: 18px;
+    }
+    .card-icon.blue { background: #E8F0FE; color: var(--tertiary); }
+    .card-icon.gold { background: #FFF3CD; color: #785A00; }
+    .card-icon.green { background: #D4EDDA; color: var(--success); }
+    .card-icon.red { background: var(--error-container); color: var(--error); }
+    .card-icon.purple { background: #F3E8FF; color: #6B21A8; }
+    .card-title { font-size: 16px; font-weight: 500; }
+    .card-subtitle { font-size: 12px; color: var(--on-surface-variant); }
+
+    .table-wrapper {
+      overflow-x: auto; margin: 16px 0;
+      border: 1px solid var(--outline-variant); border-radius: var(--corner-sm);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    thead { background: var(--surface-container-low); }
+    th {
+      padding: 12px 16px; text-align: left; font-weight: 500; font-size: 12px;
+      color: var(--on-surface-variant); text-transform: uppercase;
+      letter-spacing: 0.5px; border-bottom: 1px solid var(--outline-variant);
+    }
+    td {
+      padding: 12px 16px; border-bottom: 1px solid var(--outline-variant);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover { background: var(--surface-container-lowest); }
+    .formula {
+      background: var(--inverse-surface); color: var(--inverse-on-surface);
+      padding: 16px 20px; border-radius: var(--corner-sm);
+      font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px;
+      line-height: 22px; margin: 12px 0; overflow-x: auto; white-space: pre-wrap;
+    }
+
+    .formula-list {
+      background: var(--inverse-surface); color: var(--inverse-on-surface);
+      padding: 16px 20px 16px 40px; border-radius: var(--corner-sm);
+      font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px;
+      line-height: 28px; margin: 12px 0; overflow-x: auto;
+      list-style: decimal;
+    }
+
+    .formula-list li {
+      margin-bottom: 4px;
+      padding-left: 8px;
+    }
+    .inline-code {
+      background: var(--surface-container); padding: 2px 8px;
+      border-radius: var(--corner-xs); font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px; color: var(--tertiary);
+    }
+    .info-box {
+      padding: 16px 20px; border-radius: var(--corner-sm); margin: 16px 0;
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .info-box.warning { background: #FFF3CD; border-left: 4px solid var(--secondary-container); }
+    .info-box.info { background: #E8F0FE; border-left: 4px solid var(--tertiary); }
+    .info-box.error { background: var(--error-container); border-left: 4px solid var(--error); }
+    .info-box.success { background: #D4EDDA; border-left: 4px solid var(--success); }
+    .info-box-icon { font-size: 18px; flex-shrink: 0; }
+    .info-box-content { font-size: 14px; line-height: 22px; }
+    .info-box-content strong { font-weight: 500; }
+    .source-tag {
+      display: inline-flex; padding: 2px 8px; border-radius: var(--corner-xs);
+      font-size: 11px; font-weight: 500;
+    }
+    .source-tag.member { background: #E8F0FE; color: var(--tertiary); }
+    .source-tag.bill { background: #D4EDDA; color: var(--success); }
+    .source-tag.bill-detail { background: #F3E8FF; color: #6B21A8; }
+    .source-tag.system { background: #FEF3C7; color: #92400E; }
+    .source-tag.calc { background: var(--surface-container); color: var(--on-surface); }
+    .condition-tag {
+      display: inline-flex; padding: 2px 8px; border-radius: var(--corner-xs);
+      font-size: 11px; font-weight: 500; background: #FEF3C7; color: #92400E;
+    }
+    .level-tag {
+      display: inline-flex; padding: 2px 8px; border-radius: var(--corner-xs);
+      font-size: 11px; font-weight: 500;
+    }
+    .level-tag.owner { background: #E8F0FE; color: var(--tertiary); }
+    .level-tag.branch { background: #FEF3C7; color: #92400E; }
+    .divider { border: none; border-top: 1px solid var(--outline-variant); margin: 32px 0; }
+    .footer {
+      margin-top: 64px; padding-top: 24px;
+      border-top: 1px solid var(--outline-variant); font-size: 12px;
+      color: var(--on-surface-variant);
+    }
+    @media (max-width: 1024px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">SC</div>
+    <span>Super Coconut CRM</span>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">เอกสาร</div>
+    <a href="#overview" class="nav-link active">ภาพรวม</a>
+    <a href="#datasources" class="nav-link">แหล่งข้อมูล</a>
+    <a href="#conditions" class="nav-link">เงื่อนไขสำคัญ</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-title">ส่วนของ Dashboard</div>
+    <a href="#section1" class="nav-link">1. ภาพรวมลูกค้า</a>
+    <a href="#section2" class="nav-link">2. CLV มูลค่าตลอดอายุ</a>
+    <a href="#section3" class="nav-link">3. ยอดซื้อในสาขา</a>
+    <a href="#section4-1" class="nav-link">4.1 ข้อมูลเชิงลึก</a>
+    <a href="#section4-2" class="nav-link">4.2 การแบ่งกลุ่มลูกค้า</a>
+    <a href="#section5" class="nav-link">5. คะแนน</a>
+    <a href="#section6" class="nav-link">6. เครดิต</a>
+  </div>
+</nav>
+
+<!-- Main -->
+<main class="main">
+
+  <!-- Hero -->
+  <header class="hero" id="overview">
+    <h1>SRS — Dashboard CRM</h1>
+    <p class="subtitle">เอกสารอธิบายว่าแต่ละ Card / ตัวเลข ในหน้า Dashboard CRM ดึงข้อมูลจากไหน ใช้สูตรอะไร และมีเงื่อนไขอะไรบ้าง</p>
+    <div class="meta-badges">
+      <span class="badge badge-version">v1.0</span>
+      <span class="badge badge-status">Active</span>
+      <span class="badge badge-level-owner">Owner Level</span>
+      <span class="badge badge-level-branch">Branch Level</span>
+    </div>
+  </header>
+
+  <!-- Data Sources -->
+  <section class="section" id="datasources">
+    <h2>แหล่งข้อมูลที่ใช้</h2>
+    <p>Dashboard CRM ดึงข้อมูลจาก 4 แหล่งหลัก:</p>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon blue">👥</div>
+        <div><div class="card-title">รายงานภาพรวมสมาชิก (member_report)</div>
+        <div class="card-subtitle">ข้อมูลสมาชิก 66 Fields — Input + คำนวณ</div></div>
+      </div>
+      <p>ใช้ใน: <strong>ส่วนที่ 1, 2, 4.2</strong> — ข้อมูลส่วนตัว, สถานะ, RFM, Lifecycle, ระดับสมาชิก</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon green">🧾</div>
+        <div><div class="card-title">รายงานบิล (bill_report)</div>
+        <div class="card-subtitle">ข้อมูลระดับบิล — 1 แถว = 1 บิล</div></div>
+      </div>
+      <p>ใช้ใน: <strong>ส่วนที่ 2, 3, 4.1</strong> — ยอดขาย, จำนวนบิล, TC, TA, ต้นทุน, กำไร</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon purple">🍽️</div>
+        <div><div class="card-title">รายงานรายละเอียดบิล (bill_detail_report)</div>
+        <div class="card-subtitle">ข้อมูลระดับเมนู — 1 แถว = 1 รายการสินค้า</div></div>
+      </div>
+      <p>ใช้ใน: <strong>ส่วนที่ 4.1</strong> — เมนูขายดี, จำนวนหน่วยขาย</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon gold">⚙️</div>
+        <div><div class="card-title">ระบบหลังบ้าน (Point/Credit Events)</div>
+        <div class="card-subtitle">ข้อมูลคะแนนและเครดิตจากระบบภายใน</div></div>
+      </div>
+      <p>ใช้ใน: <strong>ส่วนที่ 5, 6</strong> — คะแนนสะสม, เครดิต</p>
+    </div>
+  </section>
+
+  <!-- Conditions -->
+  <section class="section" id="conditions">
+    <h2>เงื่อนไขสำคัญในการดึงข้อมูล</h2>
+
+    <div class="info-box error">
+      <div class="info-box-icon">⚠️</div>
+      <div class="info-box-content">
+        <strong>บิลที่สำเร็จเท่านั้น:</strong> ทุกการคำนวณยอดขาย/ค่าเฉลี่ย ใช้เฉพาะบิล <span class="inline-code">bill_status = "สำเร็จ"</span> (ไม่นับ "คืนเงิน" หรือ "ยกเลิก") ยกเว้นการนับจำนวนบิลทั้งหมด
+      </div>
+    </div>
+
+    <div class="info-box warning">
+      <div class="info-box-icon">🚫</div>
+      <div class="info-box-content">
+        <strong>ไม่คิดรายได้:</strong> บิลที่ <span class="inline-code">payment_method = "ไม่คิดรายได้"</span> จะไม่ถูกนำมาคำนวณยอดขายและค่าเฉลี่ยใดๆ
+      </div>
+    </div>
+
+    <div class="info-box info">
+      <div class="info-box-icon">🏢</div>
+      <div class="info-box-content">
+        <strong>ระดับข้อมูล:</strong><br>
+        • <span class="level-tag owner">Owner</span> ส่วนที่ 1, 2, 4.2, 5, 6 — รวมทุกสาขา<br>
+        • <span class="level-tag branch">สาขา</span> ส่วนที่ 3, 4.1 — เฉพาะบิลในสาขาที่เลือก
+      </div>
+    </div>
+
+    <div class="info-box success">
+      <div class="info-box-icon">👤</div>
+      <div class="info-box-content">
+        <strong>% เทียบกับ Active:</strong> ทุกค่า % ในส่วนที่ 1 เทียบกับ <span class="inline-code">total_members_active</span> (สมาชิกที่ไม่หมดอายุ) ไม่ใช่จำนวนสมาชิกทั้งหมด
+      </div>
+    </div>
+
+    <div class="info-box info">
+      <div class="info-box-icon">🔄</div>
+      <div class="info-box-content">
+        <strong>การเปรียบเทียบ (MoM):</strong> ขึ้นอยู่กับ Filter วันที่ที่เลือก<br>
+        • "วันนี้" → เทียบกับเมื่อวาน<br>
+        • "สัปดาห์นี้" → เทียบกับสัปดาห์ก่อน<br>
+        • "เดือนนี้" → เทียบกับเดือนก่อน<br>
+        • "ปีนี้" → เทียบกับปีก่อน
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 1: Customer Overview -->
+  <section class="section" id="section1">
+    <h2>ส่วนที่ 1: Customer Overview (ภาพรวมลูกค้า)</h2>
+    <p><span class="level-tag owner">Owner</span> <span class="source-tag member">member_report</span></p>
+
+    <h3>การ์ด: จำนวนสมาชิก</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>ชื่อที่แสดง</th><th>Field Name</th><th>สูตร</th><th>เงื่อนไข</th></tr></thead>
+        <tbody>
+          <tr><td>จำนวนสมาชิกทั้งหมด</td><td><span class="inline-code">total_members</span></td><td>COUNT(สมาชิกทั้งหมด)</td><td>ทุกสถานะ</td></tr>
+          <tr><td>สมาชิกที่ใช้งาน (Active)</td><td><span class="inline-code">total_members_active</span></td><td>COUNT(สมาชิก)</td><td><span class="inline-code">member_status</span> = "Active"</td></tr>
+          <tr><td>สมาชิกหมดอายุ</td><td><span class="inline-code">total_members_expired</span></td><td>COUNT(สมาชิก)</td><td><span class="inline-code">member_status</span> = "Expired"</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>การ์ด: สมาชิกใหม่</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>ชื่อที่แสดง</th><th>Field Name</th><th>สูตร</th><th>เงื่อนไข</th></tr></thead>
+        <tbody>
+          <tr><td>วันนี้</td><td><span class="inline-code">new_members_today</span></td><td>COUNT(สมาชิก)</td><td><span class="inline-code">register_date</span> = วันนี้</td></tr>
+          <tr><td>เดือนนี้</td><td><span class="inline-code">new_members_mtd</span></td><td>COUNT(สมาชิก)</td><td><span class="inline-code">register_date</span> อยู่ในเดือนนี้</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>การ์ด: สมาชิกใช้งานเดือนนี้</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>ชื่อที่แสดง</th><th>Field Name</th><th>สูตร</th><th>เงื่อนไข</th></tr></thead>
+        <tbody>
+          <tr><td>สมาชิกใช้งานเดือนนี้</td><td><span class="inline-code">active_members_mtd</span></td><td>COUNT(สมาชิกที่มี bill สำเร็จในเดือนนี้)</td><td><span class="inline-code">last_visit_date</span> อยู่ในเดือนนี้</td></tr>
+          <tr><td>% เทียบสมาชิก Active</td><td><span class="inline-code">active_members_mtd_pct</span></td><td>(active_members_mtd ÷ total_members_active) × 100</td><td>เทียบกับ Active</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="formula">active_members_mtd_pct = (active_members_mtd / total_members_active) × 100</div>
+
+    <h3>การ์ด: สมาชิกที่คงการใช้งาน (Retained)</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>ชื่อที่แสดง</th><th>Field Name</th><th>สูตร</th><th>เงื่อนไข</th></tr></thead>
+        <tbody>
+          <tr><td>สมาชิกที่คงการใช้งาน</td><td><span class="inline-code">retained_members</span></td><td>COUNT(สมาชิก)</td><td><span class="inline-code">member_status</span> = "Active" AND <span class="inline-code">lifecycle_segment</span> ≠ "Churn"</td></tr>
+          <tr><td>% เทียบ Active</td><td><span class="inline-code">retained_members_pct</span></td><td>(retained_members ÷ total_members_active) × 100</td><td>เทียบกับ Active</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="formula">retained_members_pct = (retained_members / total_members_active) × 100</div>
+
+    <h3>การ์ด: สมาชิกที่มีคุณภาพ</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>ชื่อที่แสดง</th><th>Field Name</th><th>สูตร</th><th>เงื่อนไข</th></tr></thead>
+        <tbody>
+          <tr><td>สมาชิกที่มีคุณภาพ</td><td><span class="inline-code">quality_members</span></td><td>COUNT(สมาชิก)</td><td><span class="inline-code">rfm_segment</span> ∈ {"Champions", "Loyal Customers", "Potential Loyalist"} AND <span class="inline-code">member_status</span> ≠ "Expired"</td></tr>
+          <tr><td>% เทียบ Active</td><td><span class="inline-code">quality_members_pct</span></td><td>(quality_members ÷ total_members_active) × 100</td><td>เทียบกับ Active</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="formula">quality_members_pct = (quality_members / total_members_active) × 100</div>
+
+    <h3>การ์ด: การเชื่อมต่อ LINE</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>ชื่อที่แสดง</th><th>Field Name</th><th>สูตร</th><th>เงื่อนไข</th></tr></thead>
+        <tbody>
+          <tr><td>เชื่อมต่อ</td><td><span class="inline-code">line_connected</span></td><td>COUNT(สมาชิก)</td><td><span class="inline-code">line_start_date</span> มีข้อมูล AND <span class="inline-code">member_status</span> = "Active"</td></tr>
+          <tr><td>ไม่เชื่อมต่อ</td><td><span class="inline-code">line_not_connected</span></td><td>COUNT(สมาชิก)</td><td><span class="inline-code">line_start_date</span> ว่าง AND <span class="inline-code">member_status</span> = "Active"</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Section 2: CLV -->
+  <section class="section" id="section2">
+    <h2>ส่วนที่ 2: มูลค่าตลอดอายุการใช้งาน (CLV)</h2>
+    <p><span class="level-tag owner">Owner</span> <span class="source-tag member">member_report</span> <span class="source-tag bill">bill_report</span></p>
+
+    <div class="info-box warning">
+      <div class="info-box-icon">🔍</div>
+      <div class="info-box-content">
+        <strong>เงื่อนไขกรอง:</strong> ใช้เฉพาะสมาชิกที่ <span class="inline-code">lifecycle_group</span> ≠ "Churn" (ไม่นับสมาชิกที่หายไปแล้ว)
+      </div>
+    </div>
+
+    <h3>ตาราง: ข้อมูลรายคน</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>ชื่อที่แสดง</th><th>Field Name</th><th>สูตร / ที่มา</th><th>แหล่ง</th></tr></thead>
+        <tbody>
+          <tr><td>ID</td><td><span class="inline-code">member_id</span></td><td>—</td><td><span class="source-tag member">member_report</span></td></tr>
+          <tr><td>ชื่อ</td><td><span class="inline-code">full_name</span></td><td>—</td><td><span class="source-tag member">member_report</span></td></tr>
+          <tr><td>กลุ่มวงจรชีวิต</td><td><span class="inline-code">lifecycle_segment</span></td><td>—</td><td><span class="source-tag member">member_report</span></td></tr>
+          <tr><td>จำนวนซื้อใน 1 เดือนแรก</td><td><span class="inline-code">orders_first_1m</span></td><td>COUNT(bills) WHERE Close_Date ≤ register_date + 30 วัน</td><td><span class="source-tag member">member_report</span></td></tr>
+          <tr><td>จำนวนซื้อใน 6 เดือนแรก</td><td><span class="inline-code">orders_first_6m</span></td><td>COUNT(bills) WHERE Close_Date ≤ register_date + 180 วัน</td><td><span class="source-tag member">member_report</span></td></tr>
+          <tr><td>จำนวนซื้อใน 1 ปีแรก</td><td><span class="inline-code">orders_first_1y</span></td><td>COUNT(bills) WHERE Close_Date ≤ register_date + 365 วัน</td><td><span class="source-tag member">member_report</span></td></tr>
+          <tr><td>จำนวนบิลทั้งหมด</td><td><span class="inline-code">total_orders_lifetime</span></td><td>COUNT(bills) ทั้งหมด</td><td><span class="source-tag member">member_report</span></td></tr>
+          <tr><td>ยอดใช้จ่ายสะสม</td><td><span class="inline-code">total_spend_lifetime</span></td><td>SUM(Total_Net_Sales)</td><td><span class="source-tag member">member_report</span></td></tr>
+          <tr><td>AOV</td><td><span class="inline-code">aov</span></td><td>total_spend_lifetime ÷ total_orders_lifetime</td><td><span class="source-tag calc">คำนวณ</span></td></tr>
+          <tr><td>ต้นทุน</td><td><span class="inline-code">cost</span></td><td>SUM(total_cost) บิลสำเร็จ</td><td><span class="source-tag bill">bill_report</span></td></tr>
+          <tr><td>กำไร</td><td><span class="inline-code">profit</span></td><td>SUM(net_profit) บิลสำเร็จ</td><td><span class="source-tag bill">bill_report</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>สูตรคำนวณ CLV (ระดับรวม)</h3>
+    <ul class="formula-list">
+      <li>orders_first_1m = COUNT(bills) WHERE Close_Date ≤ register_date + 30 วัน</li>
+      <li>orders_first_6m = COUNT(bills) WHERE Close_Date ≤ register_date + 180 วัน</li>
+      <li>orders_first_1y = COUNT(bills) WHERE Close_Date ≤ register_date + 365 วัน</li>
+      <li>total_orders_lifetime = COUNT(bills) ทั้งหมดของสมาชิก</li>
+      <li>total_spend_lifetime = SUM(Total_Net_Sales) ของสมาชิก</li>
+      <li>aov = total_spend_lifetime / total_orders_lifetime</li>
+      <li>cost = SUM(total_cost) จากบิลสำเร็จของสมาชิก</li>
+      <li>profit = SUM(net_profit) จากบิลสำเร็จของสมาชิก</li>
+    </ul>
+
+    <ul class="formula-list">
+      <li>sum_orders_first_1m = SUM(orders_first_1m) ของสมาชิกที่ ≠ Churn</li>
+      <li>avg_orders_first_1m = AVG(orders_first_1m) ของสมาชิกที่ ≠ Churn</li>
+      <li>sum_orders_first_6m = SUM(orders_first_6m) ของสมาชิกที่ ≠ Churn</li>
+      <li>avg_orders_first_6m = AVG(orders_first_6m) ของสมาชิกที่ ≠ Churn</li>
+      <li>sum_orders_first_1y = SUM(orders_first_1y) ของสมาชิกที่ ≠ Churn</li>
+      <li>avg_orders_first_1y = AVG(orders_first_1y) ของสมาชิกที่ ≠ Churn</li>
+      <li>sum_total_orders_lifetime = SUM(total_orders_lifetime) ของสมาชิกที่ ≠ Churn</li>
+      <li>avg_total_orders_lifetime = AVG(total_orders_lifetime) ของสมาชิกที่ ≠ Churn</li>
+      <li>sum_total_spend = SUM(total_spend_lifetime) ของสมาชิกที่ ≠ Churn</li>
+      <li>avg_aov = sum_total_spend / sum_total_orders_lifetime</li>
+      <li>spend_per_customer_lifetime = sum_total_spend / จำนวนสมาชิก (ที่ ≠ Churn)</li>
+      <li>sum_profit = SUM(profit) ของสมาชิกที่ ≠ Churn</li>
+      <li>avg_profit_per_order = sum_profit / sum_total_orders_lifetime</li>
+      <li>profit_per_customer_lifetime = sum_profit / จำนวนสมาชิก (ที่ ≠ Churn)</li>
+    </ul>
+  </section>
+
+  <!-- Section 3: Branch Sales -->
+  <section class="section" id="section3">
+    <h2>ส่วนที่ 3: ยอดซื้อจากสมาชิกในสาขา</h2>
+    <p><span class="level-tag branch">สาขา</span> <span class="source-tag bill">bill_report</span></p>
+
+    <div class="info-box warning">
+      <div class="info-box-icon">📋</div>
+      <div class="info-box-content">
+        <strong>เงื่อนไขพื้นฐาน:</strong> bill_status = "สำเร็จ" + payment_method ≠ "ไม่คิดรายได้" + Filter วันที่จากหน้าบ้าน + เฉพาะสาขาที่เลือก
+      </div>
+    </div>
+
+    <h3>การ์ด: ยอดซื้อ</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>ชื่อที่แสดง</th><th>Field Name</th><th>สูตร</th><th>เงื่อนไขเพิ่มเติม</th></tr></thead>
+        <tbody>
+          <tr><td>ยอดซื้อจากสมาชิก</td><td><span class="inline-code">member_sales_total</span></td><td>SUM(Total_Net_Sales)</td><td>+ customer_phone = true</td></tr>
+          <tr><td>ยอดซื้อทั้งหมด</td><td><span class="inline-code">all_customer_sales_total</span></td><td>SUM(Total_Net_Sales)</td><td>ไม่จำกัดสมาชิก</td></tr>
+          <tr><td>% ยอดซื้อสมาชิก</td><td><span class="inline-code">member_sales_percentage</span></td><td>(member_sales_total ÷ all_customer_sales_total) × 100</td><td>—</td></tr>
+          <tr><td>ยอดซื้อช่วงก่อน</td><td><span class="inline-code">member_sales_prev</span></td><td>SUM(Total_Net_Sales) ช่วงก่อนหน้า</td><td>ตาม Filter วันที่</td></tr>
+          <tr><td>% เปลี่ยนแปลง</td><td><span class="inline-code">member_sales_mom_percentage</span></td><td>((member_sales_total - member_sales_prev) ÷ member_sales_prev) × 100</td><td>ถ้าติดลบ = ลูกศรลง</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="formula-list">
+      <li>member_sales_total = SUM(Total_Net_Sales) WHERE customer_phone = true</li>
+      <li>all_customer_sales_total = SUM(Total_Net_Sales) ทั้งหมด (ไม่จำกัดสมาชิก)</li>
+      <li>member_sales_percentage = (member_sales_total / all_customer_sales_total) × 100</li>
+      <li>member_sales_mom_percentage = ((member_sales_total - member_sales_prev) / member_sales_prev) × 100</li>
+    </ul>
+
+    <h3>การ์ด: จำนวนบิล</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>ชื่อที่แสดง</th><th>Field Name</th><th>สูตร</th><th>เงื่อนไข</th></tr></thead>
+        <tbody>
+          <tr><td>จำนวนบิลทั้งหมด</td><td><span class="inline-code">total_bills_count</span></td><td>COUNT(Receipt_No)</td><td>ทุกสถานะ (รวมทั้งหมด)</td></tr>
+          <tr><td>บิลสำเร็จ</td><td><span class="inline-code">bills_completed_count</span></td><td>COUNT(Receipt_No)</td><td>bill_status = "สำเร็จ"</td></tr>
+          <tr><td>บิลคืนเงิน</td><td><span class="inline-code">bills_refund_count</span></td><td>COUNT(Receipt_No)</td><td>bill_status = "คืนเงิน"</td></tr>
+          <tr><td>บิลยกเลิก</td><td><span class="inline-code">bills_cancel_count</span></td><td>COUNT(Receipt_No)</td><td>bill_status = "ยกเลิก"</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>การ์ด: ค่าเฉลี่ย</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>ชื่อที่แสดง</th><th>Field Name</th><th>สูตร</th><th>เงื่อนไข</th></tr></thead>
+        <tbody>
+          <tr><td>ยอดซื้อเฉลี่ยต่อบิล</td><td><span class="inline-code">avg_sales_per_bill</span></td><td>member_sales_total ÷ bills_completed_count</td><td>สำเร็จ + คิดรายได้</td></tr>
+          <tr><td>เฉลี่ยต่อบิลช่วงก่อน</td><td><span class="inline-code">avg_sales_per_bill_prev</span></td><td>member_sales_prev ÷ bills_completed_count (ช่วงก่อน)</td><td>ตาม Filter</td></tr>
+          <tr><td>% เปลี่ยนแปลง</td><td><span class="inline-code">avg_sales_per_bill_mom_percentage</span></td><td>((avg - avg_prev) ÷ avg_prev) × 100</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="formula-list">
+      <li>avg_sales_per_bill = member_sales_total / bills_completed_count</li>
+      <li>avg_sales_per_bill_mom_percentage = ((avg_sales_per_bill - avg_sales_per_bill_prev) / avg_sales_per_bill_prev) × 100</li>
+    </ul>
+
+    <h3>การ์ด: TC & TA</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>ชื่อที่แสดง</th><th>Field Name</th><th>สูตร</th><th>เงื่อนไข</th></tr></thead>
+        <tbody>
+          <tr><td>จำนวนลูกค้า (TC)</td><td><span class="inline-code">total_customers_count</span></td><td>SUM(customer_count)</td><td>สำเร็จ + คิดรายได้ (นับทุกคน ไม่จำกัดสมาชิก)</td></tr>
+          <tr><td>TC ช่วงก่อน</td><td><span class="inline-code">total_customers_count_prev</span></td><td>SUM(customer_count) ช่วงก่อน</td><td>ตาม Filter</td></tr>
+          <tr><td>% เปลี่ยนแปลง TC</td><td><span class="inline-code">total_customers_mom_percentage</span></td><td>((TC - TC_prev) ÷ TC_prev) × 100</td><td>—</td></tr>
+          <tr><td>เฉลี่ยต่อหัว (TA)</td><td><span class="inline-code">avg_spend_per_customer</span></td><td>member_sales_total ÷ active_members_count</td><td>—</td></tr>
+          <tr><td>TA ช่วงก่อน</td><td><span class="inline-code">avg_spend_per_customer_prev</span></td><td>คำนวณเดียวกันแต่ช่วงก่อน</td><td>ตาม Filter</td></tr>
+          <tr><td>% เปลี่ยนแปลง TA</td><td><span class="inline-code">avg_spend_per_customer_percentage</span></td><td>((TA - TA_prev) ÷ TA_prev) × 100</td><td>—</td></tr>
+          <tr><td>จำนวนสมาชิกที่เข้าใช้บริการ</td><td><span class="inline-code">active_members_count</span></td><td>COUNT(DISTINCT customer_phone)</td><td>เฉพาะเบอร์ที่มีระดับสมาชิก + สำเร็จ + คิดรายได้</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="formula-list">
+      <li>total_customers_count = SUM(customer_count) จากบิลสำเร็จ + คิดรายได้</li>
+      <li>total_customers_mom_percentage = ((total_customers_count - total_customers_count_prev) / total_customers_count_prev) × 100</li>
+      <li>active_members_count = COUNT(DISTINCT customer_phone) WHERE มีระดับสมาชิก</li>
+      <li>avg_spend_per_customer = member_sales_total / active_members_count</li>
+      <li>avg_spend_per_customer_percentage = ((avg_spend_per_customer - avg_spend_per_customer_prev) / avg_spend_per_customer_prev) × 100</li>
+    </ul>
+
+    <div class="info-box info">
+      <div class="info-box-icon">💡</div>
+      <div class="info-box-content">
+        <strong>TC vs active_members_count:</strong><br>
+        • <strong>TC</strong> = จำนวนลูกค้าทั้งหมด (รวมทุกคนที่นั่งในบิล ไม่จำเป็นต้องเป็นสมาชิก)<br>
+        • <strong>active_members_count</strong> = จำนวนสมาชิกที่ไม่ซ้ำกัน (เฉพาะเบอร์ที่มีระดับสมาชิก)
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4.1: Insights -->
+  <section class="section" id="section4-1">
+    <h2>ส่วนที่ 4.1: ข้อมูลเชิงลึก (Insights)</h2>
+    <p><span class="level-tag branch">สาขา</span> <span class="source-tag bill">bill_report</span> <span class="source-tag bill-detail">bill_detail_report</span></p>
+
+    <h3>การจัดอันดับ</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>ประเภท</th><th>เรียงตาม</th><th>ข้อมูลที่แสดง</th><th>แหล่ง</th></tr></thead>
+        <tbody>
+          <tr><td>🍽️ เมนูขายดี</td><td>SUM(item_qty) DESC</td><td>ชื่อเมนู, จำนวน (หน่วย), มูลค่า</td><td><span class="source-tag bill-detail">bill_detail_report</span></td></tr>
+          <tr><td>👤 สมาชิกยอดใช้จ่ายสูงสุด</td><td>Total_Net_Sales DESC</td><td>ชื่อสมาชิก, จำนวนบิล, มูลค่า, เฉลี่ยต่อบิล</td><td><span class="source-tag bill">bill_report</span></td></tr>
+          <tr><td>⏰ ช่วงเวลาขายดี</td><td>Total_Net_Sales DESC</td><td>ช่วงเวลา, จำนวนบิล, มูลค่า</td><td><span class="source-tag bill">bill_report</span></td></tr>
+          <tr><td>🏷️ ลักษณะลูกค้าส่วนใหญ่</td><td>Total_Net_Sales DESC</td><td>ชื่อลักษณะลูกค้า, จำนวนบิล, มูลค่า</td><td><span class="source-tag bill">bill_report</span></td></tr>
+          <tr><td>⭐ ระดับ Rank ยอดใช้จ่ายสูง</td><td>Total_Net_Sales DESC</td><td>ชื่อระดับ Rank, จำนวนบิล, มูลค่า</td><td><span class="source-tag bill">bill_report</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Section 4.2: Segmentation -->
+  <section class="section" id="section4-2">
+    <h2>ส่วนที่ 4.2: การแบ่งกลุ่มลูกค้า</h2>
+    <p><span class="level-tag owner">Owner</span> <span class="source-tag member">member_report</span></p>
+
+    <h3>RFM Segmentation</h3>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon blue">📊</div>
+        <div><div class="card-title">กลุ่ม RFM</div>
+        <div class="card-subtitle">Field ที่ใช้: member_id, total_spend_lifetime, total_orders_lifetime, last_visit_date, recency_day</div></div>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>ข้อมูลที่แสดง</th><th>สูตร</th></tr></thead>
+          <tbody>
+            <tr><td>ชื่อกลุ่ม RFM</td><td>จาก <span class="inline-code">rfm_segment</span></td></tr>
+            <tr><td>จำนวนสมาชิก</td><td>COUNT(สมาชิก) WHERE rfm_segment = กลุ่มนั้น</td></tr>
+            <tr><td>สัดส่วนจากทั้งหมด (%)</td><td>จำนวนในกลุ่ม ÷ จำนวนสมาชิกทั้งหมด × 100</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <ul class="formula-list">
+      <li>จำนวนสมาชิก RFM = COUNT(สมาชิก) WHERE rfm_segment = "ชื่อกลุ่ม"</li>
+      <li>สัดส่วน (%) = (จำนวนในกลุ่ม / จำนวนสมาชิกทั้งหมด) × 100</li>
+    </ul>
+
+    <h3>กลุ่มวงจรชีวิต (Lifecycle)</h3>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon green">🔄</div>
+        <div><div class="card-title">Lifecycle Segment</div>
+        <div class="card-subtitle">ปัจจัย: Recency (TODAY() - last_visit_date) + Frequency (total_orders) | บิลสำเร็จ + คิดรายได้</div></div>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>ข้อมูลที่แสดง</th><th>สูตร</th></tr></thead>
+          <tbody>
+            <tr><td>ชื่อกลุ่ม Lifecycle</td><td>จาก <span class="inline-code">lifecycle_segment</span></td></tr>
+            <tr><td>จำนวนสมาชิก</td><td>COUNT(สมาชิก) WHERE lifecycle_segment = กลุ่มนั้น</td></tr>
+            <tr><td>สัดส่วนจากทั้งหมด (%)</td><td>จำนวนในกลุ่ม ÷ จำนวนสมาชิกทั้งหมด × 100</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <ul class="formula-list">
+      <li>จำนวนสมาชิก Lifecycle = COUNT(สมาชิก) WHERE lifecycle_segment = "ชื่อกลุ่ม"</li>
+      <li>สัดส่วน (%) = (จำนวนในกลุ่ม / จำนวนสมาชิกทั้งหมด) × 100</li>
+    </ul>
+
+    <h3>ระดับสมาชิก / แท็ก / สาขาที่สมัคร</h3>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon gold">🏅</div>
+        <div><div class="card-title">ระดับสมาชิก, แท็ก, สาขาที่สมัคร</div>
+        <div class="card-subtitle">ใช้สูตรเดียวกัน แค่เปลี่ยน field ที่ GROUP BY</div></div>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>ประเภท</th><th>Field ที่ใช้</th><th>สูตร</th></tr></thead>
+          <tbody>
+            <tr><td>ระดับสมาชิก</td><td><span class="inline-code">member_tier</span></td><td>COUNT GROUP BY member_tier</td></tr>
+            <tr><td>แท็ก</td><td><span class="inline-code">tags</span></td><td>COUNT GROUP BY tags</td></tr>
+            <tr><td>สาขาที่สมัคร</td><td><span class="inline-code">register_branch</span></td><td>COUNT GROUP BY register_branch</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:12px; font-size:14px; color:var(--on-surface-variant);">สัดส่วน (%) = จำนวนในกลุ่ม ÷ จำนวนทั้งหมด × 100</p>
+    </div>
+    <ul class="formula-list">
+      <li>จำนวนสมาชิกแต่ละกลุ่ม = COUNT(สมาชิก) GROUP BY [member_tier / tags / register_branch]</li>
+      <li>สัดส่วน (%) = (จำนวนในกลุ่ม / จำนวนสมาชิกทั้งหมด) × 100</li>
+    </ul>
+  </section>
+
+  <!-- Section 5: Points -->
+  <section class="section" id="section5">
+    <h2>ส่วนที่ 5: คะแนน (Points)</h2>
+    <p><span class="level-tag owner">Owner</span> <span class="source-tag system">ระบบหลังบ้าน (Point Events)</span></p>
+
+    <h3>การ์ด: ภาพรวมคะแนน</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>ชื่อที่แสดง</th><th>Field Name</th><th>สูตร</th></tr></thead>
+        <tbody>
+          <tr><td>คะแนนที่ได้รับ</td><td><span class="inline-code">Earned</span></td><td>Earned + Migrate + Adjusted Increase + Refund (ตาม Filter วันที่)</td></tr>
+          <tr><td>คะแนนที่ใช้</td><td><span class="inline-code">Used</span></td><td>Used + Returned + Adjusted Decrease (ตาม Filter วันที่)</td></tr>
+          <tr><td>คะแนนหมดอายุ</td><td><span class="inline-code">Expired</span></td><td>Expired (ตาม Filter วันที่)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="formula-list">
+      <li>Earned = SUM(Earned) + SUM(Migrate) + SUM(Adjusted Increase) + SUM(Refund)</li>
+      <li>Used = SUM(Used) + SUM(Returned) + SUM(Adjusted Decrease)</li>
+      <li>Expired = SUM(Expired)</li>
+    </ul>
+
+    <h3>ตาราง: รายละเอียดคะแนนรายคน</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>ชื่อที่แสดง</th><th>Field Name</th><th>แหล่ง</th></tr></thead>
+        <tbody>
+          <tr><td>ชื่อสมาชิก</td><td><span class="inline-code">full_name</span></td><td><span class="source-tag member">member_report</span></td></tr>
+          <tr><td>เบอร์โทร</td><td><span class="inline-code">phone_number</span></td><td><span class="source-tag member">member_report</span></td></tr>
+          <tr><td>กลุ่มวงจรชีวิต</td><td><span class="inline-code">lifecycle_segment</span></td><td><span class="source-tag member">member_report</span></td></tr>
+          <tr><td>ระยะห่างการใช้บริการ</td><td><span class="inline-code">recency_day</span></td><td><span class="source-tag member">member_report</span></td></tr>
+          <tr><td>คะแนนคงเหลือ</td><td><span class="inline-code">points_balance</span></td><td><span class="source-tag member">member_report</span></td></tr>
+          <tr><td>คะแนนที่เคยใช้</td><td><span class="inline-code">total_credits_redeemed</span></td><td><span class="source-tag member">member_report</span></td></tr>
+          <tr><td>คะแนนใกล้หมดอายุ</td><td>—</td><td><span class="source-tag system">ระบบหลังบ้าน</span> (คะแนนที่จะหมดอายุในเดือนปัจจุบัน)</td></tr>
+          <tr><td>วันหมดอายุคะแนน</td><td>—</td><td><span class="source-tag system">ระบบหลังบ้าน</span> (วันที่หมดอายุที่จะถึง)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Section 6: Credits -->
+  <section class="section" id="section6">
+    <h2>ส่วนที่ 6: เครดิต (Credits)</h2>
+    <p><span class="level-tag owner">Owner</span> <span class="source-tag system">ระบบหลังบ้าน (Credit Events)</span></p>
+
+    <h3>การ์ด: ภาพรวมเครดิต</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>ชื่อที่แสดง</th><th>สูตร</th></tr></thead>
+        <tbody>
+          <tr><td>เครดิตที่ได้รับ</td><td>SUM(เครดิตที่ได้) ของทุกคน (ตาม Filter วันที่)</td></tr>
+          <tr><td>เครดิตที่ใช้</td><td>SUM(เครดิตที่ใช้) ของทุกคน (ตาม Filter วันที่)</td></tr>
+          <tr><td>เครดิตที่หมดอายุ</td><td>SUM(เครดิตหมดอายุ) ของทุกคน (ตาม Filter วันที่)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="formula-list">
+      <li>เครดิตที่ได้รับ = SUM(เครดิตที่ได้) ของทุกคน ตาม Filter วันที่</li>
+      <li>เครดิตที่ใช้ = SUM(เครดิตที่ใช้) ของทุกคน ตาม Filter วันที่</li>
+      <li>เครดิตที่หมดอายุ = SUM(เครดิตหมดอายุ) ของทุกคน ตาม Filter วันที่</li>
+    </ul>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Summary Table -->
+  <section class="section" id="summary">
+    <h2>สรุปเงื่อนไขทั้งหมด</h2>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>เงื่อนไข</th><th>รายละเอียด</th></tr></thead>
+        <tbody>
+          <tr><td>✅ bill_status = "สำเร็จ"</td><td>ใช้เฉพาะบิลที่สำเร็จ (ยกเว้นนับจำนวนบิลทั้งหมด)</td></tr>
+          <tr><td>🚫 payment_method ≠ "ไม่คิดรายได้"</td><td>ไม่นับบิลที่ไม่คิดรายได้</td></tr>
+          <tr><td>🏢 ระดับ Owner</td><td>ส่วนที่ 1, 2, 4.2, 5, 6 — รวมทุกสาขา</td></tr>
+          <tr><td>🏪 ระดับสาขา</td><td>ส่วนที่ 3, 4.1 — เฉพาะบิลในสาขาที่เลือก</td></tr>
+          <tr><td>📅 Filter วันที่</td><td>ส่วนที่ 3-6 ใช้ตาม Filter หน้าบ้าน</td></tr>
+          <tr><td>🔄 การเปรียบเทียบ</td><td>วันนี้→เมื่อวาน / สัปดาห์→สัปดาห์ก่อน / เดือน→เดือนก่อน / ปี→ปีก่อน</td></tr>
+          <tr><td>👤 % เทียบ Active</td><td>ทุก % ในส่วนที่ 1 เทียบกับ total_members_active (ไม่ใช่ทั้งหมด)</td></tr>
+          <tr><td>👥 active_members_count</td><td>COUNT(DISTINCT customer_phone) เฉพาะเบอร์ที่มีระดับสมาชิก</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p><strong>เอกสารอ้างอิง:</strong> สรุป-Dashboard-CRM.md</p>
+    <p><strong>Design System:</strong> M3-SCCN (Super Coconut — Material 3 Custom Design System)</p>
+    <p><strong>วันที่สร้าง:</strong> 19 มิถุนายน 2569</p>
+    <p><strong>เวอร์ชัน:</strong> 1.0</p>
+    <p style="margin-top: 16px;">© Super Coconut — rOS (Restaurant/Retail Operating System)</p>
+  </footer>
+
+</main>
+
+<script>
+  const sections = document.querySelectorAll('.section, .hero');
+  const navLinks = document.querySelectorAll('.nav-link');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (pageYOffset >= s.offsetTop - 100) current = s.getAttribute('id'); });
+    navLinks.forEach(l => {
+      l.classList.remove('active');
+      if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
