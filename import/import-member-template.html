@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRS - Import สมาชิก</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style>
+        :root {
+            --md-sys-color-primary: #0B0A0A;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-secondary: #785A00;
+            --md-sys-color-on-secondary: #FFFFFF;
+            --md-sys-color-secondary-container: #FBBF14;
+            --md-sys-color-on-secondary-container: #483400;
+            --md-sys-color-tertiary: #014AC5;
+            --md-sys-color-on-tertiary: #FFFFFF;
+            --md-sys-color-error: #BA1A1A;
+            --md-sys-color-on-error: #FFFFFF;
+            --md-sys-color-error-container: #FFDAD6;
+            --md-sys-color-on-error-container: #B6363A;
+            --md-sys-color-background: #FFFFFF;
+            --md-sys-color-on-background: #1C1B1B;
+            --md-sys-color-surface: #FCFCFC;
+            --md-sys-color-on-surface: #1C1B1B;
+            --md-sys-color-surface-variant: #F5F5F5;
+            --md-sys-color-on-surface-variant: #6B7274;
+            --md-sys-color-outline: #747878;
+            --md-sys-color-outline-variant: #C0C8CB;
+            --md-sys-color-surface-container: #EBEBEB;
+            --md-sys-color-surface-container-low: #F2F2F2;
+            --md-sys-color-surface-container-high: #E5E5E5;
+            --md-sys-color-on-success-variant: #00733F;
+            --md-sys-color-on-error-variant: #BA1A1A;
+
+            --md-sys-shape-corner-none: 0px;
+            --md-sys-shape-corner-xs: 4px;
+            --md-sys-shape-corner-sm: 8px;
+            --md-sys-shape-corner-md: 12px;
+            --md-sys-shape-corner-lg: 16px;
+            --md-sys-shape-corner-xl: 24px;
+            --md-sys-shape-corner-full: 1000px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'IBM Plex Sans Thai', sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+            color: var(--md-sys-color-on-background);
+            background-color: var(--md-sys-color-background);
+        }
+        .page-wrapper { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+        .app-bar {
+            background-color: var(--md-sys-color-surface);
+            border-bottom: 1px solid var(--md-sys-color-outline-variant);
+            padding: 16px 24px; position: sticky; top: 0; z-index: 10;
+        }
+        .app-bar-content { max-width: 960px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
+        .app-bar h1 { font-size: 22px; font-weight: 500; line-height: 28px; color: var(--md-sys-color-on-surface); }
+        .app-bar .badge {
+            background-color: var(--md-sys-color-secondary-container);
+            color: var(--md-sys-color-on-secondary-container);
+            font-size: 11px; font-weight: 500; padding: 2px 8px;
+            border-radius: var(--md-sys-shape-corner-full);
+        }
+        .doc-meta { margin-top: 32px; margin-bottom: 40px; }
+        .doc-meta .doc-title { font-size: 32px; font-weight: 500; line-height: 40px; color: var(--md-sys-color-on-surface); margin-bottom: 8px; }
+        .doc-meta .doc-subtitle { font-size: 16px; font-weight: 400; line-height: 24px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 16px; }
+        .doc-meta-info {
+            display: flex; gap: 24px; flex-wrap: wrap; padding: 16px;
+            background-color: var(--md-sys-color-surface-variant);
+            border-radius: var(--md-sys-shape-corner-md);
+        }
+        .doc-meta-info .meta-item { display: flex; flex-direction: column; gap: 2px; }
+        .meta-item .meta-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; color: var(--md-sys-color-on-surface-variant); }
+        .meta-item .meta-value { font-size: 14px; font-weight: 500; color: var(--md-sys-color-on-surface); }
+
+        .toc { background-color: var(--md-sys-color-surface-container-low); border-radius: var(--md-sys-shape-corner-lg); padding: 24px; margin-bottom: 48px; }
+        .toc h2 { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: var(--md-sys-color-on-surface); }
+        .toc ol { list-style: none; counter-reset: toc-counter; }
+        .toc ol li { counter-increment: toc-counter; margin-bottom: 8px; }
+        .toc ol li a { font-size: 14px; color: var(--md-sys-color-tertiary); text-decoration: none; display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: var(--md-sys-shape-corner-sm); transition: background-color 0.2s; }
+        .toc ol li a:hover { background-color: var(--md-sys-color-surface-container); }
+        .toc ol li a::before { content: counter(toc-counter) "."; font-weight: 600; color: var(--md-sys-color-on-surface-variant); min-width: 20px; }
+
+        .section { margin-bottom: 48px; }
+        .section-title { font-size: 24px; font-weight: 500; line-height: 32px; color: var(--md-sys-color-on-surface); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--md-sys-color-secondary-container); }
+        .section-description { font-size: 14px; line-height: 22px; color: var(--md-sys-color-on-surface-variant); margin-bottom: 20px; }
+
+        .card { background-color: var(--md-sys-color-surface); border: 1px solid var(--md-sys-color-outline-variant); border-radius: var(--md-sys-shape-corner-md); padding: 24px; margin-bottom: 16px; }
+        .card-title { font-size: 16px; font-weight: 500; line-height: 24px; color: var(--md-sys-color-on-surface); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .card-title .material-symbols-outlined { font-size: 20px; color: var(--md-sys-color-tertiary); }
+
+        .data-table-wrapper { overflow-x: auto; margin-bottom: 16px; border-radius: var(--md-sys-shape-corner-md); border: 1px solid var(--md-sys-color-outline-variant); }
+        .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .data-table thead { background-color: var(--md-sys-color-surface-container); }
+        .data-table th { font-weight: 500; font-size: 12px; text-align: left; padding: 12px 16px; color: var(--md-sys-color-on-surface); white-space: nowrap; }
+        .data-table td { padding: 10px 16px; border-top: 1px solid var(--md-sys-color-outline-variant); color: var(--md-sys-color-on-surface); vertical-align: top; }
+        .data-table tbody tr:hover { background-color: var(--md-sys-color-surface-variant); }
+        .data-table .required-badge { display: inline-flex; align-items: center; gap: 4px; background-color: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container); font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--md-sys-shape-corner-full); }
+        .data-table .optional-badge { display: inline-flex; align-items: center; gap: 4px; background-color: var(--md-sys-color-surface-container); color: var(--md-sys-color-on-surface-variant); font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--md-sys-shape-corner-full); }
+        .data-table .dropdown-badge { display: inline-flex; align-items: center; gap: 4px; background-color: #E8F0FE; color: var(--md-sys-color-tertiary); font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: var(--md-sys-shape-corner-full); }
+
+        .callout { display: flex; gap: 12px; padding: 16px; border-radius: var(--md-sys-shape-corner-md); margin-bottom: 16px; }
+        .callout-info { background-color: #E8F0FE; border-left: 4px solid var(--md-sys-color-tertiary); }
+        .callout-warning { background-color: #FFF8E1; border-left: 4px solid var(--md-sys-color-secondary); }
+        .callout-error { background-color: var(--md-sys-color-error-container); border-left: 4px solid var(--md-sys-color-error); }
+        .callout-success { background-color: #E6F4EA; border-left: 4px solid var(--md-sys-color-on-success-variant); }
+        .callout .callout-icon { font-size: 20px; flex-shrink: 0; }
+        .callout-info .callout-icon { color: var(--md-sys-color-tertiary); }
+        .callout-warning .callout-icon { color: var(--md-sys-color-secondary); }
+        .callout-error .callout-icon { color: var(--md-sys-color-error); }
+        .callout-success .callout-icon { color: var(--md-sys-color-on-success-variant); }
+        .callout-content { font-size: 13px; line-height: 20px; color: var(--md-sys-color-on-surface); }
+        .callout-content strong { font-weight: 600; }
+
+        .rules-list { list-style: none; padding: 0; }
+        .rules-list li { padding: 10px 16px; border-left: 3px solid var(--md-sys-color-outline-variant); margin-bottom: 8px; font-size: 14px; line-height: 22px; background-color: var(--md-sys-color-surface); border-radius: 0 var(--md-sys-shape-corner-sm) var(--md-sys-shape-corner-sm) 0; }
+        .rules-list li strong { font-weight: 600; color: var(--md-sys-color-on-surface); }
+
+        .error-code { font-family: monospace; font-size: 12px; font-weight: 600; background-color: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container); padding: 2px 6px; border-radius: var(--md-sys-shape-corner-xs); }
+        .error-message { font-family: monospace; font-size: 12px; background-color: var(--md-sys-color-surface-variant); padding: 4px 8px; border-radius: var(--md-sys-shape-corner-xs); display: inline-block; margin-top: 4px; word-break: break-all; }
+
+        .flow-diagram { background-color: var(--md-sys-color-surface-variant); border-radius: var(--md-sys-shape-corner-lg); padding: 24px; margin-bottom: 16px; }
+        .flow-step { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 16px; position: relative; }
+        .flow-step:last-child { margin-bottom: 0; }
+        .flow-step-number { width: 32px; height: 32px; background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; flex-shrink: 0; }
+        .flow-step-content { flex: 1; padding-top: 4px; }
+        .flow-step-content h4 { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+        .flow-step-content p { font-size: 13px; color: var(--md-sys-color-on-surface-variant); line-height: 20px; }
+        .flow-connector { position: absolute; left: 15px; top: 36px; bottom: -16px; width: 2px; background-color: var(--md-sys-color-outline-variant); }
+
+        .doc-footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--md-sys-color-outline-variant); text-align: center; color: var(--md-sys-color-on-surface-variant); font-size: 12px; }
+
+        .dropdown-options { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+        .dropdown-chip { display: inline-flex; padding: 3px 10px; border-radius: var(--md-sys-shape-corner-full); font-size: 12px; font-weight: 400; border: 1px solid var(--md-sys-color-outline-variant); background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); }
+    </style>
+</head>
+<body>
+
+    <header class="app-bar">
+        <div class="app-bar-content">
+            <h1>เอกสาร SRS</h1>
+            <span class="badge">Import Module</span>
+        </div>
+    </header>
+
+    <main class="page-wrapper">
+
+        <!-- Document Meta -->
+        <section class="doc-meta">
+            <h2 class="doc-title">Import สมาชิก (Member)</h2>
+            <p class="doc-subtitle">ข้อกำหนดความต้องการซอฟต์แวร์ (Software Requirements Specification) สำหรับฟีเจอร์ Import ข้อมูลสมาชิกใหม่ผ่านไฟล์ Template</p>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;">
+                <a href="https://docs.google.com/spreadsheets/d/1H6xCwXTl8Tjgo4tM3azAyF5MyzCMO5LgfNk0V9LEONM/edit?gid=1502008631#gid=1502008631" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: var(--md-sys-color-tertiary); color: var(--md-sys-color-on-tertiary); border-radius: var(--md-sys-shape-corner-full); text-decoration: none; font-size: 14px; font-weight: 500; transition: opacity 0.2s;">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">open_in_new</span>
+                    ดู Template ใน Google Sheets
+                </a>
+                <a href="import-member-template.md" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: var(--md-sys-color-surface); color: var(--md-sys-color-tertiary); border: 1px solid var(--md-sys-color-tertiary); border-radius: var(--md-sys-shape-corner-full); text-decoration: none; font-size: 14px; font-weight: 500; transition: opacity 0.2s;">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">description</span>
+                    import-member-template.md
+                </a>
+            </div>
+            <div class="doc-meta-info">
+                <div class="meta-item">
+                    <span class="meta-label">เวอร์ชัน</span>
+                    <span class="meta-value">1.0</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">วันที่</span>
+                    <span class="meta-value">22 มิถุนายน 2569</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">โมดูล</span>
+                    <span class="meta-value">สมาชิก (Member)</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">ประเภท</span>
+                    <span class="meta-value">สร้างใหม่เท่านั้น (Create Only)</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">รูปแบบไฟล์</span>
+                    <span class="meta-value">.xlsx (Excel)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Table of Contents -->
+        <nav class="toc">
+            <h2>สารบัญ</h2>
+            <ol>
+                <li><a href="#overview">ภาพรวม</a></li>
+                <li><a href="#columns">โครงสร้างคอลัมน์ใน Template</a></li>
+                <li><a href="#dropdowns">ข้อมูลที่เป็นตัวเลือก (Dropdown)</a></li>
+                <li><a href="#rules">กฎการ Import ข้อมูล</a></li>
+                <li><a href="#errors">รายการ Error Messages</a></li>
+                <li><a href="#flow">ขั้นตอนการทำงานของระบบ</a></li>
+                <li><a href="#notes">หมายเหตุสำคัญ</a></li>
+            </ol>
+        </nav>
+
+        <!-- Section 1: Overview -->
+        <section id="overview" class="section">
+            <h2 class="section-title">1. ภาพรวม</h2>
+            <p class="section-description">
+                ระบบรองรับการ Import ข้อมูลสมาชิกใหม่แบบ Bulk ผ่านไฟล์ Excel (.xlsx)
+                เพื่อให้สามารถเพิ่มสมาชิกจำนวนมากได้ในคราวเดียว โดยไม่ต้องสร้างทีละรายการในระบบ
+            </p>
+            <div class="callout callout-error">
+                <span class="material-symbols-outlined callout-icon">new_releases</span>
+                <div class="callout-content">
+                    <strong>สร้างใหม่เท่านั้น (Create Only):</strong> การ Import นี้ใช้สำหรับสร้างสมาชิกใหม่เท่านั้น ไม่รองรับการอัพเดทข้อมูลสมาชิกที่มีอยู่แล้วในระบบ หากเบอร์โทรศัพท์ซ้ำกับสมาชิกเดิม ระบบจะแสดง Error
+                </div>
+            </div>
+            <div class="callout callout-info">
+                <span class="material-symbols-outlined callout-icon">info</span>
+                <div class="callout-content">
+                    <strong>วัตถุประสงค์:</strong> ลดเวลาในการสร้างสมาชิกใหม่จำนวนมาก เช่น การย้ายข้อมูลจากระบบเดิม หรือการนำเข้าสมาชิกจากแคมเปญ
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Column Structure -->
+        <section id="columns" class="section">
+            <h2 class="section-title">2. โครงสร้างคอลัมน์ใน Template</h2>
+            <p class="section-description">ตารางด้านล่างแสดงคอลัมน์ทั้งหมดที่อยู่ใน Template พร้อมระบุประเภทข้อมูลและเงื่อนไข</p>
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>ชื่อคอลัมน์</th>
+                            <th>บังคับ</th>
+                            <th>ประเภท</th>
+                            <th>หมายเหตุ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>ชื่อ-นามสกุล</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Text</td>
+                            <td>ชื่อและนามสกุลของสมาชิก</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>ชื่อเล่น</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Text</td>
+                            <td>ชื่อเล่น</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><strong>เบอร์โทรศัพท์</strong></td>
+                            <td><span class="required-badge">✱ บังคับ</span></td>
+                            <td>Text (ตัวเลข 10 หลัก)</td>
+                            <td>Key หลัก — ห้ามซ้ำ, ไม่มีขีด</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>อีเมล</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Text (Email)</td>
+                            <td>ต้องอยู่ในรูปแบบ email ที่ถูกต้อง</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>วันเกิด</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Date (DD/MM/YYYY)</td>
+                            <td>ต้องไม่เป็นวันในอนาคต</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>เพศ</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td><span class="dropdown-badge">📋 ตัวเลือก</span></td>
+                            <td>ชาย, หญิง, ไม่ระบุ</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>บ้านเลขที่</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Text</td>
+                            <td>ที่อยู่ - บ้านเลขที่</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>จังหวัด</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Text (พิมพ์เอง)</td>
+                            <td>ต้องตรงกับรายชื่อจังหวัดในระบบ</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>เขต/อำเภอ</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Text (พิมพ์เอง)</td>
+                            <td>ต้องตรงกับข้อมูลในระบบ + อยู่ภายใต้จังหวัดที่ระบุ</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>แขวง/ตำบล</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Text (พิมพ์เอง)</td>
+                            <td>ต้องตรงกับข้อมูลในระบบ + อยู่ภายใต้เขต/อำเภอที่ระบุ</td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td>ไปรษณีย์</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Text (ตัวเลข 5 หลัก)</td>
+                            <td>รหัสไปรษณีย์</td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td>อาชีพ</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td><span class="dropdown-badge">📋 ตัวเลือก</span></td>
+                            <td>ดูตัวเลือกในหัวข้อ 3</td>
+                        </tr>
+                        <tr>
+                            <td>13</td>
+                            <td>รายได้</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td><span class="dropdown-badge">📋 ตัวเลือก</span></td>
+                            <td>ดูตัวเลือกในหัวข้อ 3</td>
+                        </tr>
+                        <tr>
+                            <td>14</td>
+                            <td>สถานะภาพ</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td><span class="dropdown-badge">📋 ตัวเลือก</span></td>
+                            <td>ดูตัวเลือกในหัวข้อ 3</td>
+                        </tr>
+                        <tr>
+                            <td>15</td>
+                            <td>ระดับการศึกษา</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td><span class="dropdown-badge">📋 ตัวเลือก</span></td>
+                            <td>ดูตัวเลือกในหัวข้อ 3</td>
+                        </tr>
+                        <tr>
+                            <td>16</td>
+                            <td>การรับข้อมูลข่าวสาร</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td><span class="dropdown-badge">📋 ตัวเลือก</span></td>
+                            <td>ดูตัวเลือกในหัวข้อ 3</td>
+                        </tr>
+                        <tr>
+                            <td>17</td>
+                            <td>ไลฟ์สไตล์</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Text</td>
+                            <td>ระบุข้อความอิสระ</td>
+                        </tr>
+                        <tr>
+                            <td>18</td>
+                            <td>อาหารที่แพ้</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Text</td>
+                            <td>ระบุข้อความอิสระ</td>
+                        </tr>
+                        <tr>
+                            <td>19</td>
+                            <td>อาหารที่ไม่ทาน</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Text</td>
+                            <td>ระบุข้อความอิสระ</td>
+                        </tr>
+                        <tr>
+                            <td>20</td>
+                            <td>คะแนนคงเหลือ</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Number (จำนวนเต็ม)</td>
+                            <td>ไม่ใส่ = 0</td>
+                        </tr>
+                        <tr>
+                            <td>21</td>
+                            <td>คะแนนสะสม</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Number (จำนวนเต็ม)</td>
+                            <td>ไม่ใส่ = 0</td>
+                        </tr>
+                        <tr>
+                            <td>22</td>
+                            <td>ยอดใช้จ่ายสะสม</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Number (ทศนิยม 2 ตำแหน่ง)</td>
+                            <td>ไม่ใส่ = 0</td>
+                        </tr>
+                        <tr>
+                            <td>23</td>
+                            <td>วันสมัครสมาชิก</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Date (DD/MM/YYYY)</td>
+                            <td>วันที่สมัครสมาชิก</td>
+                        </tr>
+                        <tr>
+                            <td>24</td>
+                            <td>ระดับ Rank</td>
+                            <td><span class="optional-badge">ไม่บังคับ</span></td>
+                            <td>Text (พิมพ์เอง)</td>
+                            <td>ต้องตรงกับระดับ Rank ที่ตั้งค่าไว้ในระบบ</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 3: Dropdown Values -->
+        <section id="dropdowns" class="section">
+            <h2 class="section-title">3. ข้อมูลที่เป็นตัวเลือก (Dropdown)</h2>
+            <p class="section-description">
+                คอลัมน์ที่มีเครื่องหมาย <span class="dropdown-badge">📋 ตัวเลือก</span> ต้องใส่ค่าตรงตัวตามรายการที่ระบบรองรับเท่านั้น ห้ามใส่ค่าอื่นที่ไม่อยู่ในรายการ
+            </p>
+
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="material-symbols-outlined">person</span>
+                    เพศ
+                </h3>
+                <div class="dropdown-options">
+                    <span class="dropdown-chip">ชาย</span>
+                    <span class="dropdown-chip">หญิง</span>
+                    <span class="dropdown-chip">ไม่ระบุ</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="material-symbols-outlined">work</span>
+                    อาชีพ
+                </h3>
+                <div class="dropdown-options">
+                    <span class="dropdown-chip">พนักงานบริษัท</span>
+                    <span class="dropdown-chip">ข้าราชการ</span>
+                    <span class="dropdown-chip">ธุรกิจส่วนตัว</span>
+                    <span class="dropdown-chip">นักเรียน/นักศึกษา</span>
+                    <span class="dropdown-chip">อื่นๆ</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="material-symbols-outlined">payments</span>
+                    รายได้
+                </h3>
+                <div class="dropdown-options">
+                    <span class="dropdown-chip">น้อยกว่า 15,000 บาท</span>
+                    <span class="dropdown-chip">15,000 - 30,000 บาท</span>
+                    <span class="dropdown-chip">30,001 - 50,000 บาท</span>
+                    <span class="dropdown-chip">มากกว่า 50,000 บาท</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="material-symbols-outlined">favorite</span>
+                    สถานะภาพ
+                </h3>
+                <div class="dropdown-options">
+                    <span class="dropdown-chip">โสด</span>
+                    <span class="dropdown-chip">สมรส</span>
+                    <span class="dropdown-chip">หม้าย</span>
+                    <span class="dropdown-chip">หย่า</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="material-symbols-outlined">school</span>
+                    ระดับการศึกษา
+                </h3>
+                <div class="dropdown-options">
+                    <span class="dropdown-chip">ต่ำกว่ามัธยม</span>
+                    <span class="dropdown-chip">มัธยม</span>
+                    <span class="dropdown-chip">ปวช./ปวส.</span>
+                    <span class="dropdown-chip">ปริญญาตรี</span>
+                    <span class="dropdown-chip">ปริญญาโท</span>
+                    <span class="dropdown-chip">ปริญญาเอก</span>
+                    <span class="dropdown-chip">อื่นๆ</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="material-symbols-outlined">notifications</span>
+                    การรับข้อมูลข่าวสาร
+                </h3>
+                <div class="dropdown-options">
+                    <span class="dropdown-chip">Line</span>
+                    <span class="dropdown-chip">SMS</span>
+                    <span class="dropdown-chip">Email</span>
+                    <span class="dropdown-chip">ไม่รับข่าวสาร</span>
+                </div>
+            </div>
+
+            <div class="callout callout-warning">
+                <span class="material-symbols-outlined callout-icon">warning</span>
+                <div class="callout-content">
+                    <strong>สำคัญ:</strong> ค่าที่ใส่ต้องตรงตัวอักษรตามรายการด้านบน (case-sensitive) หากใส่ค่าที่ไม่ตรง ระบบจะแสดง Error
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Rules -->
+        <section id="rules" class="section">
+            <h2 class="section-title">4. กฎการ Import ข้อมูล</h2>
+
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="material-symbols-outlined">verified</span>
+                    4.1 คอลัมน์บังคับกรอก
+                </h3>
+                <ul class="rules-list">
+                    <li><strong>เบอร์โทรศัพท์</strong> — ต้องมีค่าทุกแถว (ใช้เป็น Key หลักในการระบุตัวตนสมาชิก)</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="material-symbols-outlined">remove_circle_outline</span>
+                    4.2 การไม่ใส่ข้อมูล (Empty Value)
+                </h3>
+                <ul class="rules-list">
+                    <li><strong>ข้อมูลประเภท Number</strong> (คะแนน, ยอดใช้จ่าย) → ค่าในระบบจะเป็น <code>0</code></li>
+                    <li><strong>ข้อมูลประเภท Text / Date</strong> → ค่าในระบบจะเป็นค่าว่าง (empty)</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="material-symbols-outlined">phone_android</span>
+                    4.3 เงื่อนไขเบอร์โทรศัพท์
+                </h3>
+                <ul class="rules-list">
+                    <li>รูปแบบ: <code>0XXXXXXXXX</code> (ตัวเลข 10 หลัก ไม่มีขีด เช่น 0901234567)</li>
+                    <li>ต้องขึ้นต้นด้วย <code>0</code></li>
+                    <li>ห้ามมีตัวอักษร สัญลักษณ์ หรือขีด <code>-</code></li>
+                    <li>ห้ามซ้ำกับเบอร์โทรศัพท์อื่นในไฟล์เดียวกัน</li>
+                    <li>ห้ามซ้ำกับเบอร์โทรศัพท์ที่มีอยู่ในระบบแล้ว</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="material-symbols-outlined">mail</span>
+                    4.4 เงื่อนไขอีเมล
+                </h3>
+                <ul class="rules-list">
+                    <li>ต้องเป็นรูปแบบ Email ที่ถูกต้อง (มี <code>@</code> และ domain)</li>
+                    <li>หากไม่ใส่ ระบบจะเก็บเป็นค่าว่าง</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="material-symbols-outlined">calendar_month</span>
+                    4.5 เงื่อนไขวันที่
+                </h3>
+                <ul class="rules-list">
+                    <li>รูปแบบ: <code>DD/MM/YYYY</code> เท่านั้น</li>
+                    <li>ต้องเป็นวันที่จริง (เช่น ไม่มี 31/02/2026)</li>
+                    <li>วันเกิดต้องไม่เป็นวันในอนาคต</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="material-symbols-outlined">location_on</span>
+                    4.6 เงื่อนไขที่อยู่
+                </h3>
+                <ul class="rules-list">
+                    <li>จังหวัด, เขต/อำเภอ, แขวง/ตำบล เป็นการ<strong>พิมพ์เอง</strong> แต่ค่าที่ใส่ต้องตรงกับข้อมูลในระบบ</li>
+                    <li>จังหวัดต้องตรงกับรายชื่อจังหวัดในระบบ</li>
+                    <li>เขต/อำเภอ ต้องอยู่ภายใต้จังหวัดที่ระบุ</li>
+                    <li>แขวง/ตำบล ต้องอยู่ภายใต้เขต/อำเภอที่ระบุ</li>
+                    <li>หากระบุเขต/อำเภอ โดยไม่ระบุจังหวัด → Error</li>
+                    <li>หากระบุแขวง/ตำบล โดยไม่ระบุเขต/อำเภอ → Error</li>
+                    <li>รหัสไปรษณีย์ต้องเป็นตัวเลข 5 หลัก</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="material-symbols-outlined">star</span>
+                    4.7 เงื่อนไขคะแนนและยอดใช้จ่าย
+                </h3>
+                <ul class="rules-list">
+                    <li>คะแนนคงเหลือ / คะแนนสะสม → จำนวนเต็ม ≥ 0</li>
+                    <li>ยอดใช้จ่ายสะสม → ตัวเลข ≥ 0 (ทศนิยม 2 ตำแหน่ง)</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="material-symbols-outlined">military_tech</span>
+                    4.8 เงื่อนไขระดับ Rank
+                </h3>
+                <ul class="rules-list">
+                    <li>ค่าที่ใส่ต้องตรงกับชื่อระดับ Rank ที่ตั้งค่าไว้ในระบบ</li>
+                    <li>หากไม่ใส่ค่า ระบบจะเก็บเป็นค่าว่าง (ไม่กำหนด Rank)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 5: Error Messages -->
+        <section id="errors" class="section">
+            <h2 class="section-title">5. รายการ Error Messages</h2>
+            <p class="section-description">เมื่อข้อมูลไม่ผ่านการตรวจสอบ ระบบจะแจ้งเตือน Error พร้อมระบุแถวที่พบปัญหา</p>
+            <div class="callout callout-error">
+                <span class="material-symbols-outlined callout-icon">error</span>
+                <div class="callout-content">
+                    <strong>หลักการ All or Nothing:</strong> หากพบ Error แม้แต่ 1 รายการ ระบบจะไม่ทำการ Import ข้อมูลทั้งไฟล์ และแสดง Error ทั้งหมดให้แก้ไข
+                </div>
+            </div>
+            <div class="data-table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>รหัส</th>
+                            <th>เงื่อนไข</th>
+                            <th>ข้อความแจ้งเตือน</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="error-code">ERR-001</span></td>
+                            <td>เบอร์โทรศัพท์เป็นค่าว่าง</td>
+                            <td><span class="error-message">แถวที่ {row}: กรุณาระบุเบอร์โทรศัพท์ (เบอร์โทรศัพท์เป็นข้อมูลบังคับ)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-002</span></td>
+                            <td>เบอร์โทรศัพท์รูปแบบไม่ถูกต้อง</td>
+                            <td><span class="error-message">แถวที่ {row}: รูปแบบเบอร์โทรศัพท์ไม่ถูกต้อง (ต้องเป็นตัวเลข 10 หลัก ไม่มีขีด)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-003</span></td>
+                            <td>เบอร์โทรศัพท์ซ้ำในไฟล์</td>
+                            <td><span class="error-message">แถวที่ {row}: เบอร์โทรศัพท์ "{phone}" ซ้ำกับแถวที่ {duplicate_row}</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-004</span></td>
+                            <td>เบอร์โทรศัพท์ซ้ำกับในระบบ</td>
+                            <td><span class="error-message">แถวที่ {row}: เบอร์โทรศัพท์ "{phone}" มีอยู่ในระบบแล้ว</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-005</span></td>
+                            <td>อีเมลรูปแบบไม่ถูกต้อง</td>
+                            <td><span class="error-message">แถวที่ {row}: รูปแบบอีเมลไม่ถูกต้อง</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-006</span></td>
+                            <td>วันที่รูปแบบไม่ถูกต้อง</td>
+                            <td><span class="error-message">แถวที่ {row}: รูปแบบวันที่ในคอลัมน์ "{column_name}" ไม่ถูกต้อง (ต้องเป็น DD/MM/YYYY)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-007</span></td>
+                            <td>วันเกิดเป็นวันในอนาคต</td>
+                            <td><span class="error-message">แถวที่ {row}: วันเกิดต้องไม่เป็นวันที่ในอนาคต</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-008</span></td>
+                            <td>ค่าตัวเลือกไม่ตรงกับที่ระบบรองรับ</td>
+                            <td><span class="error-message">แถวที่ {row}: ค่า "{value}" ในคอลัมน์ "{column_name}" ไม่ตรงกับตัวเลือกที่รองรับ</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-009</span></td>
+                            <td>จังหวัดไม่มีในระบบ</td>
+                            <td><span class="error-message">แถวที่ {row}: ไม่พบจังหวัด "{province}" ในระบบ</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-010</span></td>
+                            <td>เขต/อำเภอไม่ตรงกับจังหวัด</td>
+                            <td><span class="error-message">แถวที่ {row}: เขต/อำเภอ "{district}" ไม่อยู่ภายใต้จังหวัด "{province}"</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-011</span></td>
+                            <td>แขวง/ตำบลไม่ตรงกับเขต/อำเภอ</td>
+                            <td><span class="error-message">แถวที่ {row}: แขวง/ตำบล "{sub_district}" ไม่อยู่ภายใต้เขต/อำเภอ "{district}"</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-012</span></td>
+                            <td>ระบุเขต/อำเภอโดยไม่ระบุจังหวัด</td>
+                            <td><span class="error-message">แถวที่ {row}: กรุณาระบุจังหวัดก่อนระบุเขต/อำเภอ</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-013</span></td>
+                            <td>ระบุแขวง/ตำบลโดยไม่ระบุเขต/อำเภอ</td>
+                            <td><span class="error-message">แถวที่ {row}: กรุณาระบุเขต/อำเภอก่อนระบุแขวง/ตำบล</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-014</span></td>
+                            <td>รหัสไปรษณีย์ไม่ใช่ตัวเลข 5 หลัก</td>
+                            <td><span class="error-message">แถวที่ {row}: รหัสไปรษณีย์ต้องเป็นตัวเลข 5 หลัก</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-015</span></td>
+                            <td>คะแนนไม่เป็นจำนวนเต็ม ≥ 0</td>
+                            <td><span class="error-message">แถวที่ {row}: ค่าในคอลัมน์ "{column_name}" ต้องเป็นจำนวนเต็มที่มากกว่าหรือเท่ากับ 0</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-016</span></td>
+                            <td>ยอดใช้จ่ายไม่เป็นตัวเลข ≥ 0</td>
+                            <td><span class="error-message">แถวที่ {row}: ยอดใช้จ่ายสะสมต้องเป็นตัวเลขที่มากกว่าหรือเท่ากับ 0</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-017</span></td>
+                            <td>ระดับ Rank ไม่มีในระบบ</td>
+                            <td><span class="error-message">แถวที่ {row}: ไม่พบระดับ Rank "{rank}" ในระบบ กรุณาตรวจสอบ</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-018</span></td>
+                            <td>ไฟล์ไม่มีข้อมูล (เฉพาะ Header)</td>
+                            <td><span class="error-message">ไฟล์ไม่มีข้อมูลสำหรับ Import กรุณาเพิ่มข้อมูลอย่างน้อย 1 แถว</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="error-code">ERR-019</span></td>
+                            <td>รูปแบบไฟล์ไม่ถูกต้อง</td>
+                            <td><span class="error-message">รูปแบบไฟล์ไม่ถูกต้อง กรุณาใช้ Template ที่กำหนด</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 6: Flow -->
+        <section id="flow" class="section">
+            <h2 class="section-title">6. ขั้นตอนการทำงานของระบบ</h2>
+            <p class="section-description">ลำดับการทำงานเมื่อผู้ใช้กด Import ไฟล์สมาชิกเข้าสู่ระบบ:</p>
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <div class="flow-step-number">1</div>
+                    <div class="flow-step-content">
+                        <h4>ตรวจสอบรูปแบบไฟล์</h4>
+                        <p>ไฟล์ต้องเป็น .xlsx เท่านั้น</p>
+                    </div>
+                    <div class="flow-connector"></div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step-number">2</div>
+                    <div class="flow-step-content">
+                        <h4>ตรวจสอบ Header</h4>
+                        <p>Header ต้องตรงกับ Template ที่กำหนด</p>
+                    </div>
+                    <div class="flow-connector"></div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step-number">3</div>
+                    <div class="flow-step-content">
+                        <h4>ตรวจสอบข้อมูลทีละแถว</h4>
+                        <p>
+                            • เบอร์โทรศัพท์ (บังคับ) ต้องมีค่าและรูปแบบถูกต้อง<br>
+                            • เบอร์โทรศัพท์ห้ามซ้ำในไฟล์และในระบบ<br>
+                            • อีเมล (ถ้ามี) ต้องรูปแบบถูกต้อง<br>
+                            • วันที่ (ถ้ามี) ต้องรูปแบบถูกต้อง + วันเกิดไม่เป็นอนาคต<br>
+                            • คอลัมน์ตัวเลือกต้องตรงกับค่าที่ระบบรองรับ<br>
+                            • ที่อยู่ต้องสัมพันธ์กัน (จังหวัด → เขต/อำเภอ → แขวง/ตำบล)<br>
+                            • ตัวเลข (คะแนน, ยอดใช้จ่าย) ต้อง ≥ 0
+                        </p>
+                    </div>
+                    <div class="flow-connector"></div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step-number">4</div>
+                    <div class="flow-step-content">
+                        <h4>แสดงผลลัพธ์</h4>
+                        <p>
+                            ✗ พบ Error → แสดงรายการ Error ทั้งหมด (ไม่ Import ข้อมูลใดๆ)<br>
+                            ✓ ไม่มี Error → สร้างสมาชิกใหม่ทั้งหมดเข้าระบบ
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7: Notes -->
+        <section id="notes" class="section">
+            <h2 class="section-title">7. หมายเหตุสำคัญ</h2>
+            <div class="callout callout-error">
+                <span class="material-symbols-outlined callout-icon">gavel</span>
+                <div class="callout-content">
+                    <strong>All or Nothing:</strong> ระบบจะทำการ Validate ข้อมูลทั้งหมดก่อน หากมี Error แม้แต่ 1 แถว จะไม่ดำเนินการ Import ทั้งไฟล์
+                </div>
+            </div>
+            <div class="callout callout-error">
+                <span class="material-symbols-outlined callout-icon">block</span>
+                <div class="callout-content">
+                    <strong>Create Only:</strong> ระบบรองรับเฉพาะการสร้างสมาชิกใหม่ หากเบอร์โทรศัพท์ซ้ำกับสมาชิกเดิมจะแสดง Error ไม่อัพเดททับ
+                </div>
+            </div>
+            <div class="callout callout-warning">
+                <span class="material-symbols-outlined callout-icon">lightbulb</span>
+                <div class="callout-content">
+                    <strong>ค่าว่าง:</strong> คอลัมน์ที่ไม่ใส่ค่า — Number จะเป็น 0, Text/Date จะเป็นค่าว่าง
+                </div>
+            </div>
+            <div class="callout callout-info">
+                <span class="material-symbols-outlined callout-icon">list_alt</span>
+                <div class="callout-content">
+                    <strong>ตัวเลือก (Dropdown):</strong> คอลัมน์ที่เป็นตัวเลือก ต้องใส่ค่าตรงตัวตามที่ระบบกำหนดเท่านั้น ห้ามใส่ค่าอื่นที่ไม่อยู่ในรายการ
+                </div>
+            </div>
+            <div class="callout callout-success">
+                <span class="material-symbols-outlined callout-icon">phone_android</span>
+                <div class="callout-content">
+                    <strong>เบอร์โทรศัพท์ = Key:</strong> เบอร์โทรศัพท์เป็นข้อมูลหลักในการระบุตัวตนสมาชิก ต้องไม่ซ้ำทั้งในไฟล์และในระบบ
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="doc-footer">
+            <p>เอกสาร SRS — Import สมาชิก (Member) v1.0</p>
+            <p style="margin-top:4px">Design System: M3-SCCN | Font: IBM Plex Sans Thai</p>
+        </footer>
+
+    </main>
+
+</body>
+</html>
