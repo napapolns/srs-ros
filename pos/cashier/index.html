@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>SRS — แคชเชียร์ | Super Coconut rOS</title>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="../../assets/styles.css">
+</head>
+<body>
+<body>
+<div class="page-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">SC</div>
+      <span class="brand-name">Super Coconut rOS</span>
+    </div>
+    <div class="sidebar-section-title">ภาพรวม</div>
+    <ul class="sidebar-nav">
+      <li><a href="#top" class="active">ภาพรวม</a></li>
+    </ul>
+
+    <!-- Sidebar for shift tab -->
+    <div id="sidebar-shift">
+      <div class="sidebar-section-title">การ์ดข้อมูล</div>
+      <ul class="sidebar-nav">
+        <li><a href="#sec-header">0. รายละเอียดใบปิดกะ</a></li>
+        <li><a href="#sec-drawer">1. ลิ้นชักเก็บเงิน</a></li>
+        <li><a href="#sec-bills">2. บิล</a></li>
+        <li><a href="#sec-sales-summary">3. สรุปยอดขาย</a></li>
+        <li><a href="#sec-ta-tc">4. TA, TC, AVG</a></li>
+        <li><a href="#sec-sales-channel">5. ช่องทางการขาย</a></li>
+        <li><a href="#sec-payment">6. ประเภทการชำระเงิน</a></li>
+        <li><a href="#sec-discount">7. ส่วนลด</a></li>
+        <li><a href="#sec-voucher">8. คูปองแทนเงินสด</a></li>
+        <li><a href="#sec-deposit">9. มัดจำ</a></li>
+        <li><a href="#sec-customer-type">10. ลักษณะลูกค้า</a></li>
+        <li><a href="#sec-member">11. สมาชิก</a></li>
+        <li><a href="#sec-category">12. สรุปยอดขายตามหมวดหมู่</a></li>
+        <li><a href="#sec-menu">13. สรุปยอดขายตามเมนู</a></li>
+        <li><a href="#sec-package">14. สรุปยอดขายตามแพ็กเกจ</a></li>
+      </ul>
+      <div class="sidebar-section-title">อ้างอิง</div>
+      <ul class="sidebar-nav">
+        <li><a href="#sec-sales-summary">สูตรคำนวณ</a></li>
+        <li><a href="#sec-drawer">เงื่อนไขข้อมูล</a></li>
+      </ul>
+    </div>
+
+    <!-- Sidebar for daily tab -->
+    <div id="sidebar-daily" style="display:none;">
+      <div class="sidebar-section-title">การ์ดข้อมูล</div>
+      <ul class="sidebar-nav">
+        <li><a href="#sec-daily-header">0. รายละเอียดใบปิดรอบวัน</a></li>
+        <li><a href="#sec-daily-bills">1. บิล</a></li>
+        <li><a href="#sec-daily-sales">2. สรุปยอดขาย</a></li>
+        <li><a href="#sec-daily-ta-tc">3. TA, TC, AVG</a></li>
+        <li><a href="#sec-daily-channel">4. ช่องทางการขาย</a></li>
+        <li><a href="#sec-daily-payment">5. ประเภทการชำระเงิน</a></li>
+        <li><a href="#sec-daily-discount">6. ส่วนลด</a></li>
+        <li><a href="#sec-daily-voucher">7. คูปองแทนเงินสด</a></li>
+        <li><a href="#sec-daily-deposit">8. มัดจำ</a></li>
+        <li><a href="#sec-daily-customer">9. ลักษณะลูกค้า</a></li>
+        <li><a href="#sec-daily-member">10. สมาชิก</a></li>
+        <li><a href="#sec-daily-category">11. สรุปยอดขายตามหมวดหมู่</a></li>
+        <li><a href="#sec-daily-menu">12. สรุปยอดขายตามเมนู</a></li>
+        <li><a href="#sec-daily-package">13. สรุปยอดขายตามแพ็กเกจ</a></li>
+      </ul>
+      <div class="sidebar-section-title">อ้างอิง</div>
+      <ul class="sidebar-nav">
+        <li><a href="#sec-daily-sales">สูตรคำนวณ</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="page-wrapper">
+    <div class="breadcrumb">
+      <a href="../../">หน้าหลัก</a><span class="sep">/</span><a href="../">ขายหน้าร้าน</a><span class="sep">/</span><span>แคชเชียร์</span>
+    </div>
+
+    <header class="page-header" id="top">
+      <h1>แคชเชียร์ — ใบปิดกะ & ใบปิดรอบวัน</h1>
+      <p class="subtitle">เอกสารอธิบายฟิลด์ข้อมูล แหล่งที่มา เงื่อนไข และสูตรคำนวณ พร้อมตัวอย่าง UI ของแต่ละการ์ด</p>
+      <span class="badge">Super Coconut rOS — Cashier Module</span>
+    </header>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('shift')">ใบปิดกะ</div>
+      <div class="tab" onclick="switchTab('daily')">ใบปิดรอบวัน</div>
+    </div>
+
+    <!-- Tab: ใบปิดกะ -->
+    <div class="tab-content active" id="tab-shift">
+
+    <!-- Section 1: Header -->
+    <section class="section-card" id="sec-header">
+      <h2>รายละเอียดใบปิดกะ</h2>
+      <p class="section-desc">ข้อมูลทั่วไปของใบปิดกะ แสดงด้านบนสุดของรายงาน</p>
+      <div class="info-box" style="margin-bottom:20px; margin-top:0;">
+        <strong>หลักการทำงาน:</strong> ใบปิดกะ = สรุปข้อมูลที่เกิดขึ้นภายในกะนั้น ๆ ของเครื่องแคชเชียร์นั้น ๆ เท่านั้น<br><br>
+        หากร้านค้ามีแคชเชียร์มากกว่า 1 เครื่อง แต่ละเครื่องจะมีรอบกะแยกกัน เมื่อ user เข้าไปที่เครื่องแคชเชียร์ใดเครื่องหนึ่งแล้วกดปิดกะ จะได้ใบสรุปปิดกะเฉพาะของ<strong>กะนั้น</strong>และ<strong>เครื่องนั้น</strong>เป็นเอกสาร 1 ใบ<br><br>
+        <strong>ตัวอย่าง:</strong> ร้านมี 2 เครื่อง (CH01, CH02) — หากพนักงานปิดกะที่ CH01 จะได้ใบปิดกะของ CH01 เท่านั้น ข้อมูลของ CH02 จะไม่ถูกรวมอยู่ในใบนี้
+      </div>
+      <div class="info-box" style="margin-bottom:20px; margin-top:0; border-left-color: var(--tertiary);">
+        <strong>หมายเหตุสำคัญ:</strong><br>
+        1. <strong>รหัสใบปิดกะ</strong> — จะตัดรอบ "วันที่ และเวลา" ตอน 00:00 น. เท่านั้น ไม่อ้างอิงเวลารอบการขายที่ตั้งค่า และใช้ "วันที่ และเวลา" ณ ตอนที่ทำการ <strong>กดปิดกะ</strong> เท่านั้น<br>
+        2. <strong>ปฏิทินในหน้าใบปิดกะ</strong> — จะค้นหาวันที่ของ "วันที่ปิดกะ" เท่านั้น
+      </div>
+      <div class="ui-preview">
+        <div class="ui-row"><span class="label">สาขา</span><span class="value">เสนานิคม</span></div>
+        <div class="ui-row"><span class="label">หมายเลขแคชเชียร์</span><span class="value">CH01</span></div>
+        <div class="ui-row"><span class="label">เลขที่ใบปิดกะ</span><span class="value">A214-SRCH01260508004</span></div>
+        <div class="ui-row"><span class="label">ผู้เปิดกะ</span><span class="value">Admin 05/05/2026 21:00 น.</span></div>
+        <div class="ui-row"><span class="label">ผู้ปิดกะ</span><span class="value">Admin 05/05/2026 23:00 น.</span></div>
+        <div class="ui-row"><span class="label">รายการ</span><span class="value">9</span></div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>ฟิลด์</th><th>คำอธิบาย</th><th>แหล่งข้อมูล</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+        <tbody>
+          <tr><td class="field-name">สาขา</td><td>สาขาที่ทำรายการปิดกะ</td><td>ระบบ</td><td>ตั้งค่า &gt; กิจการ</td><td>—</td></tr>
+          <tr><td class="field-name">หมายเลขแคชเชียร์</td><td>หมายเลขแคชเชียร์จากตั้งค่า</td><td>หมายเลขแคชเชียร์ที่ทำรายการ</td><td>—</td><td>—</td></tr>
+          <tr><td class="field-name">รอบกะ</td><td>รอบกะที่ทำการปิดของแต่ละเครื่องแคชเชียร์</td><td>คำนวณจากรอบกะที่เปิด</td><td>—</td><td>—</td></tr>
+          <tr><td class="field-name">เลขที่ใบปิดกะ</td><td>Running number</td><td>ระบบ</td><td>—</td><td><span class="formula">{รหัสสาขา}-SR{หมายเลข CH}{ปี}{เดือน}{วัน}{ลำดับ}</span></td></tr>
+          <tr><td class="field-name">ผู้เปิดกะ</td><td>ชื่อพนักงาน + วันเวลาที่เปิดกะ</td><td>PIN ของพนักงานที่ทำรายการ</td><td>—</td><td>—</td></tr>
+          <tr><td class="field-name">ผู้ปิดกะ</td><td>ชื่อพนักงาน + วันเวลาที่ปิดกะ</td><td>PIN ของพนักงานที่ทำรายการ</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Section 1: Cash Drawer -->
+    <section class="section-card" id="sec-drawer">
+      <h2>💰 1. ลิ้นชักเก็บเงิน</h2>
+      <p class="section-desc">สรุปยอดเงินสดในลิ้นชัก ตั้งแต่เปิดกะจนถึงปิดกะ</p>
+      <div class="ui-preview">
+        <div class="ui-preview-title">ลิ้นชักเก็บเงิน</div>
+        <div class="ui-row"><span class="label">เงินตั้งต้น</span><span class="value">฿2,000.00</span></div>
+        <div class="ui-row"><span class="label">นำเงินสดเข้า</span><span class="value">฿500.00</span></div>
+        <div class="ui-row"><span class="label">นำเงินสดออก</span><span class="value negative">-฿120.00</span></div>
+        <div class="ui-row"><span class="label">ยอดเงินสดจากการขายทางร้าน</span><span class="value">฿35,300.00</span></div>
+        <div class="ui-row"><span class="label">ยอดคืนเงินสด</span><span class="value negative">-฿300.00</span></div>
+        <div class="ui-row"><span class="label">เงินในลิ้นชักทั้งหมด</span><span class="value highlight">฿35,180.00</span></div>
+        <div class="ui-row"><span class="label">ยอดเงินสดก่อนปิดบิล</span><span class="value">฿10,000.00</span></div>
+        <div class="ui-row"><span class="label">เกิน/ขาด</span><span class="value highlight">฿11,780.00</span></div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>ฟิลด์</th><th>คำอธิบาย</th><th>แหล่งข้อมูล</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+        <tbody>
+          <tr><td class="field-name">เงินตั้งต้น</td><td>เงินสดที่ใส่ไว้ในลิ้นชักตอนเปิดกะ</td><td>แคชเชียร์</td><td>—</td><td>—</td></tr>
+          <tr><td class="field-name">นำเงินสดเข้า</td><td>เงินสดที่เพิ่มเข้าในลิ้นชัก</td><td>แคชเชียร์</td><td>—</td><td><span class="formula">SUM(นำเงินสดเข้า) ของแต่ละแคชเชียร์ ในแต่ละรอบกะ</span></td></tr>
+          <tr><td class="field-name">นำเงินสดออก</td><td>เงินสดที่นำออกจากลิ้นชัก</td><td>แคชเชียร์</td><td>—</td><td><span class="formula">SUM(นำเงินสดออก) ของแต่ละแคชเชียร์ ในแต่ละรอบกะ</span></td></tr>
+          <tr><td class="field-name">ยอดเงินสดจากรายการขาย</td><td>เงินสดที่ได้รับจากการขายจริง</td><td>รายงานบิล</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Total_Net_Sales) ของช่องทาง "เงินสด"</span></td></tr>
+          <tr><td class="field-name">ยอดคืนเงินสด</td><td>เงินสดคืนลูกค้ากรณีคืนเงิน</td><td>ประวัติบิล</td><td><span class="condition-tag tag-refund">คืนเงิน</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Total_Net_Sales) ของ "เงินสด" สถานะ = คืนเงิน</span></td></tr>
+          <tr class="summary-row"><td class="field-name">เงินในลิ้นชักทั้งหมด</td><td>ยอดที่ควรมี = ตั้งต้น + นำเข้า − นำออก + ขาย − คืน</td><td>ระบบ</td><td>—</td><td>—</td></tr>
+          <tr><td class="field-name">ยอดเงินสดที่นับได้</td><td>เงินที่นับได้จริงตอนปิดกะ</td><td>แคชเชียร์</td><td>—</td><td>—</td></tr>
+          <tr class="summary-row"><td class="field-name">เกิน/ขาด</td><td>ผลต่าง (ติดลบ = เงินขาด)</td><td>ระบบ</td><td>—</td><td><span class="formula">ยอดเงินสดที่นับได้ − เงินในลิ้นชักทั้งหมด</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Section 2: Bills -->
+    <section class="section-card" id="sec-bills">
+      <h2>🧾 2. บิล</h2>
+      <p class="section-desc">จำนวนบิลทั้งหมดในกะของแคชเชียร์นั้นๆ แยกตามสถานะ</p>
+      <div class="ui-preview">
+        <div class="ui-preview-title">บิล</div>
+        <div class="ui-row"><span class="label">บิลทั้งหมด</span><span class="value">50</span></div>
+        <div class="ui-row"><span class="label">บิลยกเลิก</span><span class="value">2</span></div>
+        <div class="ui-row"><span class="label">บิลคืนเงิน</span><span class="value">8</span></div>
+        <div class="ui-row"><span class="label">บิลสำเร็จ ไม่คิดรายได้</span><span class="value">5</span></div>
+        <div class="ui-row"><span class="label">บิลสำเร็จ คิดรายได้</span><span class="value">35</span></div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>ฟิลด์</th><th>คำอธิบาย</th><th>แหล่งข้อมูล</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+        <tbody>
+          <tr><td class="field-name">บิลทั้งหมด</td><td>บิลทั้งหมดที่ปิดในกะ ของแคชเชียร์นี้</td><td>รายงานบิล</td><td>บิลทุกสถานะ, ทุกประเภทชำระเงิน</td><td><span class="formula">SUM(Receipt_No)</span></td></tr>
+          <tr><td class="field-name">บิลยกเลิก</td><td>บิลที่ถูกยกเลิก ของแคชเชียร์นี้</td><td>รายงานบิล</td><td><span class="condition-tag tag-cancel">สถานะ = ยกเลิก</span></td><td><span class="formula">SUM(Receipt_No)</span></td></tr>
+          <tr><td class="field-name">บิลคืนเงิน</td><td>บิลที่มีการคืนเงิน ของแคชเชียร์นี้</td><td>รายงานบิล</td><td><span class="condition-tag tag-refund">สถานะ = คืนเงิน</span></td><td><span class="formula">SUM(Receipt_No)</span></td></tr>
+          <tr><td class="field-name">บิลสำเร็จ ไม่คิดรายได้</td><td>บิลสำเร็จ ชำระ "ไม่คิดรายได้"</td><td>รายงานบิล</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-no-revenue">ไม่คิดรายได้</span></td><td><span class="formula">SUM(Receipt_No)</span></td></tr>
+          <tr><td class="field-name">บิลสำเร็จ คิดรายได้</td><td>บิลสำเร็จ ชำระด้วยช่องทาง "คิดรายได้"</td><td>รายงานบิล</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Receipt_No)</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Section 4: Sales Summary -->
+    <section class="section-card" id="sec-sales-summary">
+      <h2>📊 3. สรุปยอดขาย</h2>
+      <p class="section-desc">สรุปยอดขายทั้งหมดในกะของแคชเชียร์นั้นๆ</p>
+      <div class="ui-preview">
+        <div class="ui-preview-title">สรุปยอดขาย</div>
+        <div class="ui-row"><span class="label">รวมยอดขายสุทธิ</span><span class="value">฿83,618.18</span></div>
+        <div class="ui-row"><span class="label">ยอดคืนเงินทั้งหมด</span><span class="value">฿500.00</span></div>
+        <div class="ui-row"><span class="label">ยอดขายไม่คิดรายได้</span><span class="value">฿1,200.00</span></div>
+        <div class="ui-row"><span class="label">มูลค่าก่อนลด</span><span class="value">฿83,618.18</span></div>
+        <div class="ui-row"><span class="label">ส่วนลดรวม</span><span class="value negative">-฿1,800.00</span></div>
+        <div class="ui-row"><span class="label">มูลค่าหลังลด</span><span class="value">฿81,818.18</span></div>
+        <div class="ui-row"><span class="label">Service Charge</span><span class="value">฿8,181.82</span></div>
+        <div class="ui-row"><span class="label">มูลค่าก่อนภาษี</span><span class="value">฿84,112.15</span></div>
+        <div class="ui-row"><span class="label">ภาษีมูลค่าเพิ่ม</span><span class="value">฿5,887.85</span></div>
+        <div class="ui-row"><span class="label">ยอดปัดเศษ</span><span class="value">฿0.00</span></div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>ฟิลด์</th><th>คำอธิบาย</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+        <tbody>
+          <tr><td class="field-name">รวมยอดขายสุทธิ</td><td>รายได้สุทธิจากการขาย</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Total_Net_Sales)</span></td></tr>
+          <tr><td class="field-name">ยอดคืนเงินทั้งหมด</td><td>ยอดรวมบิลคืนเงิน</td><td><span class="condition-tag tag-refund">คืนเงิน</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Total_Net_Sales)</span></td></tr>
+          <tr><td class="field-name">ยอดขายไม่คิดรายได้</td><td>ยอดรวมบิลที่ไม่คิดรายได้</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-no-revenue">ไม่คิดรายได้</span></td><td><span class="formula">SUM(Total_Net_Sales)</span></td></tr>
+          <tr><td class="field-name">มูลค่าก่อนลด</td><td>ยอดก่อนหักส่วนลด</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Amount_Before_Disc)</span></td></tr>
+          <tr><td class="field-name">ส่วนลดรวม</td><td>รวมส่วนลดทั้งหมด</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Total_Discount)</span></td></tr>
+          <tr><td class="field-name">มูลค่าหลังลด</td><td>ยอดหักส่วนลดแล้ว</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Amount_After_Disc)</span></td></tr>
+          <tr><td class="field-name">Service Charge</td><td>ค่าบริการ</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Service_Charge_Amt)</span></td></tr>
+          <tr><td class="field-name">มูลค่าก่อนภาษี</td><td>ยอดก่อนรวม VAT</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Pretax_Amt)</span></td></tr>
+          <tr><td class="field-name">ภาษีมูลค่าเพิ่ม</td><td>VAT 7%</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(VAT_Amt)</span></td></tr>
+          <tr><td class="field-name">ยอดปัดเศษ</td><td>จำนวนปัดเศษ</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Rounding_Adjustment)</span></td></tr>
+        </tbody>
+      </table>
+      <div class="info-box"><strong>ลำดับการคำนวณ:</strong> มูลค่าก่อนลด → หักส่วนลด → มูลค่าหลังลด → +Service Charge → มูลค่าก่อนภาษี → +VAT → ปัดเศษ</div>
+    </section>
+
+    <!-- Section 5: TA TC AVG -->
+    <section class="section-card" id="sec-ta-tc">
+      <h2>👥 4. TA, TC, AVG</h2>
+      <p class="section-desc">ข้อมูลลูกค้าและค่าเฉลี่ยการซื้อ</p>
+      <div class="ui-preview">
+        <div class="ui-preview-title">TA, TC, AVG</div>
+        <div class="ui-row"><span class="label">บิลสำเร็จที่มีลูกค้า</span><span class="value">49</span></div>
+        <div class="ui-row"><span class="label">ลูกค้าเข้า TC</span><span class="value">308</span></div>
+        <div class="ui-row"><span class="label">ค่าเฉลี่ยการซื้อต่อคน TA</span><span class="value">฿707.67</span></div>
+        <div class="ui-row"><span class="label">ค่าเฉลี่ยการซื้อต่อบิล</span><span class="value">฿1,589.76</span></div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>ฟิลด์</th><th>คำอธิบาย</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+        <tbody>
+          <tr><td class="field-name">บิลสำเร็จที่มีลูกค้า</td><td>บิลที่ Customer_Count ≥ 1</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">COUNT(บิลที่ Customer_Count ≥ 1)</span></td></tr>
+          <tr><td class="field-name">ลูกค้าเข้า (TC)</td><td>จำนวนหัวลูกค้าทั้งหมด</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Customer_Count)</span></td></tr>
+          <tr><td class="field-name">ค่าเฉลี่ยต่อคน (TA)</td><td>ยอดขายเฉลี่ยต่อลูกค้า 1 คน</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span> Customer_Count ≥ 1</td><td><span class="formula">SUM(Total_Net_Sales) ÷ SUM(Customer_Count)</span></td></tr>
+          <tr><td class="field-name">ค่าเฉลี่ยต่อบิล</td><td>ยอดขายเฉลี่ยต่อ 1 บิล</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">รวมยอดขายสุทธิ ÷ จำนวนบิลสำเร็จคิดรายได้</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Section 5: Sales Channel -->
+    <section class="section-card" id="sec-sales-channel">
+      <h2>🛒 5. ช่องทางการขาย</h2>
+      <p class="section-desc">จำนวนบิลและยอดขายสุทธิแยกตามช่องทางการขาย</p>
+      <div class="ui-preview">
+        <div class="ui-preview-title">ช่องทางการขาย</div>
+        <div class="ui-three-col-row" style="font-weight:500; border-bottom: 1px solid var(--outline-variant);"><span class="col-label">ช่องทาง</span><span class="col-num">บิล</span><span class="col-val">ยอดขาย</span></div>
+        <div class="ui-three-col-row"><span class="col-label">Robinhood</span><span class="col-num">10</span><span class="col-val">฿11,000.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">Shopee Food</span><span class="col-num">15</span><span class="col-val">฿12,000.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">กลับบ้าน</span><span class="col-num">—</span><span class="col-val">฿1,000.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">Lineman</span><span class="col-num">8</span><span class="col-val">฿1,768.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">ทานที่ร้าน</span><span class="col-num">2</span><span class="col-val">฿250.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">Grab</span><span class="col-num">1</span><span class="col-val">฿650.00</span></div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>ช่องทาง</th><th>แสดงข้อมูล</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+        <tbody>
+          <tr><td class="field-name">ทานที่ร้าน / กลับบ้าน / Grab / Lineman / Robinhood / Shopee Food</td><td>จำนวนบิล + ยอดขายสุทธิ</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">COUNT(Receipt_No) + SUM(Total_Net_Sales) per sales_channel</span></td></tr>
+        </tbody>
+      </table>
+      <div class="info-box"><strong>หมายเหตุ:</strong> ช่องทางมาจากตั้งค่าของร้าน สามารถเพิ่ม/ลดได้</div>
+    </section>
+
+    <!-- Section 6: Payment Methods -->
+    <section class="section-card" id="sec-payment">
+      <h2>💳 6. ประเภทการชำระเงิน</h2>
+      <p class="section-desc">ยอดเงินแยกตามช่องทางชำระ แบ่งเป็น คิดรายได้ และไม่คิดรายได้</p>
+      <div class="ui-preview">
+        <div class="ui-preview-title">ประเภทการชำระเงิน</div>
+        <div class="ui-row" style="font-weight:600;"><span class="label">รวมคิดรายได้</span><span class="value">฿36,750.00</span></div>
+        <div class="ui-row" style="padding-left:16px;"><span class="label">Master Card</span><span class="value">฿12,000.00</span></div>
+        <div class="ui-row" style="padding-left:16px;"><span class="label">JCB</span><span class="value">฿11,000.00</span></div>
+        <div class="ui-row" style="padding-left:16px;"><span class="label">Union Pay</span><span class="value">฿10,500.00</span></div>
+        <div class="ui-row" style="padding-left:16px;"><span class="label">เงินสด</span><span class="value">฿10,000.00</span></div>
+        <div class="ui-row" style="padding-left:16px;"><span class="label">Visa</span><span class="value">฿3,000.00</span></div>
+        <div class="ui-row" style="padding-left:16px;"><span class="label">โอนเงิน</span><span class="value">฿200.00</span></div>
+        <div class="ui-row" style="padding-left:16px;"><span class="label">Delivery</span><span class="value">฿50.00</span></div>
+        <div class="ui-row" style="font-weight:600; margin-top:8px;"><span class="label">รวมไม่คิดรายได้</span><span class="value">฿3,500.00</span></div>
+        <div class="ui-row" style="padding-left:16px;"><span class="label">Vip</span><span class="value">฿2,000.00</span></div>
+        <div class="ui-row" style="padding-left:16px;"><span class="label">Entertain</span><span class="value">฿1,000.00</span></div>
+        <div class="ui-row" style="padding-left:16px;"><span class="label">ทดสอบเมนู</span><span class="value">฿500.00</span></div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>ช่องทาง</th><th>คำอธิบาย</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+        <tbody>
+          <tr><td class="field-name">เงินสด / โอนเงิน / Delivery / Visa / Master Card / JCB / Union Pay / อื่นๆ</td><td>ช่องทางชำระเงินแต่ละประเภท</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Total_Net_Sales) ของแต่ละช่องทาง</span></td></tr>
+          <tr class="summary-row"><td class="field-name">รวมคิดรายได้</td><td>ผลรวมของ บิลสำเร็จ, คิดรายได้</td><td>—</td><td><span class="formula">SUM(Total_Net_Sales) ทุกช่องทางคิดรายได้</span></td></tr>
+          <tr><td class="field-name">Vip / Entertain / ทดสอบเมนู</td><td>ชำระเงินช่องทาง "ไม่คิดรายได้"</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-no-revenue">ไม่คิดรายได้</span></td><td><span class="formula">SUM(Total_Net_Sales) ของแต่ละช่องทาง</span></td></tr>
+          <tr class="summary-row"><td class="field-name">รวมไม่คิดรายได้</td><td>ผลรวมของ บิลสำเร็จ, ไม่คิดรายได้</td><td>—</td><td><span class="formula">SUM(Total_Net_Sales) ทุกช่องทางไม่คิดรายได้</span></td></tr>
+        </tbody>
+      </table>
+      <div class="info-box"><strong>หมายเหตุ:</strong> ช่องทาง "อื่นๆ" จะแสดงชื่อย่อยของแต่ละช่องทางที่ร้านตั้งเอง</div>
+    </section>
+
+    <!-- Section 7: Discounts -->
+    <section class="section-card" id="sec-discount">
+      <h2>🏷️ 7. ส่วนลด</h2>
+      <p class="section-desc">รายชื่อโปรโมชันที่ใช้ในกะของแคชเชียร์นั้นๆ</p>
+      <div class="ui-preview">
+        <div class="ui-preview-title">ส่วนลด</div>
+        <div class="ui-three-col-row" style="font-weight:500; border-bottom: 1px solid var(--outline-variant);"><span class="col-label">โปรโมชัน</span><span class="col-num">บิล</span><span class="col-val">มูลค่า</span></div>
+        <div class="ui-three-col-row"><span class="col-label">Promotion_name_01</span><span class="col-num">10</span><span class="col-val negative">฿10,000.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">Promotion_name_02</span><span class="col-num">12</span><span class="col-val negative">฿5,000.00</span></div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>ฟิลด์</th><th>แสดงข้อมูล</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+        <tbody>
+          <tr><td class="field-name">ชื่อโปรโมชัน</td><td>จำนวนบิล + มูลค่าส่วนลด</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">แสดงทุก Promotion ที่ใช้ในกะของแคชเชียร์นั้นๆ</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Section 9: Voucher -->
+    <section class="section-card" id="sec-voucher">
+      <h2>🎫 8. คูปองแทนเงินสด</h2>
+      <p class="section-desc">คูปอง/Voucher ที่ถูกใช้ในกะของแคชเชียร์นั้นๆ</p>
+      <div class="ui-preview">
+        <div class="ui-preview-title">คูปองแทนเงินสด</div>
+        <div class="ui-three-col-row"><span class="col-label">Voucher_name_01</span><span class="col-num">2</span><span class="col-val negative">-฿200.00</span></div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>ฟิลด์</th><th>แสดงข้อมูล</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+        <tbody>
+          <tr><td class="field-name">ชื่อคูปอง</td><td>จำนวนบิล + มูลค่าแทนเงินสด</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td>แสดงทุก Voucher ที่ใช้ในกะของแคชเชียร์นั้นๆ</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Section 10: Deposit -->
+    <section class="section-card" id="sec-deposit">
+      <h2>📑 9. มัดจำ</h2>
+      <p class="section-desc">รายการมัดจำที่ถูกตัดในกะของแคชเชียร์นั้นๆ</p>
+      <div class="ui-preview">
+        <div class="ui-preview-title">มัดจำ</div>
+        <div class="ui-row"><span class="label">เลขที่เอกสาร_id_01</span><span class="value">฿500.00</span></div>
+        <div class="ui-row"><span class="label">เลขที่เอกสาร_id_02</span><span class="value">฿300.00</span></div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>ฟิลด์</th><th>แสดงข้อมูล</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+        <tbody>
+          <tr><td class="field-name">เลขที่เอกสารมัดจำ</td><td>มูลค่ามัดจำ (บาท)</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td>แสดงทุกรายการมัดจำที่ตัดในกะของแคชเชียร์นั้นๆ</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Section 10: Customer Type -->
+    <section class="section-card" id="sec-customer-type">
+      <h2>🧑‍🤝‍🧑 10. ลักษณะลูกค้า</h2>
+      <p class="section-desc">จำนวนบิลและยอดขายแยกตามกลุ่มลูกค้า ในกะของแคชเชียร์นั้นๆ</p>
+      <div class="ui-preview">
+        <div class="ui-preview-title">สรุปยอดขายตามลักษณะลูกค้า</div>
+        <div class="ui-three-col-row" style="font-weight:500; border-bottom: 1px solid var(--outline-variant);"><span class="col-label">กลุ่มลูกค้า</span><span class="col-num">บิล</span><span class="col-val">ยอดขาย</span></div>
+        <div class="ui-three-col-row"><span class="col-label">ก๊วนเพื่อน</span><span class="col-num">15</span><span class="col-val">฿5,500.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">ครอบครัว</span><span class="col-num">10</span><span class="col-val">฿2,300.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">คู่รัก</span><span class="col-num">5</span><span class="col-val">฿1,000.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">ทั่วไป</span><span class="col-num">3</span><span class="col-val">฿600.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">มากินคนเดียว</span><span class="col-num">2</span><span class="col-val">฿600.00</span></div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>ฟิลด์</th><th>แสดงข้อมูล</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+        <tbody>
+          <tr><td class="field-name">ชื่อกลุ่มลูกค้า</td><td>จำนวนบิล + ยอดขายสุทธิ</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">1. COUNT(Receipt_No) แต่ละ {customer_type} ในกะของแคชเชียร์นั้นๆ</span><br><span class="formula">2. SUM(Total_Net_Sales) แต่ละ {customer_type} ในกะของแคชเชียร์นั้นๆ</span></td></tr>
+        </tbody>
+      </table>
+      <div class="info-box"><strong>หมายเหตุ:</strong> ถ้าพนักงานไม่เลือกกลุ่ม ระบบจะแสดงเป็น "ทั่วไป" โดยอัตโนมัติ กลุ่มลูกค้ากำหนดจากหน้าคีย์ขาย</div>
+    </section>
+
+    <!-- Section 11: Member -->
+    <section class="section-card" id="sec-member">
+      <h2>🪪 11. สมาชิก</h2>
+      <p class="section-desc">สรุปบิลที่ระบุสมาชิกและไม่ระบุสมาชิก ในกะของแคชเชียร์นั้นๆ</p>
+      <div class="ui-preview">
+        <div class="ui-preview-title">สมาชิก</div>
+        <div class="ui-three-col-row" style="font-weight:500; border-bottom: 1px solid var(--outline-variant);"><span class="col-label">สมาชิก</span><span class="col-num">บิล</span><span class="col-val">มูลค่า</span></div>
+        <div class="ui-three-col-row"><span class="col-label">บิลระบุสมาชิก</span><span class="col-num">10</span><span class="col-val">฿8,500.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">บิลไม่ระบุสมาชิก</span><span class="col-num">25</span><span class="col-val">฿8,300.00</span></div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>ฟิลด์</th><th>คำอธิบาย</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+        <tbody>
+          <tr><td class="field-name">บิลระบุสมาชิก</td><td>จำนวนบิล และมูลค่ารวมของบิลที่มีการระบุสมาชิก</td><td><span class="condition-tag tag-success">สำเร็จ</span> ประเภทการชำระเงิน = คิดรายได้ (สมาชิกอย่างน้อย 1 คน)</td><td><span class="formula">1. COUNT(Receipt_No) บิลที่มีการระบุสมาชิก ในกะของแคชเชียร์นั้นๆ</span><br><span class="formula">2. SUM(Total_Net_Sales) บิลที่มีการระบุสมาชิก ในกะของแคชเชียร์นั้นๆ</span></td></tr>
+          <tr><td class="field-name">บิลไม่ระบุสมาชิก</td><td>จำนวนบิล และมูลค่ารวมของบิลที่ไม่มีการระบุสมาชิก</td><td><span class="condition-tag tag-success">สำเร็จ</span> ประเภทการชำระเงิน = คิดรายได้ (ไม่มีสมาชิก)</td><td><span class="formula">1. COUNT(Receipt_No) บิลที่ไม่มีการระบุสมาชิก ในกะของแคชเชียร์นั้นๆ</span><br><span class="formula">2. SUM(Total_Net_Sales) บิลที่ไม่มีการระบุสมาชิก ในกะของแคชเชียร์นั้นๆ</span></td></tr>
+        </tbody>
+      </table>
+      <div class="info-box"><strong>แหล่งข้อมูล:</strong> รายงานบิล</div>
+    </section>
+
+    <!-- Section 12: Category -->
+    <section class="section-card" id="sec-category">
+      <h2>📦 12. สรุปยอดขายตามหมวดหมู่</h2>
+      <p class="section-desc">จำนวนและยอดขายสุทธิแยกตามหมวดหมู่สินค้า</p>
+      <div class="ui-preview">
+        <div class="ui-preview-title">สรุปยอดขายตามหมวดหมู่</div>
+        <div class="ui-three-col-row" style="font-weight:500; border-bottom: 1px solid var(--outline-variant);"><span class="col-label">หมวดหมู่</span><span class="col-num">จำนวน</span><span class="col-val">ยอดขาย</span></div>
+        <div class="ui-three-col-row"><span class="col-label">เครื่องดื่ม, แอลกอฮอล์, โซดา</span><span class="col-num">20.00</span><span class="col-val">฿10,000.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">กับข้าว</span><span class="col-num">18.00</span><span class="col-val">฿10,000.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">อาหารจานหลัก</span><span class="col-num">13.00</span><span class="col-val">฿10,000.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">อาหารทะเล</span><span class="col-num">8.00</span><span class="col-val">฿10,000.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">เครื่องเคียง</span><span class="col-num">5.00</span><span class="col-val">฿10,000.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">ของหวาน</span><span class="col-num">5.00</span><span class="col-val">฿10,000.00</span></div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>ฟิลด์</th><th>แสดงข้อมูล</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+        <tbody>
+          <tr><td class="field-name">ชื่อหมวดหมู่</td><td>จำนวน + ยอดขายสุทธิ</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Quantity) + SUM(Net_Sales) per category</span></td></tr>
+        </tbody>
+      </table>
+      <div class="info-box"><strong>หมายเหตุ:</strong> อ้างอิงการแสดงผลจาก ตั้งค่า &gt; ใบปิดกะ</div>
+    </section>
+
+    <!-- Section 13: Menu -->
+    <section class="section-card" id="sec-menu">
+      <h2>🍜 13. สรุปยอดขายตามเมนู</h2>
+      <p class="section-desc">เมนูขายดี พร้อมจำนวนและยอดขายสุทธิ</p>
+      <div class="ui-preview">
+        <div class="ui-preview-title">สรุปยอดขายตามเมนู</div>
+        <div class="ui-three-col-row" style="font-weight:500; border-bottom: 1px solid var(--outline-variant);"><span class="col-label">เมนู</span><span class="col-num">จำนวน</span><span class="col-val">ยอดขาย</span></div>
+        <div class="ui-three-col-row"><span class="col-label">น้ำแข็งใส</span><span class="col-num">20.00</span><span class="col-val">฿10,000.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">หมูกะทะ</span><span class="col-num">18.00</span><span class="col-val">฿10,000.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">บิงกะเกาหลี+มาม่า</span><span class="col-num">13.00</span><span class="col-val">฿10,000.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">สะวัดดีอร่อย</span><span class="col-num">8.00</span><span class="col-val">฿10,000.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">น้ำเปล่า</span><span class="col-num">5.00</span><span class="col-val">฿10,000.00</span></div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>ฟิลด์</th><th>แสดงข้อมูล</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+        <tbody>
+          <tr><td class="field-name">ชื่อเมนู</td><td>จำนวน + ยอดขายสุทธิ</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Quantity) + SUM(Net_Sales) per menu_item</span></td></tr>
+        </tbody>
+      </table>
+      <div class="info-box"><strong>หมายเหตุ:</strong> เมนูที่ไม่ติด Top จะรวมเป็น "เมนูอื่นๆ (รวม)" อ้างอิงตั้งค่า &gt; ใบปิดกะ</div>
+    </section>
+
+    <!-- Section 14: Package -->
+    <section class="section-card" id="sec-package">
+      <h2>🎁 14. สรุปยอดขายตามแพ็กเกจ</h2>
+      <p class="section-desc">ยอดขายของแพ็กเกจ (เช่น บุฟเฟ่ต์)</p>
+      <div class="ui-preview">
+        <div class="ui-preview-title">สรุปยอดขายตามแพ็กเกจ</div>
+        <div class="ui-three-col-row" style="font-weight:500; border-bottom: 1px solid var(--outline-variant);"><span class="col-label">แพ็กเกจ</span><span class="col-num">จำนวน</span><span class="col-val">ยอดขาย</span></div>
+        <div class="ui-three-col-row"><span class="col-label">บุฟเฟ่ต์ผู้ใหญ่ (299.00)</span><span class="col-num">125.00</span><span class="col-val">฿7,475.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">บุฟเฟ่ต์ผู้ใหญ่ (249.00)</span><span class="col-num">125.00</span><span class="col-val">฿498.00</span></div>
+        <div class="ui-three-col-row"><span class="col-label">บุฟเฟ่ต์ผู้ใหญ่ (199.00)</span><span class="col-num">125.00</span><span class="col-val">฿199.00</span></div>
+      </div>
+      <table class="data-table">
+        <thead><tr><th>ฟิลด์</th><th>แสดงข้อมูล</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+        <tbody>
+          <tr><td class="field-name">ชื่อแพ็กเกจ (ราคา)</td><td>จำนวน + ยอดขาย</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Quantity) + SUM(Net_Sales) per package</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    </div><!-- /.tab-content #tab-shift -->
+
+    <!-- Tab: ใบปิดรอบวัน -->
+    <div class="tab-content" id="tab-daily">
+
+      <section class="section-card" id="sec-daily-header">
+        <h2>รายละเอียดใบปิดรอบวัน</h2>
+        <p class="section-desc">ข้อมูลทั่วไปของใบปิดรอบวัน</p>
+        <div class="info-box" style="margin-bottom:20px; margin-top:0;">
+          <strong>หลักการทำงาน:</strong> ใบปิดรอบวัน = สรุปข้อมูลจากทุกกะ ทุกเครื่องแคชเชียร์ ภายในวันนั้นของสาขานั้น<br><br>
+          ระบบจะคำนวณจาก<strong>รายงานบิล</strong>และ<strong>รายละเอียดของบิล</strong>ทั้งหมดที่เกิดขึ้นในวันนั้น<br><br>
+          <strong>*เงื่อนไขจำเป็น:</strong> ระบบจะคำนวณจากรายงานบิล และรายละเอียดของบิลทุกใบที่อยู่ในวันที่สร้างใบปิดรอบวัน
+        </div>
+        <div class="ui-preview">
+          <div class="ui-row"><span class="label">สาขา</span><span class="value">เสนานิคม</span></div>
+          <div class="ui-row"><span class="label">เลขที่ใบปิดรอบวัน</span><span class="value">A214-DE19508031</span></div>
+          <div class="ui-row"><span class="label">สร้างโดย</span><span class="value">Admin 08/05/2026 21:00 น.</span></div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>ฟิลด์</th><th>คำอธิบาย</th><th>เงื่อนไข</th><th>แหล่งข้อมูล / สูตร</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">สาขา</td><td>สาขาที่สร้างใบปิดรอบวัน</td><td><span class="condition-tag tag-input">ค่าจากระบบ</span></td><td>ตั้งค่า &gt; กิจการ</td></tr>
+            <tr><td class="field-name">เลขที่ใบปิดรอบวัน</td><td>Running number</td><td>—</td><td><span class="formula">{รหัสสาขา}-DR{ปี}{เดือน}{วัน}{ลำดับ}</span></td></tr>
+            <tr><td class="field-name">สร้างโดย</td><td>ชื่อพนักงาน + วันเวลา</td><td>—</td><td>PIN ของพนักงานที่สร้าง</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section-card" id="sec-daily-bills">
+        <h2>🧾 1. บิล</h2>
+        <p class="section-desc">จำนวนบิลทั้งหมดในรอบวันของสาขา</p>
+        <div class="ui-preview">
+          <div class="ui-preview-title">บิล</div>
+          <div class="ui-row"><span class="label">บิลทั้งหมด</span><span class="value">50</span></div>
+          <div class="ui-row"><span class="label">บิลยกเลิก</span><span class="value">2</span></div>
+          <div class="ui-row"><span class="label">บิลคืนเงิน</span><span class="value">6</span></div>
+          <div class="ui-row"><span class="label">บิลสำเร็จ ไม่คิดรายได้</span><span class="value">4</span></div>
+          <div class="ui-row"><span class="label">บิลสำเร็จ คิดรายได้</span><span class="value">—</span></div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>ฟิลด์</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">บิลทั้งหมด</td><td>บิลทุกสถานะ, ทุกประเภทชำระเงิน</td><td><span class="formula">SUM(Receipt_No)</span></td></tr>
+            <tr><td class="field-name">บิลยกเลิก</td><td><span class="condition-tag tag-cancel">สถานะ = ยกเลิก</span></td><td><span class="formula">SUM(Receipt_No)</span></td></tr>
+            <tr><td class="field-name">บิลคืนเงิน</td><td><span class="condition-tag tag-refund">สถานะ = คืนเงิน</span></td><td><span class="formula">SUM(Receipt_No)</span></td></tr>
+            <tr><td class="field-name">บิลสำเร็จ ไม่คิดรายได้</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-no-revenue">ไม่คิดรายได้</span></td><td><span class="formula">SUM(Receipt_No)</span></td></tr>
+            <tr><td class="field-name">บิลสำเร็จ คิดรายได้</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Receipt_No)</span></td></tr>
+          </tbody>
+        </table>
+        <div class="info-box"><strong>แหล่งข้อมูล:</strong> รายงานบิล</div>
+      </section>
+
+      <section class="section-card" id="sec-daily-sales">
+        <h2>📊 2. สรุปยอดขาย</h2>
+        <p class="section-desc">สรุปยอดขายทั้งหมดในรอบวัน</p>
+        <div class="ui-preview">
+          <div class="ui-preview-title">สรุปยอดขาย</div>
+          <div class="ui-row"><span class="label">รวมยอดขายสุทธิ</span><span class="value">฿862.03</span></div>
+          <div class="ui-row"><span class="label">ยอดคืนเงินทั้งหมด</span><span class="value">—</span></div>
+          <div class="ui-row"><span class="label">ยอดขายไม่คิดรายได้</span><span class="value">—</span></div>
+          <div class="ui-row"><span class="label">มูลค่าก่อนลด</span><span class="value">฿862.03</span></div>
+          <div class="ui-row"><span class="label">ส่วนลดรวม</span><span class="value negative">-฿0.00</span></div>
+          <div class="ui-row"><span class="label">มูลค่าหลังลด</span><span class="value">฿76.68</span></div>
+          <div class="ui-row"><span class="label">Service Charge</span><span class="value">—</span></div>
+          <div class="ui-row"><span class="label">มูลค่าก่อนภาษี</span><span class="value">฿81,113,748.03</span></div>
+          <div class="ui-row"><span class="label">ภาษีมูลค่าเพิ่ม</span><span class="value">—</span></div>
+          <div class="ui-row"><span class="label">ยอดปัดเศษ</span><span class="value">฿81,113,748.03</span></div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>ฟิลด์</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">รวมยอดขายสุทธิ</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Total_Net_Sales)</span></td></tr>
+            <tr><td class="field-name">ยอดคืนเงินทั้งหมด</td><td><span class="condition-tag tag-refund">คืนเงิน</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Total_Net_Sales)</span></td></tr>
+            <tr><td class="field-name">ยอดขายไม่คิดรายได้</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-no-revenue">ไม่คิดรายได้</span></td><td><span class="formula">SUM(Total_Net_Sales)</span></td></tr>
+            <tr><td class="field-name">มูลค่าก่อนลด</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Amount_Before_Disc)</span></td></tr>
+            <tr><td class="field-name">ส่วนลดรวม</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Total_Discount)</span></td></tr>
+            <tr><td class="field-name">มูลค่าหลังลด</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Amount_After_Disc)</span></td></tr>
+            <tr><td class="field-name">Service Charge</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Service_Charge_Amt)</span></td></tr>
+            <tr><td class="field-name">มูลค่าก่อนภาษี</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Pretax_Amt)</span></td></tr>
+            <tr><td class="field-name">ภาษีมูลค่าเพิ่ม</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(VAT_Amt)</span></td></tr>
+            <tr><td class="field-name">ยอดปัดเศษ</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Rounding_Adjustment)</span></td></tr>
+          </tbody>
+        </table>
+        <div class="info-box"><strong>แหล่งข้อมูล:</strong> รายงานบิล</div>
+      </section>
+
+      <section class="section-card" id="sec-daily-ta-tc">
+        <h2>👥 3. TA, TC, AVG</h2>
+        <p class="section-desc">ข้อมูลลูกค้าและค่าเฉลี่ยการซื้อ</p>
+        <div class="ui-preview">
+          <div class="ui-preview-title">TA, TC, AVG</div>
+          <div class="ui-row"><span class="label">บิลสำเร็จที่มีลูกค้า</span><span class="value">49</span></div>
+          <div class="ui-row"><span class="label">ลูกค้าเข้า TC</span><span class="value">200</span></div>
+          <div class="ui-row"><span class="label">ค่าเฉลี่ยการซื้อต่อคน TA</span><span class="value">฿1,727.07</span></div>
+          <div class="ui-row"><span class="label">ค่าเฉลี่ยการซื้อต่อบิล</span><span class="value">฿0.00</span></div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>ฟิลด์</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">บิลสำเร็จที่มีลูกค้า</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span> Customer_Count ≥ 1</td><td><span class="formula">SUM(Receipt_No)</span></td></tr>
+            <tr><td class="field-name">ลูกค้าเข้า TC</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Customer_Count)</span></td></tr>
+            <tr><td class="field-name">TA</td><td>สำเร็จ, คิดรายได้, Customer_Count ≥ 1</td><td><span class="formula">SUM(Total_Net_Sales) ÷ SUM(Customer_Count)</span></td></tr>
+            <tr><td class="field-name">ค่าเฉลี่ยต่อบิล</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Total_Net_Sales) ÷ จำนวนบิลสำเร็จคิดรายได้</span></td></tr>
+          </tbody>
+        </table>
+        <div class="info-box"><strong>แหล่งข้อมูล:</strong> รายงานบิล</div>
+      </section>
+
+      <section class="section-card" id="sec-daily-channel">
+        <h2>🛒 4. ช่องทางการขาย</h2>
+        <p class="section-desc">จำนวนบิลและยอดขายสุทธิแยกตามช่องทางการขาย</p>
+        <div class="ui-preview">
+          <div class="ui-preview-title">ช่องทางการขาย</div>
+          <div class="ui-three-col-row" style="font-weight:500; border-bottom: 1px solid var(--outline-variant);"><span class="col-label">ช่องทาง</span><span class="col-num">บิล</span><span class="col-val">ยอดขาย</span></div>
+          <div class="ui-three-col-row"><span class="col-label">ทานที่ร้าน</span><span class="col-num">1</span><span class="col-val">฿83,100.00</span></div>
+          <div class="ui-three-col-row"><span class="col-label">กลับบ้าน</span><span class="col-num">—</span><span class="col-val">—</span></div>
+          <div class="ui-three-col-row"><span class="col-label">Robinhood</span><span class="col-num">70</span><span class="col-val">฿81,310.00</span></div>
+          <div class="ui-three-col-row"><span class="col-label">Lineman</span><span class="col-num">1</span><span class="col-val">฿83,740.00</span></div>
+          <div class="ui-three-col-row"><span class="col-label">Grab</span><span class="col-num">4</span><span class="col-val">—</span></div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>ฟิลด์</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">ทานที่ร้าน / กลับบ้าน / Grab / Lineman / Robinhood / Shopee Food</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Total_Net_Sales) ของแต่ละช่องทางการขาย</span></td></tr>
+          </tbody>
+        </table>
+        <div class="info-box"><strong>แหล่งข้อมูล:</strong> รายงานบิล</div>
+      </section>
+
+      <section class="section-card" id="sec-daily-payment">
+        <h2>💳 5. ประเภทการชำระเงิน</h2>
+        <p class="section-desc">ยอดเงินแยกตามช่องทางชำระ แบ่งเป็น คิดรายได้ และไม่คิดรายได้</p>
+        <div class="ui-preview">
+          <div class="ui-preview-title">ประเภทการชำระเงิน</div>
+          <div class="ui-row" style="font-weight:600;"><span class="label">รวมคิดรายได้</span><span class="value">฿821,750.00</span></div>
+          <div class="ui-row" style="padding-left:16px;"><span class="label">Master Card</span><span class="value">฿80,000.00</span></div>
+          <div class="ui-row" style="padding-left:16px;"><span class="label">JCB</span><span class="value">฿81,110.00</span></div>
+          <div class="ui-row" style="padding-left:16px;"><span class="label">Union Pay</span><span class="value">฿81,310.00</span></div>
+          <div class="ui-row" style="padding-left:16px;"><span class="label">Visa</span><span class="value">฿82,110.00</span></div>
+          <div class="ui-row" style="padding-left:16px;"><span class="label">เงินสด</span><span class="value">—</span></div>
+          <div class="ui-row" style="padding-left:16px;"><span class="label">Delivery</span><span class="value">฿55.00</span></div>
+          <div class="ui-row" style="font-weight:600; margin-top:8px;"><span class="label">รวมไม่คิดรายได้</span><span class="value">—</span></div>
+          <div class="ui-row" style="padding-left:16px;"><span class="label">รวมไม่คิดรายได้</span><span class="value">—</span></div>
+          <div class="ui-row" style="padding-left:16px;"><span class="label">Entertain</span><span class="value">฿2,230.00</span></div>
+          <div class="ui-row" style="padding-left:16px;"><span class="label">ทดสอบเมนู</span><span class="value">—</span></div>
+          <div class="ui-row" style="padding-left:16px;"><span class="label">รวมไม่คิดรายได้</span><span class="value">฿1,550.00</span></div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>ช่องทาง</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">เงินสด / โอนเงิน / Delivery / Visa / Master Card / JCB / Union Pay / อื่นๆ</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Total_Net_Sales) ของแต่ละช่องทางการชำระเงิน</span></td></tr>
+            <tr class="summary-row"><td class="field-name">รวมคิดรายได้</td><td>—</td><td><span class="formula">= SUM(ทุกช่องทางคิดรายได้)</span></td></tr>
+            <tr><td class="field-name">Vip / Entertain / อื่นๆ</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-no-revenue">ไม่คิดรายได้</span></td><td><span class="formula">SUM(Total_Net_Sales) ของแต่ละช่องทางการชำระเงิน</span></td></tr>
+            <tr class="summary-row"><td class="field-name">รวมไม่คิดรายได้</td><td>—</td><td><span class="formula">= SUM(ทุกช่องทางไม่คิดรายได้)</span></td></tr>
+          </tbody>
+        </table>
+        <div class="info-box"><strong>แหล่งข้อมูล:</strong> รายงานบิล</div>
+      </section>
+
+      <section class="section-card" id="sec-daily-discount">
+        <h2>🏷️ 6. ส่วนลด</h2>
+        <p class="section-desc">รายชื่อโปรโมชันที่ใช้ในรอบวัน</p>
+        <div class="ui-preview">
+          <div class="ui-preview-title">ส่วนลด</div>
+          <div class="ui-three-col-row" style="font-weight:500; border-bottom: 1px solid var(--outline-variant);"><span class="col-label">โปรโมชัน</span><span class="col-num">บิล</span><span class="col-val">มูลค่า</span></div>
+          <div class="ui-three-col-row"><span class="col-label">Promotion_name_01</span><span class="col-num">4</span><span class="col-val negative">-฿800.00</span></div>
+          <div class="ui-three-col-row"><span class="col-label">Promotion_name_02</span><span class="col-num">1</span><span class="col-val negative">-฿200.00</span></div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>ฟิลด์</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">ชื่อโปรโมชัน (จากแคมเปญ)</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Discount) ของแต่ละแคมเปญ</span></td></tr>
+          </tbody>
+        </table>
+        <div class="info-box"><strong>แหล่งข้อมูล:</strong> รายงานบิล</div>
+      </section>
+
+      <section class="section-card" id="sec-daily-voucher">
+        <h2>🎫 7. คูปองแทนเงินสด</h2>
+        <p class="section-desc">คูปอง/Voucher ที่ถูกใช้ในรอบวัน</p>
+        <div class="ui-preview">
+          <div class="ui-preview-title">คูปองแทนเงินสด</div>
+          <div class="ui-three-col-row" style="font-weight:500; border-bottom: 1px solid var(--outline-variant);"><span class="col-label">คูปอง</span><span class="col-num">บิล</span><span class="col-val">มูลค่า</span></div>
+          <div class="ui-three-col-row"><span class="col-label">Voucher_name_01</span><span class="col-num">2</span><span class="col-val negative">-฿200.00</span></div>
+          <div class="ui-three-col-row"><span class="col-label">Voucher_name_02</span><span class="col-num">1</span><span class="col-val negative">—</span></div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>ฟิลด์</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">ชื่อคูปอง</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Voucher_Discount) ของแต่ละคูปอง</span></td></tr>
+          </tbody>
+        </table>
+        <div class="info-box"><strong>แหล่งข้อมูล:</strong> รายงานบิล</div>
+      </section>
+
+      <section class="section-card" id="sec-daily-deposit">
+        <h2>📑 8. มัดจำ</h2>
+        <p class="section-desc">รายการมัดจำที่ถูกตัดในรอบวัน</p>
+        <div class="ui-preview">
+          <div class="ui-preview-title">มูลค่ามัดจำแทนเงินสด</div>
+          <div class="ui-row"><span class="label">Orderforms_id_01</span><span class="value">฿500.00</span></div>
+          <div class="ui-row"><span class="label">Orderforms_id_02</span><span class="value">—</span></div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>ฟิลด์</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">เลขที่เอกสารมัดจำ</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Deposit_Amount) ของแต่ละเอกสาร</span></td></tr>
+          </tbody>
+        </table>
+        <div class="info-box"><strong>แหล่งข้อมูล:</strong> รายงานบิล</div>
+      </section>
+
+      <section class="section-card" id="sec-daily-customer">
+        <h2>🧑‍🤝‍🧑 9. ลักษณะลูกค้า</h2>
+        <p class="section-desc">จำนวนบิลและยอดขายแยกตามกลุ่มลูกค้า</p>
+        <div class="ui-preview">
+          <div class="ui-preview-title">สรุปยอดขายตามลักษณะลูกค้า</div>
+          <div class="ui-three-col-row" style="font-weight:500; border-bottom: 1px solid var(--outline-variant);"><span class="col-label">กลุ่มลูกค้า</span><span class="col-num">บิล</span><span class="col-val">ยอดขาย</span></div>
+          <div class="ui-three-col-row"><span class="col-label">ทั่วไป</span><span class="col-num">—</span><span class="col-val">฿0.00</span></div>
+          <div class="ui-three-col-row"><span class="col-label">ครอบครัว</span><span class="col-num">1</span><span class="col-val">—</span></div>
+          <div class="ui-three-col-row"><span class="col-label">คู่รัก</span><span class="col-num">—</span><span class="col-val">—</span></div>
+          <div class="ui-three-col-row"><span class="col-label">ก๊วนเพื่อน</span><span class="col-num">—</span><span class="col-val">—</span></div>
+          <div class="ui-three-col-row"><span class="col-label">มากินคนเดียว</span><span class="col-num">10</span><span class="col-val">฿82,100.00</span></div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>ฟิลด์</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">ชื่อกลุ่มลูกค้า</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">COUNT(Receipt_No) + SUM(Total_Net_Sales) แต่ละ customer_type</span></td></tr>
+          </tbody>
+        </table>
+        <div class="info-box"><strong>แหล่งข้อมูล:</strong> รายงานบิล | ถ้าไม่เลือกกลุ่ม ระบบแสดง "ทั่วไป"</div>
+      </section>
+
+      <section class="section-card" id="sec-daily-member">
+        <h2>🪪 10. สมาชิก</h2>
+        <p class="section-desc">สรุปบิลที่ระบุสมาชิกและไม่ระบุสมาชิกในรอบวัน</p>
+        <div class="ui-preview">
+          <div class="ui-preview-title">สมาชิก</div>
+          <div class="ui-three-col-row" style="font-weight:500; border-bottom: 1px solid var(--outline-variant);"><span class="col-label">สมาชิก</span><span class="col-num">บิล</span><span class="col-val">มูลค่า</span></div>
+          <div class="ui-three-col-row"><span class="col-label">บิลระบุสมาชิก</span><span class="col-num">0</span><span class="col-val">฿8500.00</span></div>
+          <div class="ui-three-col-row"><span class="col-label">บิลไม่ระบุสมาชิก</span><span class="col-num">0</span><span class="col-val">฿8300.00</span></div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>ฟิลด์</th><th>คำอธิบาย</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">บิลระบุสมาชิก</td><td>จำนวนบิล และมูลค่ารวมของบิลที่มีการระบุสมาชิก</td><td><span class="condition-tag tag-success">สำเร็จ</span> ประเภทการชำระเงิน = คิดรายได้ (สมาชิกอย่างน้อย 1 คน)</td><td><span class="formula">1. COUNT(Receipt_No) บิลที่มีการระบุสมาชิก</span><br><span class="formula">2. SUM(Total_Net_Sales) บิลที่มีการระบุสมาชิก</span></td></tr>
+            <tr><td class="field-name">บิลไม่ระบุสมาชิก</td><td>จำนวนบิล และมูลค่ารวมของบิลที่ไม่มีการระบุสมาชิก</td><td><span class="condition-tag tag-success">สำเร็จ</span> ประเภทการชำระเงิน = คิดรายได้ (ไม่มีสมาชิก)</td><td><span class="formula">1. COUNT(Receipt_No) บิลที่ไม่มีการระบุสมาชิก</span><br><span class="formula">2. SUM(Total_Net_Sales) บิลที่ไม่มีการระบุสมาชิก</span></td></tr>
+          </tbody>
+        </table>
+        <div class="info-box"><strong>แหล่งข้อมูล:</strong> รายงานบิล</div>
+      </section>
+
+      <section class="section-card" id="sec-daily-category">
+        <h2>📦 11. สรุปยอดขายตามหมวดหมู่</h2>
+        <p class="section-desc">จำนวนและยอดขายสุทธิแยกตามหมวดหมู่สินค้า</p>
+        <div class="ui-preview">
+          <div class="ui-preview-title">สรุปยอดขายตามหมวดหมู่</div>
+          <div class="ui-three-col-row" style="font-weight:500; border-bottom: 1px solid var(--outline-variant);"><span class="col-label">หมวดหมู่</span><span class="col-num">จำนวน</span><span class="col-val">ยอดขาย</span></div>
+          <div class="ui-three-col-row"><span class="col-label">เครื่องดื่ม, แอลกอฮอล์, โซดา</span><span class="col-num">20.00</span><span class="col-val">฿10,000.00</span></div>
+          <div class="ui-three-col-row"><span class="col-label">กับแกล้ม</span><span class="col-num">—</span><span class="col-val">—</span></div>
+          <div class="ui-three-col-row"><span class="col-label">อาหารจานหลัก</span><span class="col-num">12.00</span><span class="col-val">฿823,000.00</span></div>
+          <div class="ui-three-col-row"><span class="col-label">อาหารทะเล</span><span class="col-num">—</span><span class="col-val">—</span></div>
+          <div class="ui-three-col-row"><span class="col-label">เครื่องเคียง</span><span class="col-num">0.00</span><span class="col-val">฿823,000.00</span></div>
+          <div class="ui-three-col-row"><span class="col-label">ของหวาน</span><span class="col-num">5.00</span><span class="col-val">—</span></div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>ฟิลด์</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">ชื่อหมวดหมู่</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Quantity) + SUM(Total_Net_Sales) แต่ละ Item_Category</span></td></tr>
+          </tbody>
+        </table>
+        <div class="info-box"><strong>แหล่งข้อมูล:</strong> รายงานรายละเอียดบิล | อ้างอิงตั้งค่า &gt; ใบปิดกะ</div>
+      </section>
+
+      <section class="section-card" id="sec-daily-menu">
+        <h2>🍜 12. สรุปยอดขายตามเมนู</h2>
+        <p class="section-desc">เมนูขายดี พร้อมจำนวนและยอดขายสุทธิ</p>
+        <div class="ui-preview">
+          <div class="ui-preview-title">สรุปยอดขายตามเมนู</div>
+          <div class="ui-three-col-row" style="font-weight:500; border-bottom: 1px solid var(--outline-variant);"><span class="col-label">เมนู</span><span class="col-num">จำนวน</span><span class="col-val">ยอดขาย</span></div>
+          <div class="ui-three-col-row"><span class="col-label">หมู</span><span class="col-num">10.00</span><span class="col-val">฿823,000.00</span></div>
+          <div class="ui-three-col-row"><span class="col-label">น้ำเปล่า</span><span class="col-num">—</span><span class="col-val">—</span></div>
+          <div class="ui-three-col-row"><span class="col-label">บิงกะเกาหลี+มาม่า</span><span class="col-num">—</span><span class="col-val">฿80,000.00</span></div>
+          <div class="ui-three-col-row"><span class="col-label">กุ้งแม่น้ำ</span><span class="col-num">0.00</span><span class="col-val">฿823,000.00</span></div>
+          <div class="ui-three-col-row"><span class="col-label">น้ำเปล่า</span><span class="col-num">0.00</span><span class="col-val">—</span></div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>ฟิลด์</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">ชื่อเมนู</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Quantity) + SUM(Total_Net_Sales) แต่ละ Menu_Name</span></td></tr>
+          </tbody>
+        </table>
+        <div class="info-box"><strong>แหล่งข้อมูล:</strong> รายงานรายละเอียดบิล | เมนูไม่ติด Top รวมเป็น "เมนูอื่นๆ (รวม)"</div>
+      </section>
+
+      <section class="section-card" id="sec-daily-package">
+        <h2>🎁 13. สรุปยอดขายตามแพ็กเกจ</h2>
+        <p class="section-desc">ยอดขายของแพ็กเกจ (เช่น บุฟเฟ่ต์)</p>
+        <div class="ui-preview">
+          <div class="ui-preview-title">สรุปยอดขายตามแพ็กเกจ</div>
+          <div class="ui-three-col-row" style="font-weight:500; border-bottom: 1px solid var(--outline-variant);"><span class="col-label">แพ็กเกจ</span><span class="col-num">จำนวน</span><span class="col-val">ยอดขาย</span></div>
+          <div class="ui-three-col-row"><span class="col-label">บุฟเฟ่ต์ผู้ใหญ่ (299.00)</span><span class="col-num">125.00</span><span class="col-val">฿7,475.00</span></div>
+          <div class="ui-three-col-row"><span class="col-label">บุฟเฟ่ต์ผู้ใหญ่ (249.00)</span><span class="col-num">121.00</span><span class="col-val">฿498.00</span></div>
+          <div class="ui-three-col-row"><span class="col-label">บุฟเฟ่ต์ผู้ใหญ่ (199.00)</span><span class="col-num">125.00</span><span class="col-val">฿8999.00</span></div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>ฟิลด์</th><th>เงื่อนไข</th><th>สูตร</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">ชื่อแพ็กเกจ (ราคา)</td><td><span class="condition-tag tag-success">สำเร็จ</span> <span class="condition-tag tag-revenue">คิดรายได้</span></td><td><span class="formula">SUM(Quantity) + SUM(Total_Net_Sales) แต่ละ package</span></td></tr>
+          </tbody>
+        </table>
+        <div class="info-box"><strong>แหล่งข้อมูล:</strong> รายงานรายละเอียดบิล</div>
+      </section>
+
+    </div><!-- /.tab-content #tab-daily -->
+
+    <!-- Footer -->
+    <footer class="page-footer">
+      <p>SRS — รายละเอียดใบปิดกะ | Super Coconut rOS — Cashier Module</p>
+      <p style="margin-top:4px;">Design System: M3-SCCN | v1.0 | 23 มิถุนายน 2026</p>
+    </footer>
+
+  </div><!-- /.page-wrapper -->
+</div><!-- /.page-layout -->
+
+<script>
+  let currentTab = 'shift';
+
+  function switchTab(tab) {
+    currentTab = tab;
+
+    // Update tab buttons
+    document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+
+    if (tab === 'shift') {
+      document.querySelectorAll('.tab')[0].classList.add('active');
+      document.getElementById('tab-shift').classList.add('active');
+    } else {
+      document.querySelectorAll('.tab')[1].classList.add('active');
+      document.getElementById('tab-daily').classList.add('active');
+    }
+
+    // Update sidebar: show matching nav, hide other
+    document.getElementById('sidebar-shift').style.display = (tab === 'shift') ? '' : 'none';
+    document.getElementById('sidebar-daily').style.display = (tab === 'daily') ? '' : 'none';
+
+    // Scroll to top and recalculate
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(setActiveLink, 150);
+  }
+
+  function setActiveLink() {
+    var activeTabContent = document.getElementById(currentTab === 'shift' ? 'tab-shift' : 'tab-daily');
+    var visibleSections = activeTabContent.querySelectorAll('.section-card');
+    var sidebarId = currentTab === 'shift' ? 'sidebar-shift' : 'sidebar-daily';
+    var navLinks = document.getElementById(sidebarId).querySelectorAll('.sidebar-nav a');
+
+    var current = '';
+    visibleSections.forEach(function(s) {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+
+    // Clear all active states
+    document.querySelectorAll('.sidebar-nav a').forEach(function(l) { l.classList.remove('active'); });
+
+    if (!current || window.scrollY < 200) {
+      var overviewLink = document.querySelector('.sidebar-nav a[href="#top"]');
+      if (overviewLink) overviewLink.classList.add('active');
+    } else {
+      navLinks.forEach(function(l) {
+        if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+      });
+    }
+  }
+
+  window.addEventListener('scroll', setActiveLink);
+  window.addEventListener('load', setActiveLink);
+</script>
+</body>
+</html>
