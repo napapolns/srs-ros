@@ -469,6 +469,17 @@
       .main { margin-left: 0; padding: 24px; }
     }
 
+    .breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; color: var(--on-surface-variant); margin-bottom: 24px;
+    }
+    .breadcrumb a {
+      color: var(--tertiary); text-decoration: none; font-weight: 400;
+    }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb .sep { color: var(--outline-variant); }
+    .breadcrumb .current { color: var(--on-surface); font-weight: 500; }
+
     /* Field Number */
     .field-num {
       display: inline-flex;
@@ -536,6 +547,15 @@
 
 <!-- Main Content -->
 <main class="main">
+
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb">
+    <a href="https://napapolns.github.io/srs-ros/">หน้าหลัก</a>
+    <span class="sep">/</span>
+    <a href="https://napapolns.github.io/srs-ros/crm/">CRM</a>
+    <span class="sep">/</span>
+    <span class="current">รายงานภาพรวมสมาชิก</span>
+  </nav>
 
   <!-- Hero -->
   <header class="hero" id="overview">
